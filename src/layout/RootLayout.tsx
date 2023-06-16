@@ -6,7 +6,6 @@ const StyledLayout = styled.div`
   .main {
     position: relative;
     top: 68.5px;
-    background: violet;
   }
 `;
 

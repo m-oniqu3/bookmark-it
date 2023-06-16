@@ -3,6 +3,7 @@ import Explore from "./components/pages/Explore";
 import Home from "./components/pages/Home";
 import Library from "./components/pages/Library";
 import Shelf from "./components/pages/Shelf";
+import LibraryLayout from "./layout/LibraryLayout";
 import RootLayout from "./layout/RootLayout";
 import { GlobalStyles } from "./styles/Global.styled";
 
@@ -13,7 +14,11 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/explore", element: <Explore /> },
-      { path: "/library", element: <Library /> },
+      {
+        path: "/library",
+        element: <LibraryLayout />,
+        children: [{ path: "*", element: <Library /> }],
+      },
       { path: "/shelves", element: <Shelf /> },
     ],
   },

@@ -1,4 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Explore from "./components/pages/Explore";
+import Home from "./components/pages/Home";
+import Library from "./components/pages/Library";
+import Shelf from "./components/pages/Shelf";
 import RootLayout from "./layout/RootLayout";
 import { GlobalStyles } from "./styles/Global.styled";
 
@@ -7,8 +11,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { path: "/", element: <p>home</p> },
-      { path: "/explore", element: <p>explore</p> },
+      { path: "/", element: <Home /> },
+      { path: "/explore", element: <Explore /> },
+      { path: "/library", element: <Library /> },
+      { path: "/shelves", element: <Shelf /> },
     ],
   },
 ]);

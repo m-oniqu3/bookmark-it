@@ -1,5 +1,13 @@
+import Pages from "./components/pages/Pages";
+import { GlobalStyles } from "./styles/Global.styled";
+
 const App = () => {
-  return <div>hey</div>;
+  return (
+    <div>
+      <Pages />
+      <GlobalStyles />
+    </div>
+  );
 };
 
 export default App;

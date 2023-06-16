@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import { VscClose } from "react-icons/vsc";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { styled } from "styled-components";
 import logo from "../../assets/bookmark.png";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
@@ -10,7 +10,7 @@ const StyledMenu = styled.div`
   position: fixed;
   top: 0;
   left: 0%;
-  /* background: rgb(255, 255, 255); */
+  background: rgb(255, 255, 255);
   backdrop-filter: blur(30px);
   width: 100%;
   min-height: 90vh;
@@ -23,7 +23,7 @@ const StyledMenu = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    height: 2rem;
+    /* height: 2rem; */
   }
 
   ul {
@@ -53,7 +53,13 @@ const StyledMenu = styled.div`
   }
 `;
 
-const MobileMenu = () => {
+type Props = {
+  closeMenu: () => void;
+};
+
+const MobileMenu = (props: Props) => {
+  const { closeMenu } = props;
+
   return ReactDOM.createPortal(
     <StyledMenu>
       <Container>
@@ -62,27 +68,27 @@ const MobileMenu = () => {
             <img src={logo} alt="Bookmark Logo" />
           </StyledLogo>
 
-          <VscClose size={35} color="var(--primary)" />
+          <VscClose size={35} color="var(--primary)" onClick={closeMenu} />
         </div>
 
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <Link to="/explore">Explore</Link>
-          </li>
-
-          <li>
-            <Link to="/library">Library</Link>
+            <NavLink to="/explore">Explore</NavLink>
           </li>
 
           <li>
-            <Link to="/shelves">Shelves</Link>
+            <NavLink to="/library">Library</NavLink>
           </li>
 
           <li>
-            <Link to="">Login</Link>
+            <NavLink to="/shelves">Shelves</NavLink>
+          </li>
+
+          <li>
+            <NavLink to="">Login</NavLink>
           </li>
         </ul>
       </Container>

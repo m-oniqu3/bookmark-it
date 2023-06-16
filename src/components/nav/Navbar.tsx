@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { NavLink, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import Logo from "../../assets/bookmark.png";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
+import { devices } from "../../styles/breakpoints";
+import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import SearchBar from "../search/SearchBar";
 import MobileMenu from "./MobileMenu";
@@ -27,20 +30,88 @@ const StyledNavContainer = styled.div`
 
       h3 {
         display: none;
+
+        @media ${devices.medium} {
+          display: block;
+          font-family: "Roboto", sans-serif;
+          font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+          font-weight: bold;
+          color: var(--primary);
+        }
+      }
+    }
+
+    &__list {
+      display: none;
+
+      @media (${devices.large}) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        list-style: none;
+      }
+
+      a {
+        @media (${devices.large}) {
+          text-decoration: none;
+          color: var(--neutral-medium);
+          font-size: 1rem;
+
+          &.active {
+            color: var(--secondary);
+            font-weight: bold;
+          }
+
+          &:hover {
+            color: var(--secondary);
+          }
+        }
+      }
+    }
+
+    &__group {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      @media (${devices.large}) {
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        width: min(40%, 250px);
+      }
+
+      button {
+        display: none;
+
+        @media (${devices.large}) {
+          display: grid;
+        }
       }
     }
 
     &__icon {
       display: grid;
       place-items: center;
+
+      @media (${devices.large}) {
+        display: none;
+      }
     }
   }
 `;
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { pathname } = useLocation();
 
   const handleMobileMenu = () => setIsMenuOpen((state) => !state);
+
+  //close menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -54,8 +125,26 @@ const Navbar = () => {
               <h3>Bookmark</h3>
             </div>
 
+            <ul className="nav__list">
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/explore">Explore</NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/library">Library</NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/shelves">Shelves</NavLink>
+              </li>
+            </ul>
+
             <div className="nav__group">
               <SearchBar />
+              <Button onClick={() => console.log("click")}>Login</Button>
             </div>
 
             <div className="nav__icon" onClick={handleMobileMenu}>
@@ -65,7 +154,7 @@ const Navbar = () => {
         </Container>
       </StyledNavContainer>
 
-      {isMenuOpen && <MobileMenu />}
+      {isMenuOpen && <MobileMenu closeMenu={() => setIsMenuOpen(false)} />}
     </>
   );
 };

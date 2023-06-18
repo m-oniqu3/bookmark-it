@@ -27,7 +27,7 @@ const StyledPrimaryButton = styled(ButtonBase)`
 `;
 
 const StyledActionButton = styled(ButtonBase)`
-  padding: 10px 20px;
+  padding: 8px 20px;
   background-color: var(--neutral-primary);
   color: var(--secondary);
   border-radius: 5px;

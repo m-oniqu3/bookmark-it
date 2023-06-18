@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { NavLink, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import Logo from "../../assets/bookmark.png";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import { devices } from "../../styles/breakpoints";
+import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
+import Modal from "../helpers/ui/Modal";
 import SearchBar from "../search/SearchBar";
+import Login from "../user/Login";
 import MobileMenu from "./MobileMenu";
 
 const StyledNavContainer = styled.div`
@@ -104,6 +107,7 @@ const StyledNavContainer = styled.div`
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { pathname } = useLocation();
 
   const handleMobileMenu = () => setIsMenuOpen((state) => !state);
@@ -114,7 +118,7 @@ const Navbar = () => {
   }, [pathname]);
 
   return (
-    <>
+    <Fragment>
       <StyledNavContainer>
         <Container>
           <nav className="nav">
@@ -144,7 +148,11 @@ const Navbar = () => {
 
             <div className="nav__group">
               <SearchBar />
-              <Button onClick={() => console.log("click")}>Login</Button>
+              <Button
+                onClick={() => setActiveModal({ type: ModalEnum.LOGIN_MODAL })}
+              >
+                Login
+              </Button>
             </div>
 
             <div className="nav__icon" onClick={handleMobileMenu}>
@@ -155,7 +163,12 @@ const Navbar = () => {
       </StyledNavContainer>
 
       {isMenuOpen && <MobileMenu closeMenu={() => setIsMenuOpen(false)} />}
-    </>
+      {activeModal && (
+        <Modal closeModal={() => setActiveModal(null)} variant>
+          <Login />
+        </Modal>
+      )}
+    </Fragment>
   );
 };
 

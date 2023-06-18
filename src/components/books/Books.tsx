@@ -64,7 +64,7 @@ const Books = (props: Props) => {
       </StyledBook>
 
       {activeModal && (
-        <Modal>
+        <Modal closeModal={() => setActiveModal(null)}>
           <Fragment>{modalContent}</Fragment>
         </Modal>
       )}

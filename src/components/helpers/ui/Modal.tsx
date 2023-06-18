@@ -4,11 +4,6 @@ import { IoIosClose } from "react-icons/io";
 import { styled } from "styled-components";
 import { devices } from "../../../styles/breakpoints";
 
-type Props = {
-  children: ReactNode;
-  variant?: "primary" | "secondary";
-};
-
 const ModalBase = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
@@ -60,21 +55,41 @@ const StyledPrimaryModal = styled(ModalBase)`
 
 const StyledSecondaryModal = styled(ModalBase)`
   .children {
+    background-color: var(--neutral-primary);
+    border-radius: 8px;
+    width: calc(100vw - 1rem);
+    border: 15px solid var(--neutral-light);
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+      rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    padding: 0.5rem;
+    max-width: 450px;
+
+    .icon-container {
+      display: none;
+    }
   }
 `;
 
+type Props = {
+  children: ReactNode;
+  variant?: boolean;
+
+  closeModal: () => void;
+};
+
 const Modal = (props: Props) => {
-  const { variant, children } = props;
+  const { variant, children, closeModal } = props;
 
   const handleEvent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
   };
 
   const Modal = variant ? StyledSecondaryModal : StyledPrimaryModal;
+
   return ReactDOM.createPortal(
-    <Modal>
+    <Modal onClick={closeModal}>
       <div className="children" onClick={handleEvent}>
-        <div className="icon-container">
+        <div className="icon-container" onClick={closeModal}>
           <IoIosClose size="35px" className="icon" color="var(--secondary)" />
         </div>
 

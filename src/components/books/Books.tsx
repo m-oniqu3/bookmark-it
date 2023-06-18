@@ -1,7 +1,10 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
+import { ModalEnum, ModalType } from "../../types/ModalType";
+import Modal from "../helpers/ui/Modal";
+import Information from "./Information";
 
 const StyledBook = styled.div`
   figure {
@@ -30,16 +33,41 @@ type Props = {
 };
 
 const Books = (props: Props) => {
-  const { book } = props;
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
+  const { book, modalType } = props;
+
+  const handleModal = () => {
+    setActiveModal({
+      type: ModalEnum.INFO_MODAL,
+      book,
+      modal: modalType,
+    });
+  };
+
+  const modalContent = (() => {
+    switch (activeModal?.type) {
+      case ModalEnum.INFO_MODAL:
+        return <Information />;
+
+      default:
+        return null;
+    }
+  })();
 
   const src = book.imageLinks?.smallThumbnail;
   return (
     <Fragment>
       <StyledBook>
-        <figure>
+        <figure onClick={handleModal}>
           <img src={src} alt={book.title} />
         </figure>
       </StyledBook>
+
+      {activeModal && (
+        <Modal>
+          <Fragment>{modalContent}</Fragment>
+        </Modal>
+      )}
     </Fragment>
   );
 };

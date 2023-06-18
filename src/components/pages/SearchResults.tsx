@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react";
 import { useParams } from "react-router-dom";
+import { styled } from "styled-components";
 import { useGetSearchResultsQuery } from "../../store/features/api/apiSlice";
+import { StyledGrid } from "../../styles/StyledGrid";
 import type { Book } from "../../types/Book";
 import Books from "../books/Books";
+import Container from "../helpers/ui/Container";
+
+const StyledSearchResults = styled.div`
+  padding: 1rem 0;
+`;
 
 const SearchResults = () => {
   const { query } = useParams() as { query: string };
@@ -55,7 +62,13 @@ const SearchResults = () => {
     }
   })();
 
-  return <div>{content}</div>;
+  return (
+    <StyledSearchResults>
+      <Container>
+        <StyledGrid>{content}</StyledGrid>
+      </Container>
+    </StyledSearchResults>
+  );
 };
 
 export default SearchResults;

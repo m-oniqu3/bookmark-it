@@ -7,6 +7,7 @@ import { StyledGrid } from "../../styles/StyledGrid";
 import type { Book } from "../../types/Book";
 import Books from "../books/Books";
 import Container from "../helpers/ui/Container";
+import Loading from "../helpers/ui/Loading";
 
 const StyledSearchResults = styled.div`
   padding: 1rem 0;
@@ -43,7 +44,7 @@ const SearchResults = () => {
       }
     );
   const content = (() => {
-    if (isLoading || isFetching) return <p>Loading...</p>;
+    if (isLoading || isFetching) return <Loading />;
     if (error) return <p>Error</p>;
 
     if (isSuccess && books) {

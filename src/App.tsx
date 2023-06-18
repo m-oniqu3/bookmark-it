@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Explore from "./components/pages/Explore";
 import Home from "./components/pages/Home";
 import Library from "./components/pages/Library";
+import SearchResults from "./components/pages/SearchResults";
 import Shelf from "./components/pages/Shelf";
 import LibraryLayout from "./layout/LibraryLayout";
 import RootLayout from "./layout/RootLayout";
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
         children: [{ path: "*", element: <Library /> }],
       },
       { path: "/shelves", element: <Shelf /> },
+      { path: "/search/:query", element: <SearchResults /> },
     ],
   },
 ]);

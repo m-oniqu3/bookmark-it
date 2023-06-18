@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 const StyledSearchBar = styled.form`
@@ -29,9 +31,27 @@ const StyledSearchBar = styled.form`
 `;
 
 const SearchBar = () => {
+  const [query, setQuery] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    navigate(`/search/${query}`);
+  };
+
   return (
-    <StyledSearchBar>
-      <input type="text" placeholder="Search bookmark" />
+    <StyledSearchBar onSubmit={(e) => handleSubmit(e)}>
+      <input
+        type="text"
+        placeholder="Search bookmark"
+        value={query}
+        onChange={(e) => handleQuery(e)}
+      />
     </StyledSearchBar>
   );
 };

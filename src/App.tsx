@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import BookDetails from "./components/books/BookDetails";
 import Explore from "./components/pages/Explore";
 import Home from "./components/pages/Home";
 import Library from "./components/pages/Library";
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       },
       { path: "/shelves", element: <Shelf /> },
       { path: "/search/:query", element: <SearchResults /> },
+      { path: "/details/:id", element: <BookDetails /> },
     ],
   },
 ]);

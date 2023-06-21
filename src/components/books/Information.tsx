@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
@@ -31,18 +32,26 @@ type Props = {
 };
 
 const Information = (props: Props) => {
+  const navigate = useNavigate();
   const { book, modalType } = props;
 
   const text = modalType === "library" ? "Library" : "Shelf";
 
+  const handleDetails = () => {
+    navigate(`/details/${book.id}`, {
+      state: { id: book.id },
+    });
+  };
+
   return (
     <StyledInfo>
       <Summary book={book} />
+
       <div className="button-group">
         <Button buttonType="action" onClick={() => console.log("v")}>
           Add to {text}
         </Button>
-        <Button buttonType="action" onClick={() => console.log("v")}>
+        <Button buttonType="action" onClick={handleDetails}>
           Details & More
         </Button>
       </div>

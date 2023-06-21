@@ -17,7 +17,7 @@ const StyledSummary = styled.section`
     figure {
       height: 150px;
       width: 100px;
-      box-shadow: rgba(90, 90, 90, 0.25) 0px 2px 5px -1px,
+      box-shadow: rgba(90, 90, 90, 0.096) 0px 2px 5px -1px,
         rgba(76, 76, 76, 0.3) 0px 1px 3px -1px;
       border-radius: 5px;
 

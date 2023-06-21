@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { styled } from "styled-components";
+import ScrollToTop from "../components/helpers/routes/ScrollToTop";
 import Navbar from "../components/nav/Navbar";
 
 const StyledLayout = styled.div`
@@ -11,13 +12,15 @@ const StyledLayout = styled.div`
 
 const RootLayout = () => {
   return (
-    <StyledLayout>
-      <Navbar />
+    <ScrollToTop>
+      <StyledLayout>
+        <Navbar />
 
-      <main className="main">
-        <Outlet />
-      </main>
-    </StyledLayout>
+        <main className="main">
+          <Outlet />
+        </main>
+      </StyledLayout>
+    </ScrollToTop>
   );
 };
 

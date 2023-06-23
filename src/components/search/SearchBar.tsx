@@ -42,6 +42,7 @@ const SearchBar = () => {
     e.preventDefault();
 
     navigate(`/search/${query}`);
+    setQuery("");
   };
 
   return (

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
+import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import Summary from "./Summary";
 
@@ -29,13 +30,25 @@ const StyledInfo = styled.div`
 type Props = {
   book: Book;
   modalType: "library" | "shelf";
+  setActiveModal: (modal: ModalType | null) => void;
 };
 
 const Information = (props: Props) => {
   const navigate = useNavigate();
-  const { book, modalType } = props;
+  const { book, modalType, setActiveModal } = props;
 
   const text = modalType === "library" ? "Library" : "Shelf";
+
+  const handleAdd = () => {
+    switch (modalType) {
+      case "library":
+        setActiveModal({ type: ModalEnum.ADD_TO_LIBRARY_MODAL, book });
+        break;
+
+      default:
+        setActiveModal({ type: ModalEnum.ADD_TO_LIBRARY_MODAL, book });
+    }
+  };
 
   const handleDetails = () => {
     navigate(`/details/${book.id}`, {
@@ -48,7 +61,7 @@ const Information = (props: Props) => {
       <Summary book={book} />
 
       <div className="button-group">
-        <Button buttonType="action" onClick={() => console.log("v")}>
+        <Button buttonType="action" onClick={handleAdd}>
           Add to {text}
         </Button>
         <Button buttonType="action" onClick={handleDetails}>

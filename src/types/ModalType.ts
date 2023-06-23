@@ -3,6 +3,7 @@ import { Book } from "./Book";
 export enum ModalEnum {
   INFO_MODAL = "INFO_MODAL",
   LOGIN_MODAL = "LOGIN_MODAL",
+  ADD_TO_LIBRARY_MODAL = "ADD_TO_LIBRARY_MODAL",
 }
 
 export type InfoModal = {
@@ -15,4 +16,9 @@ export type LoginModal = {
   type: ModalEnum.LOGIN_MODAL;
 };
 
-export type ModalType = InfoModal | LoginModal;
+export type AddToLibraryModal = {
+  type: ModalEnum.ADD_TO_LIBRARY_MODAL;
+  book: Book;
+};
+
+export type ModalType = InfoModal | LoginModal | AddToLibraryModal;

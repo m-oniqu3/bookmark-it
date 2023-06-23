@@ -4,6 +4,7 @@ import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Modal from "../helpers/ui/Modal";
+import AddToLibrary from "./AddToLibrary";
 import Information from "./Information";
 
 const StyledBook = styled.div`
@@ -37,11 +38,7 @@ const Books = (props: Props) => {
   const { book, modalType } = props;
 
   const handleModal = () => {
-    setActiveModal({
-      type: ModalEnum.INFO_MODAL,
-      book,
-      modal: modalType,
-    });
+    setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
   };
 
   const modalContent = (() => {
@@ -56,7 +53,7 @@ const Books = (props: Props) => {
         );
 
       case ModalEnum.ADD_TO_LIBRARY_MODAL:
-        return <p>ADD</p>;
+        return <AddToLibrary book={book} />;
 
       default:
         return null;

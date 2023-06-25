@@ -6,24 +6,33 @@ import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
+import { parseColor } from "../utils/parseColor";
 
-const StyledAddToLibrary = styled.div`
+const StyledAddToLibrary = styled.div<{ color: string }>`
   .content {
     display: grid;
     grid-template-columns: 100px auto;
     gap: 1rem;
   }
-  figure {
-    height: 150px;
-    width: 100px;
-    box-shadow: rgba(90, 90, 90, 0.096) 0px 2px 5px -1px,
-      rgba(76, 76, 76, 0.3) 0px 1px 3px -1px;
+
+  .background {
+    background-color: ${({ color }) => `rgba(${parseColor(color)},
+       0.5)`};
+    padding: 0.8rem;
     border-radius: 5px;
+    display: grid;
+    place-items: center;
+  }
+
+  figure {
+    height: 122px;
+    width: 75px;
 
     img {
       width: 100%;
       height: 100%;
       border-radius: 5px;
+      object-fit: cover;
     }
   }
 
@@ -108,13 +117,14 @@ type Props = {
   book: Book;
   setActiveModal: (modal: ModalType | null) => void;
   modalType: "library" | "shelf";
+  backgroundColor: string;
 };
 
 const categories = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
   const navigate = useNavigate();
-  const { book, setActiveModal, modalType } = props;
+  const { book, setActiveModal, modalType, backgroundColor } = props;
 
   const src = book.imageLinks?.smallThumbnail;
 
@@ -133,11 +143,13 @@ const AddToLibrary = (props: Props) => {
   };
 
   return (
-    <StyledAddToLibrary>
+    <StyledAddToLibrary color={backgroundColor}>
       <div className="content">
-        <figure>
-          <img src={src} alt={book.title} />
-        </figure>
+        <div className="background">
+          <figure>
+            <img src={src} alt={book.title} />
+          </figure>
+        </div>
 
         <article>
           <h1 className="title">Choose a category</h1>

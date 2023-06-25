@@ -26,7 +26,6 @@ const StyledSearchBar = styled.form`
     &::placeholder {
       color: var(--primary);
       opacity: 1;
-      text-align: center;
       font-weight: 300;
     }
   }

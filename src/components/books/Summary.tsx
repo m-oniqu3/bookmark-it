@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useRef } from "react";
+import ReactStars from "react-rating-star-with-type";
 import styled from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
@@ -26,13 +27,14 @@ const StyledSummary = styled.section<{ background: string }>`
     }
 
     figure {
-      height: 115px;
+      height: 122px;
       width: 75px;
 
       img {
         width: 100%;
         height: 100%;
         border-radius: 5px;
+        object-fit: cover;
       }
     }
 
@@ -45,14 +47,10 @@ const StyledSummary = styled.section<{ background: string }>`
         width: calc(100% - 2rem);
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         font-family: "Rubik", sans-serif;
         font-weight: bold;
-
-        @media (${devices.medium}) {
-          -webkit-line-clamp: 1;
-        }
       }
 
       .author {
@@ -84,7 +82,7 @@ const StyledSummary = styled.section<{ background: string }>`
         color: var(--secondary);
         font-style: normal;
         position: relative;
-        bottom: -12px;
+        bottom: 0px;
 
         @media (${devices.xsmall}) {
           -webkit-line-clamp: 3;
@@ -112,7 +110,7 @@ const Summary = (props: Props) => {
   const src = book.imageLinks?.smallThumbnail;
 
   const author = !book.authors ? "Unknown" : book.authors[0];
-  const categories = !book.categories ? "" : `- ${book.categories[0]}`;
+  const categories = !book.categories ? "" : `${book.categories[0]}`;
 
   return (
     <StyledSummary background={background}>
@@ -128,10 +126,18 @@ const Summary = (props: Props) => {
           <p className="author">{author}</p>
 
           <p className="details">
-            {new Date(book.publishedDate).getFullYear().toString()}
-            &nbsp;
+            {book.publishedDate &&
+              `${new Date(book.publishedDate).getFullYear().toString()} -  `}
             {categories}
           </p>
+
+          <ReactStars
+            value={book.averageRating || 1}
+            count={5}
+            size={15}
+            activeColor={background}
+            inactiveColor={`rgba(${parseColor(background)}, 0.8)`}
+          />
 
           <p className="snippet" ref={snippetRef} />
         </article>

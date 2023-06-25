@@ -77,6 +77,7 @@ const Books = (props: Props) => {
             book={book}
             setActiveModal={setActiveModal}
             modalType={modalType}
+            backgroundColor={colors[0]}
           />
         );
 

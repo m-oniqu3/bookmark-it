@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
@@ -60,14 +61,14 @@ const Information = (props: Props) => {
     <StyledInfo>
       <Summary book={book} />
 
-      <div className="button-group">
+      <StyledButtonGroup>
         <Button buttonType="action" onClick={handleAdd}>
           Add to {text}
         </Button>
         <Button buttonType="action" onClick={handleDetails}>
           Details & More
         </Button>
-      </div>
+      </StyledButtonGroup>
     </StyledInfo>
   );
 };

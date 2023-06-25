@@ -53,7 +53,13 @@ const Books = (props: Props) => {
         );
 
       case ModalEnum.ADD_TO_LIBRARY_MODAL:
-        return <AddToLibrary book={book} />;
+        return (
+          <AddToLibrary
+            book={book}
+            setActiveModal={setActiveModal}
+            modalType={modalType}
+          />
+        );
 
       default:
         return null;

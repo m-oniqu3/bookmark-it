@@ -1,13 +1,18 @@
 import { BsFillBookmarkFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
+import { ModalEnum, ModalType } from "../../types/ModalType";
+import Button from "../helpers/ui/Button";
 
 const StyledAddToLibrary = styled.div`
-  display: grid;
-  grid-template-columns: 100px auto;
-  gap: 1rem;
-
+  .content {
+    display: grid;
+    grid-template-columns: 100px auto;
+    gap: 1rem;
+  }
   figure {
     height: 150px;
     width: 100px;
@@ -101,43 +106,70 @@ const StyledAddToLibrary = styled.div`
 
 type Props = {
   book: Book;
+  setActiveModal: (modal: ModalType | null) => void;
+  modalType: "library" | "shelf";
 };
 
 const categories = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
-  const { book } = props;
+  const navigate = useNavigate();
+  const { book, setActiveModal, modalType } = props;
 
   const src = book.imageLinks?.smallThumbnail;
 
+  const handleSummary = () => {
+    setActiveModal({
+      type: ModalEnum.INFO_MODAL,
+      book,
+      modal: modalType,
+    });
+  };
+
+  const handleDetails = () => {
+    navigate(`/details/${book.id}`, {
+      state: { id: book.id },
+    });
+  };
+
   return (
     <StyledAddToLibrary>
-      <figure>
-        <img src={src} alt={book.title} />
-      </figure>
+      <div className="content">
+        <figure>
+          <img src={src} alt={book.title} />
+        </figure>
 
-      <article>
-        <h1 className="title">Choose a category</h1>
-        <p>Where do you want to add this book?</p>
-        <div className="categories">
-          {categories.map((category) => {
-            return (
-              <p
-                key={category}
-                className={`category ${category
-                  .toLowerCase()
-                  .split(" ")
-                  .join("-")}  `}
-              >
-                <span>
-                  <BsFillBookmarkFill />
-                </span>
-                {category}
-              </p>
-            );
-          })}
-        </div>
-      </article>
+        <article>
+          <h1 className="title">Choose a category</h1>
+          <p>Where do you want to add this book?</p>
+          <div className="categories">
+            {categories.map((category) => {
+              return (
+                <p
+                  key={category}
+                  className={`category ${category
+                    .toLowerCase()
+                    .split(" ")
+                    .join("-")}  `}
+                >
+                  <span>
+                    <BsFillBookmarkFill />
+                  </span>
+                  {category}
+                </p>
+              );
+            })}
+          </div>
+        </article>
+      </div>
+      <StyledButtonGroup>
+        <Button buttonType="action" onClick={handleSummary}>
+          Back to Summary
+        </Button>
+        <Button buttonType="action" onClick={handleDetails}>
+          Details & More
+        </Button>
+      </StyledButtonGroup>
     </StyledAddToLibrary>
   );
 };

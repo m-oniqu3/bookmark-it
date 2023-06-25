@@ -1,22 +1,40 @@
-import styled from "styled-components";
-import loading from "./../../../assets/blocks-wave.svg";
+import { StyledGrid } from "../../../styles/StyledGrid";
 
-const StyledLoader = styled.div`
-  display: grid;
-  place-items: center;
-  place-content: center;
-  min-height: calc(90vh - 65px);
-  height: 100%;
-`;
+const createPlaceholders = () => {
+  const windowWidth = window.innerWidth - 24;
+  const windowHeight = window.innerHeight - 65;
+
+  let placeholderWidth;
+  let placeholderHeight;
+  const gap = 24;
+
+  if (windowWidth >= 1024) {
+    placeholderWidth = 120 + gap;
+    placeholderHeight = 184 + gap;
+  } else if (windowWidth >= 600) {
+    placeholderWidth = 120 + gap;
+    placeholderHeight = 184 + gap;
+  } else {
+    placeholderWidth = 104;
+    placeholderHeight = 156.8;
+  }
+
+  const placeholderCount =
+    Math.floor(windowWidth / placeholderWidth) *
+    Math.floor(windowHeight / placeholderHeight);
+
+  const placeholderArray = [];
+  for (let i = 0; i < placeholderCount; i++) {
+    placeholderArray.push(<div className="placeholder" key={i}></div>);
+  }
+
+  return placeholderArray;
+};
 
 const Loading = () => {
-  return (
-    <StyledLoader>
-      <figure>
-        <img src={loading} alt="Loading icon" />
-      </figure>
-    </StyledLoader>
-  );
+  const placeholders = createPlaceholders();
+
+  return <StyledGrid>{placeholders}</StyledGrid>;
 };
 
 export default Loading;

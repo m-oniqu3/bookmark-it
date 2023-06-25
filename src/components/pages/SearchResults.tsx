@@ -45,6 +45,7 @@ const SearchResults = () => {
     );
   const content = (() => {
     if (isLoading || isFetching) return <Loading />;
+
     if (error) return <p>Error</p>;
 
     if (isSuccess && books) {

@@ -13,9 +13,21 @@ export const StyledGrid = styled.div`
   .placeholder {
     background-color: var(--primary);
     border-radius: 5px;
-    opacity: 0.2;
     height: 9.8rem;
     width: 6.5rem;
+
+    animation: pulse 1s infinite;
+    @keyframes pulse {
+      0% {
+        opacity: 0.4;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.4;
+      }
+    }
 
     @media (${devices.medium}) {
       height: 11.5rem;

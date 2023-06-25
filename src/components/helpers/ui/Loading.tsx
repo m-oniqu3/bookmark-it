@@ -1,4 +1,41 @@
+import { styled } from "styled-components";
 import { StyledGrid } from "../../../styles/StyledGrid";
+
+const StyledLoading = styled.div`
+  width: 100%;
+
+  .title {
+    height: 6vh;
+    margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    background: var(--primary);
+    border-radius: 5px;
+    animation: pulse 5s infinite;
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.1;
+      }
+
+      25% {
+        opacity: 0.15;
+      }
+
+      50% {
+        opacity: 0.2;
+      }
+
+      75% {
+        opacity: 0.15;
+      }
+
+      100% {
+        opacity: 0.1;
+      }
+    }
+  }
+`;
 
 const createPlaceholders = () => {
   const windowWidth = window.innerWidth - 24;
@@ -34,7 +71,12 @@ const createPlaceholders = () => {
 const Loading = () => {
   const placeholders = createPlaceholders();
 
-  return <StyledGrid>{placeholders}</StyledGrid>;
+  return (
+    <StyledLoading>
+      <div className="title"></div>
+      <StyledGrid>{placeholders}</StyledGrid>;
+    </StyledLoading>
+  );
 };
 
 export default Loading;

@@ -8,6 +8,7 @@ import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
+import Options from "./Options";
 
 const StyledDetailsContainer = styled(Container)`
   display: grid;
@@ -258,6 +259,7 @@ const BookDetails = () => {
         };
       },
     });
+
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
   const navigate = useNavigate();
   const [openAddToLibraryOptions, setOpenAddToLibraryOptions] = useState(false);
@@ -312,7 +314,7 @@ const BookDetails = () => {
 
             {openAddToLibraryOptions && (
               <article className="desktop-library-categories">
-                <p>options</p>
+                <Options />
               </article>
             )}
           </div>
@@ -336,7 +338,7 @@ const BookDetails = () => {
 
           {openAddToLibraryOptions && (
             <article className="mobile-library-categories">
-              <p>options</p>
+              <Options />
             </article>
           )}
 

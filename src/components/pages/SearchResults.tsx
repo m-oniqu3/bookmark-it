@@ -33,6 +33,7 @@ const SearchResults = () => {
               description: item.volumeInfo?.description,
               imageLinks: item.volumeInfo.imageLinks,
               searchInfo: item.searchInfo,
+              averageRating: item.volumeInfo.averageRating,
             })) as Book[],
 
             isLoading: result.isLoading,
@@ -56,6 +57,7 @@ const SearchResults = () => {
           {books
             // remove books without an image
             .filter((book) => book.imageLinks?.smallThumbnail !== undefined)
+
             .map((book) => {
               return <Books key={book.id} book={book} modalType="library" />;
             })}

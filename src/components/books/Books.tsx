@@ -7,6 +7,10 @@ import Modal from "../helpers/ui/Modal";
 import AddToLibrary from "./AddToLibrary";
 import Information from "./Information";
 
+// @ts-expect-error - no types available
+
+import { ColorExtractor } from "react-color-extractor";
+
 const StyledBook = styled.div`
   figure {
     cursor: pointer;
@@ -36,6 +40,7 @@ type Props = {
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType } = props;
+  const [colors, setColors] = useState<string[]>([]);
 
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -66,13 +71,27 @@ const Books = (props: Props) => {
     }
   })();
 
-  const src = book.imageLinks?.smallThumbnail;
+  const handleColors = (colors: string[]) => {
+    setColors(colors);
+  };
+
+  const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+
   return (
     <Fragment>
       <StyledBook>
         <figure onClick={handleModal}>
-          <img src={src} alt={book.title} />
+          <ColorExtractor getColors={handleColors}>
+            <img src={src} alt={book.title} />
+          </ColorExtractor>
         </figure>
+
+        {colors.map((color, index) => (
+          <div
+            key={index}
+            style={{ backgroundColor: color, width: "100%", height: "1rem" }}
+          ></div>
+        ))}
       </StyledBook>
 
       {activeModal && (

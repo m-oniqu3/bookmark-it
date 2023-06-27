@@ -4,7 +4,7 @@ import { devices } from "./breakpoints";
 export const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
   place-items: center;
   padding-bottom: 2rem;
   width: 100%;
@@ -36,11 +36,12 @@ export const StyledGrid = styled.div`
   }
 
   @media (${devices.medium}) {
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 2rem;
   }
 
   @media (${devices.xlarge}) {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 3rem;
   }
 `;

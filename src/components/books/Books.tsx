@@ -11,11 +11,56 @@ import Information from "./Information";
 
 import { ColorExtractor } from "react-color-extractor";
 
-const StyledBook = styled.div`
+const StyledBook = styled.div<{ colors: string[] }>`
+  position: relative;
+
+  .bg-container {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    z-index: -1;
+  }
+
+  .bg-left,
+  .bg-right {
+    position: relative;
+    height: 8rem;
+    width: 5rem;
+    border-radius: 5px;
+    opacity: 0.5;
+
+    @media (${devices.medium}) {
+      height: 11rem;
+      width: 7rem;
+    }
+  }
+
+  .bg-left {
+    background-color: ${(props) => props.colors[0]};
+    border-radius: 5px;
+    transform: rotate(-10deg);
+  }
+
+  .bg-right {
+    background-color: ${(props) => props.colors[1]};
+    transform: rotate(10deg);
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
   figure {
+    position: relative;
     cursor: pointer;
     height: 9.8rem;
     width: 6.5rem;
+
+    //no rotation
+    transform: rotate(0deg);
 
     @media (${devices.medium}) {
       height: 11.5rem;
@@ -79,19 +124,16 @@ const Books = (props: Props) => {
 
   return (
     <Fragment>
-      <StyledBook>
+      <StyledBook colors={colors}>
+        <div className="bg-container">
+          <div className="bg-left"></div>
+          <div className="bg-right"></div>
+        </div>
         <figure onClick={handleModal}>
           <ColorExtractor getColors={handleColors}>
             <img src={src} alt={book.title} />
           </ColorExtractor>
         </figure>
-
-        {colors.map((color, index) => (
-          <div
-            key={index}
-            style={{ backgroundColor: color, width: "100%", height: "1rem" }}
-          ></div>
-        ))}
       </StyledBook>
 
       {activeModal && (

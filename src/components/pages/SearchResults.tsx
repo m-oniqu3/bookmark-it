@@ -9,7 +9,7 @@ import Books from "../books/Books";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
 
-const StyledSearchResults = styled.div`
+const StyledSearchResults = styled(Container)`
   padding: 1rem 0;
 `;
 
@@ -68,9 +68,7 @@ const SearchResults = () => {
 
   return (
     <StyledSearchResults>
-      <Container>
-        <StyledGrid>{content}</StyledGrid>
-      </Container>
+      <StyledGrid>{content}</StyledGrid>
     </StyledSearchResults>
   );
 };

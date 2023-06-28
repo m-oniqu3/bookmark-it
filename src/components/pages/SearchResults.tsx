@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetSearchResultsQuery } from "../../store/features/api/apiSlice";
@@ -14,10 +13,16 @@ import Loading from "../helpers/ui/Loading";
 const StyledSearchResults = styled(Container)`
   padding: 1.5rem 0;
 
+  width: 100%;
+
   @media (${devices.large}) {
     display: grid;
-    grid-template-columns: 1fr 18rem;
+    grid-template-columns: 1fr 15.5rem;
     gap: 2rem;
+
+    aside {
+      order: 1;
+    }
   }
 `;
 
@@ -61,7 +66,9 @@ const SearchResults = () => {
       if (books.length === 0) return <p>No results found</p>;
 
       return (
-        <>
+        <StyledSearchResults>
+          <Sidebar books={books} />
+
           <StyledGrid>
             {books
               // remove books without an image
@@ -71,18 +78,12 @@ const SearchResults = () => {
                 return <Books key={book.id} book={book} modalType="library" />;
               })}
           </StyledGrid>
-
-          <Sidebar books={books} />
-        </>
+        </StyledSearchResults>
       );
     }
   })();
 
-  return (
-    <StyledSearchResults>
-      <Fragment>{content}</Fragment>
-    </StyledSearchResults>
-  );
+  return <Container>{content}</Container>;
 };
 
 export default SearchResults;

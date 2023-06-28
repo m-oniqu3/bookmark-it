@@ -30,13 +30,8 @@ const StyledBook = styled.div<{ colors: string[] }>`
     }
 
     @media (${devices.medium}) {
-      height: 10rem;
-      width: 6.8rem;
-    }
-
-    @media (${devices.large}) {
-      height: 11rem;
-      width: 7.2rem;
+      height: 10.5rem;
+      width: 7rem;
     }
 
     img {

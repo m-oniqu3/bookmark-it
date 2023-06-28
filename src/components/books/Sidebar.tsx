@@ -7,33 +7,58 @@ import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 
 const StyledSidebar = styled.aside`
-  display: none;
+  /* display: none; */
+
+  .genres {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    padding-bottom: 1rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (${devices.large}) {
+      flex-wrap: wrap;
+      /* overflow: none; */
+    }
+
+    .genre {
+      padding: 7px 12px;
+      border-radius: 5px;
+      text-transform: capitalize;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1a1a1a;
+      min-width: fit-content;
+    }
+  }
 
   @media (${devices.large}) {
     position: sticky;
     top: 12vh;
     height: fit-content;
-    /* padding: 0 1rem;
-    border-left: 1px solid var(--neutral-light); */
-    display: block;
-  }
-
-  .genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    .genre {
-      padding: 6px 12px;
-      border-radius: 5px;
-      text-transform: capitalize;
-    }
   }
 `;
 
 type Props = {
   books: Book[];
 };
+
+const recentSearches = [
+  "helen hoang",
+  "colleen hoover",
+  "harley laroux",
+  "sally thorne",
+  "lj shen",
+  "ana huang",
+  "sophie lark",
+  "twisted games",
+];
+
 const Sidebar = (props: Props) => {
   const { books } = props;
   const [colors, setColors] = useState<string[]>([]);
@@ -45,6 +70,7 @@ const Sidebar = (props: Props) => {
   const uniqueGenres = new Set(
     result.map((book) => book.categories).flat() as string[]
   );
+
   const genreColors: string[] = [];
 
   const handleColors = (colors: string[]) => {
@@ -65,7 +91,13 @@ const Sidebar = (props: Props) => {
   const content = (
     <div className="genres">
       {[...uniqueGenres].map((genre, i) => (
-        <div className="genre" style={{ backgroundColor: colors[i] }} key={i}>
+        <div
+          className="genre"
+          style={{
+            backgroundColor: colors[i],
+          }}
+          key={i}
+        >
           {genre.toLowerCase()}
         </div>
       ))}

@@ -12,66 +12,37 @@ import Information from "./Information";
 import { ColorExtractor } from "react-color-extractor";
 
 const StyledBook = styled.div<{ colors: string[] }>`
-  position: relative;
-
   .bg-container {
-    position: absolute;
-    top: 2px;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* display: flex; */
-    /* justify-content: space-between; */
-    z-index: -1;
-  }
-
-  .bg-left,
-  .bg-right {
-    position: relative;
-    height: 8rem;
-    width: 5rem;
+    background-color: ${({ colors }) => colors[0]};
+    padding: 0.8rem;
     border-radius: 5px;
-    opacity: 0.5;
-
-    @media (${devices.medium}) {
-      height: 11rem;
-      width: 7rem;
-    }
-  }
-
-  .bg-left {
-    background-color: ${(props) => props.colors[0]};
-    border-radius: 5px;
-    transform: rotate(-10deg);
-  }
-
-  .bg-right {
-    background-color: ${(props) => props.colors[1]};
-    transform: rotate(10deg);
-    position: absolute;
-    top: 5px;
-    left: 5px;
   }
 
   figure {
     position: relative;
     cursor: pointer;
-    height: 9.8rem;
-    width: 6.5rem;
+    height: 6rem;
+    width: 4rem;
 
-    //no rotation
-    transform: rotate(0deg);
+    @media (${devices.xsmall}) {
+      height: 7.5rem;
+      width: 5rem;
+    }
 
     @media (${devices.medium}) {
-      height: 11.5rem;
-      width: 7.5rem;
+      height: 10rem;
+      width: 6.8rem;
+    }
+
+    @media (${devices.large}) {
+      height: 11rem;
+      width: 7.2rem;
     }
 
     img {
       height: 100%;
       width: 100%;
-      /* box-shadow: rgba(95, 95, 96, 0.25) 0px 4px 8px -2px,
-        rgba(9, 30, 66, 0.08) 0px 0px 0px 1px; */
+      object-fit: cover;
       border-radius: 5px;
     }
   }
@@ -126,14 +97,12 @@ const Books = (props: Props) => {
     <Fragment>
       <StyledBook colors={colors}>
         <div className="bg-container">
-          <div className="bg-left"></div>
-          <div className="bg-right"></div>
+          <figure onClick={handleModal}>
+            <ColorExtractor getColors={handleColors}>
+              <img src={src} alt={book.title} />
+            </ColorExtractor>
+          </figure>{" "}
         </div>
-        <figure onClick={handleModal}>
-          <ColorExtractor getColors={handleColors}>
-            <img src={src} alt={book.title} />
-          </ColorExtractor>
-        </figure>
       </StyledBook>
 
       {activeModal && (

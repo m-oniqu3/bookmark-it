@@ -4,14 +4,69 @@ import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetSearchResultsQuery } from "../../store/features/api/apiSlice";
 import { StyledGrid } from "../../styles/StyledGrid";
+import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import Books from "../books/Books";
+import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
 
 const StyledSearchResults = styled(Container)`
-  padding: 1rem 0;
+  padding: 1.5rem 0;
+
+  aside {
+    display: none;
+  }
+
+  @media (${devices.large}) {
+    display: grid;
+    grid-template-columns: 1fr 18rem;
+    gap: 2rem;
+
+    aside {
+      position: sticky;
+      top: 12vh;
+      height: fit-content;
+      padding: 0 1rem;
+      border-left: 1px solid var(--neutral-light);
+      display: block;
+
+      .heading {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        font-family: "Roboto", sans-serif;
+        font-weight: bold;
+      }
+
+      .genres {
+        padding: 1rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+  }
 `;
+
+const bookGenres = [
+  "Fiction",
+  "Non-fiction",
+  "Mystery",
+  "Thriller",
+  "Romance",
+  "Self-Help",
+  "Fantasy",
+  "Horror",
+  "Science Fiction",
+  "Art",
+  "Biography",
+  "History",
+  "Business",
+  "Travel",
+  "Cooking",
+  "Poetry",
+  "Children",
+];
 
 const SearchResults = () => {
   const { query } = useParams() as { query: string };
@@ -69,6 +124,23 @@ const SearchResults = () => {
   return (
     <StyledSearchResults>
       <StyledGrid>{content}</StyledGrid>
+      <aside>
+        <h2 className="heading">Genres</h2>
+
+        <div className="genres">
+          {bookGenres.map((genre) => {
+            return (
+              <Button
+                key={genre}
+                buttonType="action"
+                onClick={() => console.log("click")}
+              >
+                {genre}
+              </Button>
+            );
+          })}
+        </div>
+      </aside>
     </StyledSearchResults>
   );
 };

@@ -10,10 +10,12 @@ import Information from "./Information";
 // @ts-expect-error - no types available
 
 import { ColorExtractor } from "react-color-extractor";
+import { parseColor } from "../utils/parseColor";
 
 const StyledBook = styled.div<{ colors: string[] }>`
   .bg-container {
-    background-color: ${({ colors }) => colors[0]};
+    background-color: ${({ colors }) => `rgba(${parseColor(colors[0])},
+       0.5)`};
     padding: 0.8rem;
     border-radius: 5px;
   }

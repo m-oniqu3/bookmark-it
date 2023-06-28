@@ -5,6 +5,7 @@ import type { Book } from "../../types/Book";
 import { ColorExtractor } from "react-color-extractor";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
+import { parseColor } from "../utils/parseColor";
 
 const StyledSidebar = styled.aside`
   /* display: none; */
@@ -94,7 +95,7 @@ const Sidebar = (props: Props) => {
         <div
           className="genre"
           style={{
-            backgroundColor: colors[i],
+            backgroundColor: `rgba(${parseColor(colors[i])}, 0.5)`,
           }}
           key={i}
         >

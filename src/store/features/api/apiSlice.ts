@@ -11,7 +11,7 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getSearchResults: builder.query({
       query: (searchQuery: string) =>
-        `?q=${searchQuery}&orderBy=relevance&maxResults=40&key=${apiKey}`,
+        `?q=${searchQuery}&orderBy=relevance&maxResults=40&printType=books&key=${apiKey}`,
     }),
     getBookDetails: builder.query({
       query: (bookId: string) => `/${bookId}`,

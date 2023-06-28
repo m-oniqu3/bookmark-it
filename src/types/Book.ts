@@ -3,7 +3,7 @@ type SearchInfo = {
 };
 
 type ImageLinks = {
-  smallThumbnail: string | undefined;
+  smallThumbnail: string;
 };
 
 export type Book = {
@@ -16,4 +16,5 @@ export type Book = {
   searchInfo: SearchInfo | undefined;
   subtitle?: string | undefined;
   publishedDate: string;
+  averageRating: number;
 };

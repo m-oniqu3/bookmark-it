@@ -1,16 +1,27 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
+import { IoIosClose } from "react-icons/io";
 import type { Book } from "../../types/Book";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
 const StyledSidebar = styled.aside`
-  /* display: none; */
+  .title {
+    display: none;
 
-  .genres {
+    @media (${devices.large}) {
+      display: block;
+      padding-bottom: 1rem;
+      color: var(--secondary);
+    }
+  }
+
+  .genres,
+  .searches {
     display: flex;
     gap: 1rem;
     width: 100%;
@@ -24,10 +35,10 @@ const StyledSidebar = styled.aside`
 
     @media (${devices.large}) {
       flex-wrap: wrap;
-      /* overflow: none; */
     }
 
-    .genre {
+    .genre,
+    .search {
       padding: 7px 12px;
       border-radius: 5px;
       text-transform: capitalize;
@@ -35,6 +46,37 @@ const StyledSidebar = styled.aside`
       font-weight: 500;
       color: #1a1a1a;
       min-width: fit-content;
+    }
+  }
+
+  .searches {
+    @media (${devices.large}) {
+      padding-bottom: 1.5rem;
+    }
+
+    .search {
+      background-color: var(--neutral-light);
+      display: flex;
+      gap: 5px;
+      align-content: center;
+      justify-content: center;
+      cursor: pointer;
+
+      p {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.2rem;
+        width: 1.2rem;
+      }
     }
   }
 
@@ -51,18 +93,17 @@ type Props = {
 
 const recentSearches = [
   "helen hoang",
-  "colleen hoover",
-  "harley laroux",
-  "sally thorne",
+  "scythe",
   "lj shen",
+  "colleen hoover",
+  "punk 57",
   "ana huang",
-  "sophie lark",
-  "twisted games",
 ];
 
 const Sidebar = (props: Props) => {
   const { books } = props;
   const [colors, setColors] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const result = books
     .filter((book) => book.categories !== undefined)
@@ -105,9 +146,31 @@ const Sidebar = (props: Props) => {
     </div>
   );
 
+  const handleSearch = (search: string) => {
+    navigate(`/search/${search}`);
+  };
+
   return (
     <StyledSidebar>
-      <Fragment> {content}</Fragment>
+      <div className="recents">
+        <h3 className="title">Recent Searches</h3>
+        <div className="searches">
+          {recentSearches.map((search, i) => (
+            <div className="search" key={i}>
+              <p onClick={() => handleSearch(search)}> {search}</p>
+
+              <span>
+                <IoIosClose size={20} />
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="genre-group">
+        <h3 className="title">Genres</h3>
+        {content}
+      </div>
       <div style={{ display: "none" }}>{image}</div>
     </StyledSidebar>
   );

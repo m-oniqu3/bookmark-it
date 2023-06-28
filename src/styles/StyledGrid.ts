@@ -6,7 +6,6 @@ export const StyledGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
   gap: 1rem;
   place-items: center;
-  /* padding-bottom: 2rem; */
   width: 100%;
   height: 100%;
 

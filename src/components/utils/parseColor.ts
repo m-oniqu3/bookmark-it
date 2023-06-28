@@ -1,4 +1,8 @@
-export function parseColor(color: string) {
+export function parseColor(color: string | undefined): string {
+  if (!color) {
+    return "";
+  }
+
   // Remove leading '#' if present
   if (color.charAt(0) === "#") {
     color = color.substr(1);

@@ -57,6 +57,7 @@ const SearchResults = () => {
         },
       }
     );
+
   const content = (() => {
     if (isLoading || isFetching) return <Loading />;
 
@@ -73,7 +74,6 @@ const SearchResults = () => {
             {books
               // remove books without an image
               .filter((book) => book.imageLinks?.smallThumbnail !== undefined)
-
               .map((book) => {
                 return <Books key={book.id} book={book} modalType="library" />;
               })}

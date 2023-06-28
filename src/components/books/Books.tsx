@@ -101,7 +101,7 @@ const Books = (props: Props) => {
             <ColorExtractor getColors={handleColors}>
               <img src={src} alt={book.title} />
             </ColorExtractor>
-          </figure>{" "}
+          </figure>
         </div>
       </StyledBook>
 

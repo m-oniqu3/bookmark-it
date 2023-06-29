@@ -40,14 +40,15 @@ const StyledAddToLibrary = styled.div<{ color: string }>`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
     justify-content: space-between;
 
-    p {
+    .question {
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
+      position: relative;
+      top: -8px;
 
       @media (${devices.small}) {
         display: block;
@@ -153,7 +154,7 @@ const AddToLibrary = (props: Props) => {
 
         <article>
           <h1 className="title">Choose a category</h1>
-          <p>Where do you want to add this book?</p>
+          <p className="question">Where do you want to add this book?</p>
           <div className="categories">
             {categories.map((category) => {
               return (

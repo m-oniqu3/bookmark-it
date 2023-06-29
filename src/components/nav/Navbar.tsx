@@ -48,11 +48,12 @@ const StyledNavContainer = styled.div`
       display: none;
 
       @media (${devices.large}) {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        place-items: center;
         gap: 1rem;
         list-style: none;
+        width: 300px;
       }
 
       a {
@@ -60,10 +61,13 @@ const StyledNavContainer = styled.div`
           text-decoration: none;
           color: var(--neutral-medium);
           font-size: 0.95rem;
+          font-weight: 400;
+          font-stretch: condensed; /* Added font-stretch property */
+          width: 50px;
 
           &.active {
             color: var(--secondary);
-            font-weight: bold;
+            font-weight: 500;
           }
 
           &:hover {

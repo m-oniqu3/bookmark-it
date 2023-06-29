@@ -36,7 +36,7 @@ const StyledNavContainer = styled.div`
 
         @media ${devices.medium} {
           display: block;
-          font-family: "Roboto", sans-serif;
+          font-family: "Rubik", sans-serif;
           font-size: clamp(1.2rem, 2.5vw, 1.4rem);
           font-weight: bold;
           color: var(--primary);
@@ -59,7 +59,7 @@ const StyledNavContainer = styled.div`
         @media (${devices.large}) {
           text-decoration: none;
           color: var(--neutral-medium);
-          font-size: 1rem;
+          font-size: 0.95rem;
 
           &.active {
             color: var(--secondary);

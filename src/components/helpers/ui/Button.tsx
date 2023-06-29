@@ -8,8 +8,8 @@ interface Props {
 }
 
 const ButtonBase = styled.button`
-  font-size: 1rem;
-  padding: 6px 20px;
+  font-size: 0.9rem;
+  padding: 7px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -27,7 +27,6 @@ const StyledPrimaryButton = styled(ButtonBase)`
 `;
 
 const StyledActionButton = styled(ButtonBase)`
-  padding: 6px 20px;
   background-color: var(--neutral-primary);
   color: var(--secondary);
   border-radius: 5px;

@@ -53,7 +53,7 @@ const StyledAddToLibrary = styled.div`
       display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
-      font-family: "Roboto", sans-serif;
+      font-family: "Rubik", sans-serif;
       font-weight: bold;
     }
 

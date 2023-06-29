@@ -10,7 +10,7 @@ export type Book = {
   id: string;
   title: string;
   authors?: string[];
-  categories: string | undefined;
+  categories: string[] | undefined;
   description: string | undefined;
   imageLinks: ImageLinks | undefined;
   searchInfo: SearchInfo | undefined;

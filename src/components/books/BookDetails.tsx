@@ -89,7 +89,7 @@ const StyledDetailsContainer = styled(Container)`
     .title {
       font-size: clamp(1.2rem, 2.5vw, 1.5rem);
       color: var(--secondary);
-      font-family: "Roboto", sans-serif;
+      font-family: "Rubik", sans-serif;
       font-weight: bold;
     }
 

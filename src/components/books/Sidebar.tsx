@@ -95,7 +95,6 @@ const recentSearches = [
   "helen hoang",
   "scythe",
   "lj shen",
-  "colleen hoover",
   "punk 57",
   "ana huang",
 ];
@@ -110,17 +109,22 @@ const Sidebar = (props: Props) => {
     .filter((book) => book.imageLinks?.smallThumbnail !== undefined);
 
   const uniqueGenres = new Set(
-    result.map((book) => book.categories).flat() as string[]
+    result
+      .map((book) => {
+        const categories: string = book.categories ? book.categories[0] : "";
+        return categories.toLowerCase();
+      })
+      .flat() as string[]
   );
 
-  const genreColors: string[] = [];
+  const uniqueColors = new Set() as Set<string>;
 
-  const handleColors = (colors: string[]) => {
-    genreColors.push(colors[0]);
-    setColors(genreColors.slice(0, uniqueGenres.size));
+  const handleColors = (values: string[]) => {
+    uniqueColors.add(values[0]);
+    setColors([...uniqueColors]);
   };
 
-  const image = books.slice(0, uniqueGenres.size).map((book, i) => {
+  const image = result.map((book, i) => {
     const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
     return (
@@ -135,9 +139,7 @@ const Sidebar = (props: Props) => {
       {[...uniqueGenres].map((genre, i) => (
         <div
           className="genre"
-          style={{
-            backgroundColor: `rgba(${parseColor(colors[i])}, 0.5)`,
-          }}
+          style={{ backgroundColor: `rgba(${parseColor(colors[i])}, 0.5)` }}
           key={i}
         >
           {genre.toLowerCase()}

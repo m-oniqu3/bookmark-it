@@ -32,8 +32,8 @@ const StyledBook = styled.div<{ colors: string[] }>`
     }
 
     @media (${devices.medium}) {
-      height: 10.5rem;
-      width: 7rem;
+      height: 10.8rem;
+      width: 7.2rem;
     }
 
     img {
@@ -67,6 +67,7 @@ const Books = (props: Props) => {
             book={book}
             modalType={modalType}
             setActiveModal={setActiveModal}
+            background={colors[0]}
           />
         );
 

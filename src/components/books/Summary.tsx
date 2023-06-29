@@ -3,23 +3,31 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
+import { parseColor } from "../utils/parseColor";
 
 interface Props {
   book: Book;
+  background: string;
 }
 
-const StyledSummary = styled.section`
+const StyledSummary = styled.section<{ background: string }>`
   .summary {
     display: grid;
     grid-template-columns: 100px auto;
     gap: 1rem;
 
-    figure {
-      height: 150px;
-      width: 100px;
-      box-shadow: rgba(90, 90, 90, 0.096) 0px 2px 5px -1px,
-        rgba(76, 76, 76, 0.3) 0px 1px 3px -1px;
+    .background {
+      background-color: ${({ background }) => `rgba(${parseColor(background)},
+       0.5)`};
+      padding: 0.8rem;
       border-radius: 5px;
+      display: grid;
+      place-items: center;
+    }
+
+    figure {
+      height: 115px;
+      width: 75px;
 
       img {
         width: 100%;
@@ -39,7 +47,7 @@ const StyledSummary = styled.section`
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-        font-family: "Roboto", sans-serif;
+        font-family: "Rubik", sans-serif;
         font-weight: bold;
 
         @media (${devices.medium}) {
@@ -49,6 +57,8 @@ const StyledSummary = styled.section`
 
       .author {
         color: var(--secondary);
+        font-size: 0.95rem;
+        font-weight: 500;
       }
 
       .details {
@@ -57,10 +67,13 @@ const StyledSummary = styled.section`
         padding: 3px 0;
         flex-wrap: wrap-reverse;
         text-transform: capitalize;
+        font-size: 0.95rem;
+        font-weight: 500;
       }
 
       .snippet {
-        font-weight: 300;
+        font-size: 0.92rem;
+        font-weight: 400;
         line-height: 125%;
         padding-top: 0.5rem;
         width: calc(100% - 1rem);
@@ -83,7 +96,7 @@ const StyledSummary = styled.section`
 
 const Summary = (props: Props) => {
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
-  const { book } = props;
+  const { book, background } = props;
 
   /** the textSnippet includes html tags so use useRef to include the text in the innerHTML
    * if there is no snippet then show description or alternative text
@@ -102,11 +115,13 @@ const Summary = (props: Props) => {
   const categories = !book.categories ? "" : `- ${book.categories[0]}`;
 
   return (
-    <StyledSummary>
+    <StyledSummary background={background}>
       <div className="summary">
-        <figure>
-          <img src={src} alt={book.title} />
-        </figure>
+        <div className="background">
+          <figure>
+            <img src={src} alt={book.title} />
+          </figure>
+        </div>
 
         <article>
           <h1 className="title">{book.title}</h1>

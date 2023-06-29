@@ -12,10 +12,11 @@ const StyledSearchBar = styled.form`
   input {
     border: 1.2px solid var(--primary);
     border-radius: 5px;
-    padding: 6px 15px;
+    padding: 7px 15px;
     color: var(--primary);
     width: 100%;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    font-weight: 400;
 
     &:focus {
       outline: none;
@@ -26,6 +27,7 @@ const StyledSearchBar = styled.form`
       color: var(--primary);
       opacity: 1;
       text-align: center;
+      font-weight: 300;
     }
   }
 `;
@@ -42,7 +44,6 @@ const SearchBar = () => {
     e.preventDefault();
 
     navigate(`/search/${query}`);
-    setQuery("");
   };
 
   return (

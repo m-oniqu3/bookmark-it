@@ -6,6 +6,7 @@ import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import Books from "../books/Books";
+
 import Sidebar from "../books/Sidebar";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
@@ -18,7 +19,7 @@ const StyledSearchResults = styled(Container)`
   @media (${devices.large}) {
     display: grid;
     grid-template-columns: 1fr 15.5rem;
-    gap: 2rem;
+    gap: 3rem;
 
     aside {
       order: 1;

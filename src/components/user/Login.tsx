@@ -11,7 +11,7 @@ const StyledLogin = styled(Container)`
   h1 {
     font-size: clamp(1.2rem, 2vw, 1.7rem);
     color: var(--primary);
-    font-family: "Roboto", sans-serif;
+    font-family: "Rubik", sans-serif;
     font-weight: 700;
   }
 

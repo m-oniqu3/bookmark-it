@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
@@ -12,7 +12,12 @@ import Loading from "../helpers/ui/Loading";
 import { ColorExtractor } from "react-color-extractor";
 import { parseColor } from "../utils/parseColor";
 
-const StyledDetailsContainer = styled(Container)<{ background: string }>`
+type StyledProps = {
+  background: string;
+  categories: boolean;
+};
+
+const StyledDetailsContainer = styled(Container)<StyledProps>`
   padding: 2rem 0;
 
   @media (${devices.semiLarge}) {
@@ -22,7 +27,9 @@ const StyledDetailsContainer = styled(Container)<{ background: string }>`
   }
 
   @media (${devices.xlarge}) {
-    grid-template-columns: 250px 1fr 15.5rem;
+    grid-template-columns: ${({ categories }) =>
+      categories ? "250px 1fr 15.5rem;" : "200px 1fr"};
+    width: ${({ categories }) => (categories ? "" : "70%")};
     gap: 1rem;
   }
 
@@ -62,7 +69,7 @@ const StyledDetailsContainer = styled(Container)<{ background: string }>`
 
   .overview {
     @media (${devices.xlarge}) {
-      width: 85%;
+      width: ${({ categories }) => (categories ? "80%" : "85%")};
       margin: 0 auto;
     }
   }
@@ -80,7 +87,7 @@ const StyledDetailsContainer = styled(Container)<{ background: string }>`
     }
 
     .title {
-      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
       color: var(--secondary);
       font-family: "Rubik", sans-serif;
       font-weight: bold;
@@ -103,8 +110,19 @@ const StyledDetailsContainer = styled(Container)<{ background: string }>`
   }
 
   .details {
+    .synopsis {
+      font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--secondary);
+      margin-top: 1.2rem;
+
+      @media (${devices.medium}) {
+        margin-top: 1.8rem;
+      }
+    }
+
     .description {
-      padding-top: 1rem;
+      padding-top: 0.5rem;
     }
 
     .description,
@@ -118,6 +136,7 @@ const StyledDetailsContainer = styled(Container)<{ background: string }>`
       padding-top: 1rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       overflow-x: scroll;
       scrollbar-width: none;
       gap: 1rem;
@@ -230,7 +249,7 @@ const BookDetails = () => {
   );
   const allCategories = [...categorySet]?.map((category, index) => {
     const newColor = parseColor(colors[index % colors.length]);
-    console.log("newColor", newColor);
+
     return (
       <p
         className="category"
@@ -248,9 +267,12 @@ const BookDetails = () => {
   //   setOpenAddToLibraryOptions((state) => !state);
   // };
 
-  const handleColors = (colors: string[]) => {
-    setColors(colors);
-  };
+  const handleColors = useCallback(
+    (colors: string[]) => {
+      setColors(colors);
+    },
+    [setColors]
+  );
 
   // iffe to determine content
   const content = (() => {
@@ -261,7 +283,10 @@ const BookDetails = () => {
       const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
       return (
-        <StyledDetailsContainer background={colors[0]}>
+        <StyledDetailsContainer
+          background={colors[0]}
+          categories={!!bookDetails.categories}
+        >
           <div className="background">
             <figure>
               <ColorExtractor getColors={handleColors}>
@@ -286,15 +311,17 @@ const BookDetails = () => {
                 <div className="categories">{allCategories}</div>
               )}
 
-              <p className="description" ref={descriptionRef}></p>
+              <div>
+                <h2 className="synopsis">Synopsis</h2>
+                <p className="description" ref={descriptionRef}></p>
+              </div>
             </article>
           </section>
-
-          <aside>
-            {bookDetails.categories && (
+          {bookDetails.categories && (
+            <aside>
               <div className="genres">{allCategories}</div>
-            )}
-          </aside>
+            </aside>
+          )}
         </StyledDetailsContainer>
       );
     }

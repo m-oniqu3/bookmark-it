@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
@@ -86,9 +86,9 @@ const Books = (props: Props) => {
     }
   })();
 
-  const handleColors = (colors: string[]) => {
+  const handleColors = useCallback((colors: string[]) => {
     setColors(colors);
-  };
+  }, []);
 
   const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 

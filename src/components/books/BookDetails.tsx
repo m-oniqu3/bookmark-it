@@ -1,32 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useEffect, useRef, useState } from "react";
-import { BsFillBookmarkPlusFill } from "react-icons/bs";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
-import Options from "./Options";
 
-const StyledDetailsContainer = styled(Container)`
-  display: grid;
-  grid-template-columns: 180px 1fr;
+// @ts-expect-error - no types available
+import { ColorExtractor } from "react-color-extractor";
+import { parseColor } from "../utils/parseColor";
+
+const StyledDetailsContainer = styled(Container)<{ background: string }>`
   padding: 2rem 0;
-  position: relative;
 
   @media (${devices.semiLarge}) {
-    grid-template-columns: repeat(7, 1fr);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+  }
+
+  @media (${devices.xlarge}) {
+    grid-template-columns: 250px 1fr 15.5rem;
     gap: 1rem;
   }
 
-  .image {
+  .background {
+    background-color: ${({ background }) => `rgba(${parseColor(background)},
+       0.5)`};
+    padding: 0.8rem;
+    border-radius: 5px;
+    margin: 0 auto 1rem;
+    width: fit-content;
+
     @media (${devices.semiLarge}) {
-      grid-column: 1/3;
-      grid-row: 1/3;
-      margin: 0 auto;
-      position: relative;
+      width: fit-content;
+      height: fit-content;
+      place-items: start;
     }
 
     figure {
@@ -34,9 +45,6 @@ const StyledDetailsContainer = styled(Container)`
       height: 11rem;
       width: 7.125rem;
       border-radius: 10px;
-      box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
-        rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-      margin: 0 auto;
 
       @media (${devices.semiLarge}) {
         height: 14rem;
@@ -50,44 +58,29 @@ const StyledDetailsContainer = styled(Container)`
         object-fit: cover;
       }
     }
+  }
 
-    .add {
-      display: none;
-
-      @media (${devices.semiLarge}) {
-        padding: 1.5rem 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-      }
-
-      span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.8rem;
-        height: 1.8rem;
-
-        svg {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          left: 3px;
-        }
-      }
+  .overview {
+    @media (${devices.xlarge}) {
+      width: 85%;
+      margin: 0 auto;
     }
   }
 
   .intro {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    gap: 0.3rem;
+    text-align: center;
 
     @media (${devices.semiLarge}) {
-      grid-column: 3/-1;
+      text-align: left;
     }
 
     .title {
-      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
       color: var(--secondary);
       font-family: "Rubik", sans-serif;
       font-weight: bold;
@@ -95,88 +88,21 @@ const StyledDetailsContainer = styled(Container)`
 
     .subtitle {
       color: var(--neutral-medium);
-      font-size: 0.8rem;
-      padding: 0.2rem 0 0.3rem;
-      line-height: 120%;
+      font-size: 0.95rem;
       overflow: hidden !important;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-
-      @media (${devices.semiLarge}) {
-        font-size: 1rem;
-      }
     }
 
     .author {
       color: var(--secondary);
       font-size: 1rem;
-    }
-
-    .author-works {
-      margin-top: 0.3rem;
-      color: var(--secondary);
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    .icon {
-      width: 1.8rem;
-      height: 1.8rem;
-      position: absolute;
-      bottom: 0;
-      cursor: pointer;
-
-      @media (${devices.semiLarge}) {
-        display: none;
-      }
-
-      svg {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        left: -3px;
-      }
-    }
-  }
-
-  .mobile-library-categories {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-column: 1/3;
-    gap: 1rem;
-    padding-top: 1rem;
-
-    @media (${devices.semiLarge}) {
-      display: none;
-    }
-  }
-
-  .desktop-library-categories {
-    display: none;
-
-    @media (${devices.semiLarge}) {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
     }
   }
 
   .details {
-    grid-column: 1/3;
-    padding-top: 2rem;
-
-    @media (${devices.semiLarge}) {
-      display: grid;
-      grid-column: 3/-1;
-      padding-top: 0rem;
-    }
-
     .description {
       padding-top: 1rem;
     }
@@ -186,45 +112,68 @@ const StyledDetailsContainer = styled(Container)`
       font-style: normal !important;
       font-weight: normal;
       line-height: 150%;
-
-      @media (${devices.semiLarge}) {
-        order: 1;
-      }
     }
 
     .categories {
       padding-top: 1rem;
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      overflow-x: scroll;
+      scrollbar-width: none;
       gap: 1rem;
-      order: 1;
+      width: 100%;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (${devices.medium}) {
+        overflow-x: hidden;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
 
       @media (${devices.semiLarge}) {
-        order: 0;
-        padding-bottom: 1rem;
+        justify-content: flex-start;
+      }
+
+      @media (${devices.xlarge}) {
+        display: none;
       }
 
       .category {
+        font-size: 0.9rem;
         font-weight: 400;
-        padding: 10px 15px;
+        padding: 7px 10px;
         border-radius: 5px;
-        border: 1px solid var(--secondary);
-        color: var(--secondary);
-        transition: all 0.3s ease-in-out;
+        color: black;
         text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        min-width: fit-content;
+        font-weight: 500;
+      }
+    }
+  }
+
+  aside {
+    display: none;
+
+    @media (${devices.xlarge}) {
+      display: block;
+
+      .genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
         width: 100%;
 
-        &:hover {
-          background-color: var(--secondary);
-          color: var(--neutral-primary);
-        }
-
-        @media (${devices.small}) {
-          width: fit-content;
+        .category {
+          padding: 7px 12px;
+          border-radius: 5px;
+          text-transform: capitalize;
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: #1a1a1a;
+          min-width: fit-content;
         }
       }
     }
@@ -235,6 +184,7 @@ const BookDetails = () => {
   const {
     state: { id },
   } = useLocation();
+  const [colors, setColors] = useState<string[]>([]);
 
   const { bookDetails, isLoading, isFetching, isSuccess, error } =
     useGetBookDetailsQuery(id, {
@@ -261,8 +211,8 @@ const BookDetails = () => {
     });
 
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
-  const navigate = useNavigate();
-  const [openAddToLibraryOptions, setOpenAddToLibraryOptions] = useState(false);
+
+  // const [openAddToLibraryOptions, setOpenAddToLibraryOptions] = useState(false);
 
   if (!id) <Navigate to="/" />;
 
@@ -274,20 +224,32 @@ const BookDetails = () => {
     }
   }, [bookDetails.description]);
 
-  //remove duplicate categories
-  const categorySet = new Set(bookDetails.categories);
+  //remove duplicate categories, split categories with "/" and flatten array
+  const categorySet = new Set(
+    bookDetails.categories?.map((cat) => cat.split("/"))?.flat()
+  );
   const allCategories = [...categorySet]?.map((category, index) => {
+    const newColor = parseColor(colors[index % colors.length]);
+    console.log("newColor", newColor);
     return (
-      <p className="category" key={Date.now() + index}>
+      <p
+        className="category"
+        key={category}
+        style={{
+          backgroundColor: `rgba(${newColor}, 0.5)`,
+        }}
+      >
         {category}
       </p>
     );
   });
 
-  const handleAuthorWorks = () => navigate(`/search/${bookDetails.authors}`);
+  // const handleAddToLibraryOptions = () => {
+  //   setOpenAddToLibraryOptions((state) => !state);
+  // };
 
-  const handleAddToLibraryOptions = () => {
-    setOpenAddToLibraryOptions((state) => !state);
+  const handleColors = (colors: string[]) => {
+    setColors(colors);
   };
 
   // iffe to determine content
@@ -296,59 +258,43 @@ const BookDetails = () => {
     if (error) return <p>Error</p>;
 
     if (isSuccess && bookDetails) {
-      const src = bookDetails.imageLinks?.smallThumbnail;
+      const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
       return (
-        <StyledDetailsContainer>
-          <div className="image">
+        <StyledDetailsContainer background={colors[0]}>
+          <div className="background">
             <figure>
-              <img src={src} alt={bookDetails.title} />
+              <ColorExtractor getColors={handleColors}>
+                <img src={src} alt={bookDetails.title} />
+              </ColorExtractor>
             </figure>
-
-            <p className="add" onClick={handleAddToLibraryOptions}>
-              Add to Library
-              <span>
-                <BsFillBookmarkPlusFill color="var(--secondary)" />
-              </span>
-            </p>
-
-            {openAddToLibraryOptions && (
-              <article className="desktop-library-categories">
-                <Options />
-              </article>
-            )}
           </div>
 
-          <article className="intro">
-            <h1 className="title">{bookDetails.title}</h1>
-            {bookDetails.subtitle && (
-              <p className="subtitle">{bookDetails.subtitle}</p>
-            )}
-            {bookDetails.authors && (
-              <p className="author">{bookDetails.authors[0]}</p>
-            )}
-            <p className="author-works" onClick={handleAuthorWorks}>
-              More by Author
-            </p>
-
-            <div className="icon" onClick={handleAddToLibraryOptions}>
-              <BsFillBookmarkPlusFill color="var(--secondary)" />
+          <section className="overview">
+            <div className="intro">
+              <h1 className="title">{bookDetails.title}</h1>
+              {bookDetails.subtitle && (
+                <p className="subtitle">{bookDetails.subtitle}</p>
+              )}
+              {bookDetails.authors && (
+                <p className="author">{bookDetails.authors[0]}</p>
+              )}
             </div>
-          </article>
 
-          {openAddToLibraryOptions && (
-            <article className="mobile-library-categories">
-              <Options />
+            <article className="details">
+              {bookDetails.categories && (
+                <div className="categories">{allCategories}</div>
+              )}
+
+              <p className="description" ref={descriptionRef}></p>
             </article>
-          )}
+          </section>
 
-          <article className="details">
-            <p className="description" ref={descriptionRef}></p>
-
+          <aside>
             {bookDetails.categories && (
-              <div className="categories">{allCategories}</div>
+              <div className="genres">{allCategories}</div>
             )}
-          </article>
+          </aside>
         </StyledDetailsContainer>
       );
     }
@@ -358,3 +304,26 @@ const BookDetails = () => {
 };
 
 export default BookDetails;
+
+/* {openAddToLibraryOptions && (
+              <article className="desktop-library-categories">
+                <Options />
+              </article>
+            )}
+
+             {openAddToLibraryOptions && (
+            <article className="mobile-library-categories">
+              <Options />
+            </article>
+          )}
+          
+            <div className="icon">
+              <BsFillBookmarkPlusFill color="var(--secondary)" />
+            </div>
+            
+   <p className="add" onClick={handleAddToLibraryOptions}>
+              Add to Library
+              <span>
+                <BsFillBookmarkPlusFill color="var(--secondary)" />
+              </span>
+            </p>*/

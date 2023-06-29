@@ -64,6 +64,8 @@ const SearchResults = () => {
 
     if (error) return <p>Error</p>;
 
+    if (!isSuccess || !books) return <p>No results</p>;
+
     if (isSuccess && books) {
       if (books.length === 0) return <p>No results found</p>;
 

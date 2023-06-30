@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
@@ -10,11 +10,14 @@ import Information from "./Information";
 // @ts-expect-error - no types available
 
 import { ColorExtractor } from "react-color-extractor";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { addBookColors } from "../../store/features/colours/colours";
 import { parseColor } from "../utils/parseColor";
 
-const StyledBook = styled.div<{ colors: string[] }>`
+const StyledBook = styled.div<{ color: string }>`
   .bg-container {
-    background-color: ${({ colors }) => `rgba(${parseColor(colors[0])},
+    background-color: ${({ color }) => `rgba(${parseColor(color)},
        0.5)`};
     padding: 0.8rem;
     border-radius: 5px;
@@ -53,7 +56,10 @@ type Props = {
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType } = props;
-  const [colors, setColors] = useState<string[]>([]);
+  const dispatch = useDispatch();
+  const color = useSelector(
+    (state: RootState) => state.colours.bookColours[book.id]
+  ) as string;
 
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -67,7 +73,6 @@ const Books = (props: Props) => {
             book={book}
             modalType={modalType}
             setActiveModal={setActiveModal}
-            background={colors[0]}
           />
         );
 
@@ -77,7 +82,6 @@ const Books = (props: Props) => {
             book={book}
             setActiveModal={setActiveModal}
             modalType={modalType}
-            backgroundColor={colors[0]}
           />
         );
 
@@ -86,15 +90,15 @@ const Books = (props: Props) => {
     }
   })();
 
-  const handleColors = useCallback((colors: string[]) => {
-    setColors(colors);
-  }, []);
+  const handleColors = (colors: string[]) => {
+    dispatch(addBookColors({ bookId: book.id, colors: colors[0] }));
+  };
 
   const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
   return (
     <Fragment>
-      <StyledBook colors={colors}>
+      <StyledBook color={color}>
         <div className="bg-container">
           <figure onClick={handleModal}>
             <ColorExtractor getColors={handleColors}>

@@ -34,7 +34,7 @@ const SearchResults = () => {
       query,
       //select the data we want from the response if there is a query
       {
-        selectFromResult: (result) => {
+        selectFromResult: (result: any) => {
           const items = result.data?.items;
 
           return {

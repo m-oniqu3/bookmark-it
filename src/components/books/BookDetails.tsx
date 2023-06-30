@@ -12,11 +12,6 @@ import Loading from "../helpers/ui/Loading";
 import { ColorExtractor } from "react-color-extractor";
 import { parseColor } from "../utils/parseColor";
 
-type StyledProps = {
-  background: string;
-  categories: boolean;
-};
-
 const StyledDetailsContainer = styled(Container)<StyledProps>`
   padding: 2rem 0;
 
@@ -128,7 +123,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     .description,
     .description * {
       font-style: normal !important;
-      font-weight: normal;
+      font-weight: 300;
       line-height: 150%;
     }
 
@@ -198,6 +193,11 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     }
   }
 `;
+
+type StyledProps = {
+  background: string;
+  categories: boolean;
+};
 
 const BookDetails = () => {
   const {

@@ -12,7 +12,7 @@ import Information from "./Information";
 import { ColorExtractor } from "react-color-extractor";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { addBookColors } from "../../store/features/colours/colours";
+import { addBookColors } from "../../store/features/colours/coloursSlice";
 import { parseColor } from "../utils/parseColor";
 
 const StyledBook = styled.div<{ color: string }>`

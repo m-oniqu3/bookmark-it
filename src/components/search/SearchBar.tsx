@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { addSearch } from "../../store/features/search/searchSlice";
 
 const StyledSearchBar = styled.form`
   position: relative;
@@ -34,6 +36,7 @@ const StyledSearchBar = styled.form`
 const SearchBar = () => {
   const [query, setQuery] = useState<string>("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -41,6 +44,7 @@ const SearchBar = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(addSearch(query));
 
     navigate(`/search/${query}`);
   };

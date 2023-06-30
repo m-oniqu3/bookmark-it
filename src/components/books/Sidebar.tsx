@@ -1,10 +1,12 @@
 import { IoIosClose } from "react-icons/io";
 import type { Book } from "../../types/Book";
 
-import { useSelector } from "react-redux";
+import { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { RootState } from "../../store";
+import { removeSearch } from "../../store/features/search/searchSlice";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
@@ -90,17 +92,13 @@ type Props = {
   books: Book[];
 };
 
-const recentSearches = [
-  "helen hoang",
-  "scythe",
-  "lj shen",
-  "punk 57",
-  "ana huang",
-];
-
 const Sidebar = (props: Props) => {
   const { books } = props;
   const colors = useSelector((state: RootState) => state.colours.bookColours);
+  const recentSearches = useSelector(
+    (state: RootState) => state.searches.recentSearches
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const result = books
@@ -136,21 +134,31 @@ const Sidebar = (props: Props) => {
     navigate(`/search/${search}`);
   };
 
+  const deleteSearch = (search: string) => {
+    dispatch(removeSearch(search));
+  };
+
   return (
     <StyledSidebar>
       <div className="recents">
-        <h3 className="title">Recent Searches</h3>
-        <div className="searches">
-          {recentSearches.map((search, i) => (
-            <div className="search" key={i}>
-              <p onClick={() => handleSearch(search)}> {search}</p>
+        {recentSearches.length > 0 && (
+          <Fragment>
+            <h3 className="title">Recent Searches</h3>
+            <div className="searches">
+              {recentSearches.map((search) => {
+                return (
+                  <div className="search" key={search}>
+                    <p onClick={() => handleSearch(search)}> {search}</p>
 
-              <span>
-                <IoIosClose size={20} />
-              </span>
+                    <span onClick={() => deleteSearch(search)}>
+                      <IoIosClose size={20} />
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          </Fragment>
+        )}
       </div>
 
       <div className="genre-group">

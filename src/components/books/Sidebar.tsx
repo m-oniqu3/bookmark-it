@@ -102,35 +102,32 @@ const Sidebar = (props: Props) => {
   const { books } = props;
   const colors = useSelector((state: RootState) => state.colours.bookColours);
   const navigate = useNavigate();
-  const uniqueCategories = {} as { [key: string]: string };
 
   const result = books
     .filter((book) => book.categories !== undefined)
     .filter((book) => book.imageLinks?.smallThumbnail !== undefined);
 
-  const bookCategories = Array.from(
+  const uniqueCategories = Array.from(
     new Set(
       result.map((book) => {
         const categories = book.categories ? book.categories[0] : "";
-        return { categories, id: book.id };
+        return categories.toLowerCase();
       })
     )
   );
 
-  bookCategories.map(({ categories, id }) => {
-    if (!uniqueCategories[categories]) {
-      uniqueCategories[categories] = id;
-    }
-  });
+  const genreColours = Object.values(colors).slice(0, uniqueCategories.length);
 
-  const content = Object.keys(uniqueCategories).map((key) => {
-    const background = `rgba(${parseColor(
-      colors[uniqueCategories[key]]
-    )}, 0.5)`;
+  const content = uniqueCategories.map((genre, i) => {
+    const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
 
     return (
-      <div className="genre" style={{ backgroundColor: background }} key={key}>
-        {key.toLowerCase()}
+      <div
+        className="genre"
+        style={{ backgroundColor: background }}
+        key={genre}
+      >
+        {genre.toLowerCase()}
       </div>
     );
   });

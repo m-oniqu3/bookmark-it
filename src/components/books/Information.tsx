@@ -32,12 +32,11 @@ type Props = {
   book: Book;
   modalType: "library" | "shelf";
   setActiveModal: (modal: ModalType | null) => void;
-  background: string;
 };
 
 const Information = (props: Props) => {
   const navigate = useNavigate();
-  const { book, modalType, setActiveModal, background } = props;
+  const { book, modalType, setActiveModal } = props;
 
   const text = modalType === "library" ? "Library" : "Shelf";
 
@@ -60,7 +59,7 @@ const Information = (props: Props) => {
 
   return (
     <StyledInfo>
-      <Summary book={book} background={background} />
+      <Summary book={book} />
 
       <StyledButtonGroup>
         <Button buttonType="action" onClick={handleAdd}>

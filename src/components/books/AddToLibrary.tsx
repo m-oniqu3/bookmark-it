@@ -1,6 +1,8 @@
 import { BsFillBookmarkFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { RootState } from "../../store";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
@@ -118,14 +120,16 @@ type Props = {
   book: Book;
   setActiveModal: (modal: ModalType | null) => void;
   modalType: "library" | "shelf";
-  backgroundColor: string;
 };
 
 const categories = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
+  const { book, setActiveModal, modalType } = props;
+  const color = useSelector(
+    (state: RootState) => state.colours.bookColours[book.id]
+  ) as string;
   const navigate = useNavigate();
-  const { book, setActiveModal, modalType, backgroundColor } = props;
 
   const src = book.imageLinks?.smallThumbnail;
 
@@ -144,7 +148,7 @@ const AddToLibrary = (props: Props) => {
   };
 
   return (
-    <StyledAddToLibrary color={backgroundColor}>
+    <StyledAddToLibrary color={color}>
       <div className="content">
         <div className="background">
           <figure>

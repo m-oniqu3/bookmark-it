@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useRef } from "react";
 import ReactStars from "react-rating-star-with-type";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { RootState } from "../../store";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
-
-interface Props {
-  book: Book;
-  background: string;
-}
 
 const StyledSummary = styled.section<{ background: string }>`
   .summary {
@@ -91,10 +88,15 @@ const StyledSummary = styled.section<{ background: string }>`
     }
   }
 `;
-
+type Props = {
+  book: Book;
+};
 const Summary = (props: Props) => {
+  const { book } = props;
+  const color = useSelector(
+    (state: RootState) => state.colours.bookColours[book.id]
+  ) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
-  const { book, background } = props;
 
   /** the textSnippet includes html tags so use useRef to include the text in the innerHTML
    * if there is no snippet then show description or alternative text
@@ -113,7 +115,7 @@ const Summary = (props: Props) => {
   const categories = !book.categories ? "" : `${book.categories[0]}`;
 
   return (
-    <StyledSummary background={background}>
+    <StyledSummary background={color}>
       <div className="summary">
         <div className="background">
           <figure>
@@ -135,8 +137,8 @@ const Summary = (props: Props) => {
             value={book.averageRating || 1}
             count={5}
             size={15}
-            activeColor={background}
-            inactiveColor={`rgba(${parseColor(background)}, 0.8)`}
+            activeColor={color}
+            inactiveColor={`rgba(${parseColor(color)}, 0.8)`}
           />
 
           <p className="snippet" ref={snippetRef} />

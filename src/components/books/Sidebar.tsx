@@ -1,11 +1,10 @@
-import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import type { Book } from "../../types/Book";
 
-// @ts-expect-error - no types available
-import { ColorExtractor } from "react-color-extractor";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { RootState } from "../../store";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
@@ -101,52 +100,37 @@ const recentSearches = [
 
 const Sidebar = (props: Props) => {
   const { books } = props;
-  const [colors, setColors] = useState<string[]>([]);
+  const colors = useSelector((state: RootState) => state.colours.bookColours);
   const navigate = useNavigate();
 
   const result = books
     .filter((book) => book.categories !== undefined)
     .filter((book) => book.imageLinks?.smallThumbnail !== undefined);
 
-  const uniqueGenres = new Set(
-    result
-      .map((book) => {
-        const categories: string = book.categories ? book.categories[0] : "";
+  const uniqueCategories = Array.from(
+    new Set(
+      result.map((book) => {
+        const categories = book.categories ? book.categories[0] : "";
         return categories.toLowerCase();
       })
-      .flat() as string[]
+    )
   );
 
-  const uniqueColors = new Set() as Set<string>;
+  const genreColours = Object.values(colors).slice(0, uniqueCategories.length);
 
-  const handleColors = (values: string[]) => {
-    uniqueColors.add(values[0]);
-    setColors([...uniqueColors]);
-  };
-
-  const image = result.map((book, i) => {
-    const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+  const content = uniqueCategories.map((genre, i) => {
+    const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
 
     return (
-      <ColorExtractor key={i} getColors={handleColors}>
-        <img src={src} alt={book.title} />
-      </ColorExtractor>
+      <div
+        className="genre"
+        style={{ backgroundColor: background }}
+        key={genre}
+      >
+        {genre.toLowerCase()}
+      </div>
     );
   });
-
-  const content = (
-    <div className="genres">
-      {[...uniqueGenres].map((genre, i) => (
-        <div
-          className="genre"
-          style={{ backgroundColor: `rgba(${parseColor(colors[i])}, 0.5)` }}
-          key={i}
-        >
-          {genre.toLowerCase()}
-        </div>
-      ))}
-    </div>
-  );
 
   const handleSearch = (search: string) => {
     navigate(`/search/${search}`);
@@ -171,9 +155,8 @@ const Sidebar = (props: Props) => {
 
       <div className="genre-group">
         <h3 className="title">Genres</h3>
-        {content}
+        <div className="genres">{content}</div>
       </div>
-      <div style={{ display: "none" }}>{image}</div>
     </StyledSidebar>
   );
 };

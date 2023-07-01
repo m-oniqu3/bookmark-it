@@ -17,4 +17,5 @@ export type Book = {
   subtitle?: string | undefined;
   publishedDate: string;
   averageRating: number;
+  ratingsCount: number;
 };

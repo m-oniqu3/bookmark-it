@@ -5,7 +5,6 @@ type Colours = {
   colors: string;
 };
 
-// Redux slice
 const bookColorsSlice = createSlice({
   name: "bookColours",
   initialState: {

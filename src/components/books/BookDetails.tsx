@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Fragment, useEffect, useRef, useState } from "react";
+import ReactStars from "react-rating-star-with-type";
+import { Navigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
 import { devices } from "../../styles/breakpoints";
@@ -40,6 +41,11 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       width: fit-content;
       height: fit-content;
       place-items: start;
+    }
+
+    @media (${devices.large}) {
+      margin: 0;
+      margin-left: auto;
     }
 
     figure {
@@ -102,6 +108,22 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       font-size: 1rem;
       font-weight: 600;
     }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+
+      @media (${devices.semiLarge}) {
+        padding-top: 0.2rem;
+        justify-content: flex-start;
+      }
+
+      svg {
+        color: ${({ background }) => background};
+      }
+    }
   }
 
   .details {
@@ -131,7 +153,6 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       padding-top: 1rem;
       display: flex;
       align-items: center;
-      justify-content: center;
       overflow-x: scroll;
       scrollbar-width: none;
       gap: 1rem;
@@ -200,9 +221,7 @@ type StyledProps = {
 };
 
 const BookDetails = () => {
-  const {
-    state: { id },
-  } = useLocation();
+  const { id } = useParams() as { id: string };
   const [colors, setColors] = useState<string[]>([]);
 
   const { bookDetails, isLoading, isFetching, isSuccess, error } =
@@ -219,6 +238,8 @@ const BookDetails = () => {
             description: result.data?.volumeInfo?.description,
             imageLinks: result.data?.volumeInfo.imageLinks,
             searchInfo: result.data?.searchInfo,
+            averageRating: result.data?.volumeInfo?.averageRating,
+            ratingsCount: result.data?.volumeInfo?.ratingsCount,
           } as Book,
 
           isLoading: result.isLoading,
@@ -267,12 +288,11 @@ const BookDetails = () => {
   //   setOpenAddToLibraryOptions((state) => !state);
   // };
 
-  const handleColors = useCallback(
-    (colors: string[]) => {
-      setColors(colors);
-    },
-    [setColors]
-  );
+  const handleColors = (colors: string[]) => {
+    setColors(colors);
+  };
+
+  const background = colors[0];
 
   // iffe to determine content
   const content = (() => {
@@ -284,7 +304,7 @@ const BookDetails = () => {
 
       return (
         <StyledDetailsContainer
-          background={colors[0]}
+          background={background}
           categories={!!bookDetails.categories}
         >
           <div className="background">
@@ -304,6 +324,22 @@ const BookDetails = () => {
               {bookDetails.authors && (
                 <p className="author">{bookDetails.authors[0]}</p>
               )}
+
+              <div className="rating">
+                <ReactStars
+                  value={bookDetails.averageRating || 1}
+                  count={5}
+                  size={16}
+                  activeColor={background}
+                  inactiveColor={`rgba(${parseColor(background)}, 0.8)`}
+                />
+                <p className="count">
+                  {bookDetails.ratingsCount || 1}
+                  {bookDetails.ratingsCount === 1 || !bookDetails.ratingsCount
+                    ? " review"
+                    : " reviews"}
+                </p>
+              </div>
             </div>
 
             <article className="details">

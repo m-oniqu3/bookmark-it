@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { RootState } from "../../store";
-import { removeSearch } from "../../store/features/search/searchSlice";
+import {
+  addSearch,
+  removeSearch,
+} from "../../store/features/search/searchSlice";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
@@ -132,11 +135,24 @@ const Sidebar = (props: Props) => {
 
   const handleSearch = (search: string) => {
     navigate(`/search/${search}`);
+    dispatch(addSearch(search));
   };
 
   const deleteSearch = (search: string) => {
     dispatch(removeSearch(search));
   };
+
+  const searches = recentSearches.map((search, i) => {
+    return (
+      <div className="search" key={search}>
+        <p onClick={() => handleSearch(search)}> {search}</p>
+
+        <span onClick={() => deleteSearch(search)}>
+          <IoIosClose size={20} />
+        </span>
+      </div>
+    );
+  });
 
   return (
     <StyledSidebar>
@@ -144,19 +160,7 @@ const Sidebar = (props: Props) => {
         {recentSearches.length > 0 && (
           <Fragment>
             <h3 className="title">Recent Searches</h3>
-            <div className="searches">
-              {recentSearches.map((search) => {
-                return (
-                  <div className="search" key={search}>
-                    <p onClick={() => handleSearch(search)}> {search}</p>
-
-                    <span onClick={() => deleteSearch(search)}>
-                      <IoIosClose size={20} />
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            <div className="searches">{searches}</div>
           </Fragment>
         )}
       </div>

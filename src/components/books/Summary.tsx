@@ -66,6 +66,22 @@ const StyledSummary = styled.section<{ background: string }>`
         font-weight: 500;
       }
 
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+
+        .count {
+          padding-top: 2px;
+          font-size: 0.9rem;
+        }
+
+        span {
+          display: grid;
+          place-items: center;
+        }
+      }
+
       .snippet {
         font-size: 0.92rem;
         font-weight: 400;
@@ -133,13 +149,21 @@ const Summary = (props: Props) => {
             {categories}
           </p>
 
-          <ReactStars
-            value={book.averageRating || 1}
-            count={5}
-            size={15}
-            activeColor={color}
-            inactiveColor={`rgba(${parseColor(color)}, 0.8)`}
-          />
+          <div className="rating">
+            <ReactStars
+              value={book.averageRating || 1}
+              count={5}
+              size={16}
+              activeColor={color}
+              inactiveColor={`rgba(${parseColor(color)}, 0.8)`}
+            />
+            <p className="count">
+              {book.ratingsCount || 1}
+              {book.ratingsCount === 1 || !book.ratingsCount
+                ? " review"
+                : " reviews"}
+            </p>
+          </div>
 
           <p className="snippet" ref={snippetRef} />
         </article>

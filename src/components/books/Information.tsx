@@ -52,9 +52,7 @@ const Information = (props: Props) => {
   };
 
   const handleDetails = () => {
-    navigate(`/details/${book.id}`, {
-      state: { id: book.id },
-    });
+    navigate(`/details/${book.id}`);
   };
 
   return (

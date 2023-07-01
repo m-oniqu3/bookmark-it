@@ -48,6 +48,7 @@ const SearchResults = () => {
               imageLinks: item.volumeInfo.imageLinks,
               searchInfo: item.searchInfo,
               averageRating: item.volumeInfo.averageRating,
+              ratingsCount: item.volumeInfo.ratingsCount,
             })) as Book[],
 
             isLoading: result.isLoading,

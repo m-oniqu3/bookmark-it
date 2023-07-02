@@ -19,3 +19,7 @@ export type Book = {
   averageRating: number;
   ratingsCount: number;
 };
+
+export interface ExploreBooks extends Book {
+  subject: string[];
+}

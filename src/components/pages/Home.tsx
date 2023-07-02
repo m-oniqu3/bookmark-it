@@ -3,6 +3,7 @@ import background from "../../assets/public_background.png";
 import reading from "../../assets/reading.png";
 import Genre from "../home/Genre";
 import Hero from "../home/Hero";
+import TopPicks from "../home/TopPicks";
 
 const heroContent = {
   heading: "Your <span>online</span> bookshelf",
@@ -28,6 +29,12 @@ const genreContent = {
   ],
 };
 
+const topPicksContent = {
+  heading: "Top picks of the <span>month</span>",
+  paragraph:
+    "These books are all great reads that will keep you entertained for hours on end. If you're looking for something new to read, be sure to check out one of these books!",
+};
+
 const Home = () => {
   return (
     <Fragment>
@@ -43,6 +50,10 @@ const Home = () => {
         genres={genreContent.genres}
         src={genreContent.src}
         alt={genreContent.alt}
+      />
+      <TopPicks
+        heading={topPicksContent.heading}
+        paragraph={topPicksContent.paragraph}
       />
     </Fragment>
   );

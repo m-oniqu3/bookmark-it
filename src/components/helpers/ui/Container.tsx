@@ -7,7 +7,7 @@ interface Props {
 }
 
 const StyledContainer = styled.div`
-  width: 95%;
+  width: 92%;
   margin: 0 auto;
 `;
 

@@ -11,7 +11,7 @@ import Sidebar from "../books/Sidebar";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
 
-const StyledSearchResults = styled(Container)`
+const StyledSearchResults = styled.div`
   padding: 1.5rem 0;
 
   width: 100%;

@@ -13,11 +13,11 @@ const HeadingBase = styled.h1`
 `;
 
 const MediumHeading = styled(HeadingBase)`
-  font-size: 2rem;
+  font-size: clamp(2rem, 6vw, 3rem);
 `;
 
 const LargeHeading = styled(HeadingBase)`
-  font-size: clamp(2.8rem, 4vw, 4rem);
+  font-size: clamp(2.8rem, 6vw, 4rem);
 `;
 
 type Props = {

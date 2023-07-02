@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { StyledText } from "../../styles/StyledText";
 import { devices } from "../../styles/breakpoints";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
@@ -31,9 +32,7 @@ const StyledHero = styled.div<{ url: string }>`
     }
 
     p {
-      font-weight: 300;
-      line-height: 150%;
-      width: min(90%, 350px);
+      width: min(100%, 350px);
     }
 
     button {
@@ -61,7 +60,7 @@ const Hero = (props: Props) => {
       <Container>
         <article>
           <Heading variant="large" text={heading} />
-          <p>{text}</p>
+          <StyledText>{text}</StyledText>
           <Button onClick={handleClick}>{button}</Button>
         </article>
       </Container>

@@ -60,7 +60,7 @@ type Props = {
 };
 
 const TopPicks = (props: Props) => {
-  const picks = useExplore("picks");
+  const picks = useExplore("easy reads");
   const limitedPicks = picks.slice(0, 6);
   const { heading, paragraph } = props;
 

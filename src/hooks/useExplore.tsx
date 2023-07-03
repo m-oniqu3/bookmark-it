@@ -2,13 +2,18 @@ import Books from "../components/books/Books";
 import { exploreBooks } from "../components/utils/exploreBooks";
 
 const useExplore = (subject: string) => {
-  const results = exploreBooks.filter((book) => {
-    return book.subject
-      .map((subject) => subject.toLowerCase())
-      .includes(subject.toLowerCase());
-  });
+  const results = (() => {
+    if (subject === "all") {
+      return exploreBooks;
+    }
 
-  console.log(results);
+    return exploreBooks.filter((book) => {
+      return book.subject
+        .map((subject) => subject.toLowerCase())
+        .includes(subject.toLowerCase());
+    });
+  })();
+
   const allBooks = results.map((book) => {
     return <Books key={book.id} book={book} modalType="library" />;
   });

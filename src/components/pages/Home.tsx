@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import background from "../../assets/public_background.png";
 import reading from "../../assets/reading.png";
+import Booktok from "../home/Booktok";
 import Genre from "../home/Genre";
 import Hero from "../home/Hero";
 import TopPicks from "../home/TopPicks";
@@ -55,6 +56,7 @@ const Home = () => {
         heading={topPicksContent.heading}
         paragraph={topPicksContent.paragraph}
       />
+      <Booktok />
     </Fragment>
   );
 };

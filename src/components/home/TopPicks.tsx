@@ -14,7 +14,8 @@ const StyledPicks = styled.div`
   }
 
   @media (${devices.large}) {
-    height: 90vh;
+    padding: 5rem 0;
+    margin-bottom: 2rem;
   }
 
   article {

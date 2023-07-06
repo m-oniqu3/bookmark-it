@@ -70,9 +70,7 @@ const Reviews = () => {
     const color = `var(--primary)`;
     return (
       <article key={review.id} className="review">
-        <p>
-          <b>{review.name}</b>
-        </p>
+        <strong>{review.name}</strong>
 
         <div className="stars">
           <ReactStars value={5} count={5} size={16} activeColor={color} />

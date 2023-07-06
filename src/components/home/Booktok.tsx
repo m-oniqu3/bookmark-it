@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import banner from "../../assets/banner.jpg";
+import background from "../../assets/text-bg.png";
 import { StyledText } from "../../styles/StyledText";
 import { devices } from "../../styles/breakpoints";
 import Button from "../helpers/ui/Button";
@@ -7,7 +9,7 @@ import Container from "../helpers/ui/Container";
 import Heading from "../helpers/ui/Heading";
 
 const StyledBookTok = styled.div`
-  background-image: url("../../assets/text-bg.png");
+  background-image: url(${background});
   background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
@@ -47,6 +49,10 @@ const StyledBookTok = styled.div`
     p {
       max-width: 460px;
       margin: 0 auto;
+
+      span {
+        font-weight: 500;
+      }
     }
 
     @media (${devices.medium}) {
@@ -56,6 +62,12 @@ const StyledBookTok = styled.div`
 `;
 
 const Booktok = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate("/explore");
+  };
+
   return (
     <StyledBookTok>
       <figure className="banner">
@@ -70,13 +82,13 @@ const Booktok = () => {
           />
 
           <StyledText>
-            TikTok made me read it! We are staying up to date with #BookTok and
-            we've made it easier for you to see what's going viral. Add these
-            popular books to your collection and stay up-to-date on the latest
-            must-reads.
+            TikTok made me read it! We are staying up to date with{" "}
+            <span>#BookTok</span> and we've made it easier for you to see what's
+            going viral. Add these popular books to your collection and stay
+            up-to-date on the latest must-reads.
           </StyledText>
 
-          <Button onClick={() => console.log("click")}>Explore</Button>
+          <Button onClick={handleNavigation}>Explore</Button>
         </article>
       </Container>
     </StyledBookTok>

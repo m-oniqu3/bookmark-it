@@ -4,6 +4,7 @@ import reading from "../../assets/reading.png";
 import Booktok from "../home/Booktok";
 import Genre from "../home/Genre";
 import Hero from "../home/Hero";
+import Reviews from "../home/Reviews";
 import TopPicks from "../home/TopPicks";
 
 const heroContent = {
@@ -57,6 +58,7 @@ const Home = () => {
         paragraph={topPicksContent.paragraph}
       />
       <Booktok />
+      <Reviews />
     </Fragment>
   );
 };

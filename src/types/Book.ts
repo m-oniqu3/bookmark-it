@@ -23,3 +23,5 @@ export type Book = {
 export interface ExploreBooks extends Book {
   subject: string[];
 }
+
+export type BookCategory = "Reading" | "TBR" | "DNF" | "Finished";

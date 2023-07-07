@@ -1,10 +1,11 @@
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { useAppSelector } from "../../store/hooks/hooks";
+import { addToLibrary } from "../../store/features/library/librarySlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
-import { Book } from "../../types/Book";
+import { Book, BookCategory } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import { parseColor } from "../utils/parseColor";
@@ -121,30 +122,46 @@ type Props = {
   modalType: "library" | "shelf";
 };
 
-const categories = ["Reading", "TBR", "DNF", "Finished"];
+const categories: BookCategory[] = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
-  const color = useAppSelector(
-    (state) => state.colours.bookColours[book.id]
-  ) as string;
+  const dispatch = useAppDispatch();
+  const color = useAppSelector((state) => state.colours.bookColours[book.id]);
   const navigate = useNavigate();
 
   const src = book.imageLinks?.smallThumbnail;
 
   const handleSummary = () => {
-    setActiveModal({
-      type: ModalEnum.INFO_MODAL,
-      book,
-      modal: modalType,
-    });
+    setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
   };
 
   const handleDetails = () => {
-    navigate(`/details/${book.id}`, {
-      state: { id: book.id },
-    });
+    navigate(`/details/${book.id}`);
   };
+
+  const handleCategory = (category: BookCategory) => {
+    const now = Date.now();
+
+    dispatch(addToLibrary({ bookInfo: book, category, timeAdded: now }));
+    setActiveModal(null);
+  };
+
+  const bookCategories = categories.map((category) => {
+    const className = category.toLowerCase().split(" ").join("-");
+    return (
+      <p
+        key={category}
+        className={`category ${className}`}
+        onClick={() => handleCategory(category)}
+      >
+        <span>
+          <BsFillBookmarkFill />
+        </span>
+        {category}
+      </p>
+    );
+  });
 
   return (
     <StyledAddToLibrary color={color}>
@@ -158,26 +175,10 @@ const AddToLibrary = (props: Props) => {
         <article>
           <h1 className="title">Choose a category</h1>
           <p className="question">Where do you want to add this book?</p>
-          <div className="categories">
-            {categories.map((category) => {
-              return (
-                <p
-                  key={category}
-                  className={`category ${category
-                    .toLowerCase()
-                    .split(" ")
-                    .join("-")}  `}
-                >
-                  <span>
-                    <BsFillBookmarkFill />
-                  </span>
-                  {category}
-                </p>
-              );
-            })}
-          </div>
+          <div className="categories">{bookCategories}</div>
         </article>
       </div>
+
       <StyledButtonGroup>
         <Button buttonType="action" onClick={handleSummary}>
           Back to Summary

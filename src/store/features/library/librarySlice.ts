@@ -9,13 +9,13 @@ type BookRecord = {
 
 type LibraryState = {
   library: BookRecord;
-  duplicateBookCategory: string;
+  duplicateBookCategory: BookCategory | null;
   toast: { message: string; type: "success" | "warning" | "error" | null };
 };
 
 const initialState: LibraryState = {
   library: {},
-  duplicateBookCategory: "",
+  duplicateBookCategory: null,
   toast: { message: "", type: null },
 };
 
@@ -51,9 +51,15 @@ const librarySlice = createSlice({
 
       state.library[id] = { bookInfo, category, timeAdded };
     },
+    getCategory: (state, { payload }: PayloadAction<string>) => {
+      const id = payload;
+
+      const book = state.library[id];
+      state.duplicateBookCategory = book ? book.category : null;
+    },
   },
 });
 
-export const { addToLibrary } = librarySlice.actions;
+export const { addToLibrary, getCategory } = librarySlice.actions;
 
 export default librarySlice.reducer;

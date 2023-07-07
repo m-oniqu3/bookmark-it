@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { addToLibrary } from "../../store/features/library/librarySlice";
+import { addToLibrary, getCategory } from "../../store/features/library/librarySlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
@@ -127,6 +128,7 @@ const categories: BookCategory[] = ["Reading", "TBR", "DNF", "Finished"];
 const AddToLibrary = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
   const dispatch = useAppDispatch();
+  const duplicateBookCategory = useAppSelector((state) => state.bookStore.duplicateBookCategory);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
   const navigate = useNavigate();
 
@@ -140,6 +142,10 @@ const AddToLibrary = (props: Props) => {
     navigate(`/details/${book.id}`);
   };
 
+  useEffect(() => {
+    dispatch(getCategory(book.id));
+  }, [book.id, dispatch]);
+
   const handleCategory = (category: BookCategory) => {
     const now = Date.now();
 
@@ -149,13 +155,11 @@ const AddToLibrary = (props: Props) => {
 
   const bookCategories = categories.map((category) => {
     const className = category.toLowerCase().split(" ").join("-");
+    const color = duplicateBookCategory === category ? "var(--primary)" : "";
+    //todo set background color insteads
     return (
-      <p
-        key={category}
-        className={`category ${className}`}
-        onClick={() => handleCategory(category)}
-      >
-        <span>
+      <p key={category} className={`category ${className}`} onClick={() => handleCategory(category)}>
+        <span style={{ color: `${color}` }}>
           <BsFillBookmarkFill />
         </span>
         {category}

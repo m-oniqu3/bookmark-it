@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Book } from "../../../types/Book";
 
-type BookRecord = {
-  [key: string]: { bookData: Book; category: string; timeAdded: number };
-};
+type Record = { bookData: Book; category: string; timeAdded: number };
+
+type BookRecord = Map<string, Record>;
 
 type LibraryState = {
   library: BookRecord;
@@ -12,7 +12,7 @@ type LibraryState = {
 };
 
 const initialState: LibraryState = {
-  library: {},
+  library: new Map(),
   duplicateBookCategory: "",
   toast: { message: "", type: "" },
 };

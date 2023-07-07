@@ -9,8 +9,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :root {
-    --toastify-color-success: var(--primary);
-    --toastify-icon-color-success: var(--primary);
 
     /* primary */
     --primary: #c2a410;
@@ -26,7 +24,10 @@ export const GlobalStyles = createGlobalStyle`
     /* neutral */
     --neutral-primary: #fff;
     --neutral-medium: rgba(0, 0, 0, 0.45);
-    --neutral-light: #f2f2f2;
+    --neutral-light: #f2f2f2;   
+    
+    --toastify-color-success: #c2a410;
+    --toastify-icon-color-success: #c2a410;
   }
 
 `;

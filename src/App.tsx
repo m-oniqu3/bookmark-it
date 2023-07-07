@@ -1,39 +1,28 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import BookDetails from "./components/books/BookDetails";
-import Explore from "./components/pages/Explore";
-import Home from "./components/pages/Home";
-import Library from "./components/pages/Library";
-import SearchResults from "./components/pages/SearchResults";
-import Shelf from "./components/pages/Shelf";
-import LibraryLayout from "./layout/LibraryLayout";
-import RootLayout from "./layout/RootLayout";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAppSelector } from "./store/hooks/hooks";
 import { GlobalStyles } from "./styles/Global.styled";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    children: [
-      { path: "/", element: <Home /> },
-      { path: "/explore", element: <Explore /> },
-      {
-        path: "/library",
-        element: <LibraryLayout />,
-        children: [{ path: "*", element: <Library /> }],
-      },
-      { path: "/shelves", element: <Shelf /> },
-      { path: "/search/:query", element: <SearchResults /> },
-      { path: "/details/:id", element: <BookDetails /> },
-    ],
-  },
-]);
-
 const App = () => {
+  const feedback = useAppSelector((state) => state.bookStore.toast);
+
+  useEffect(() => {
+    if (feedback.message) {
+      const { message, type } = feedback;
+      const goToLibrary = () => (window.location.pathname = "/library");
+      if (type === "success") {
+        toast.success(message, { onClick: goToLibrary });
+      } else if (type === "info") toast.info(message, { onClick: goToLibrary });
+      else if (type === "warning") toast.warning(message, { onClick: goToLibrary });
+    }
+  }, [feedback]);
+
   return (
-    <div>
-      <RouterProvider router={router} />
+    <>
       <GlobalStyles />
-    </div>
+      <ToastContainer position="top-left" autoClose={2000} />
+    </>
   );
 };
 

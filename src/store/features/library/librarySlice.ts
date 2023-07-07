@@ -10,7 +10,7 @@ type BookRecord = {
 type LibraryState = {
   library: BookRecord;
   duplicateBookCategory: BookCategory | null;
-  toast: { message: string; type: "success" | "warning" | "error" | null };
+  toast: { message: string; type: "success" | "warning" | "error" | "info" | null };
 };
 
 const initialState: LibraryState = {
@@ -50,6 +50,7 @@ const librarySlice = createSlice({
       }
 
       state.library[id] = { bookInfo, category, timeAdded };
+      state.toast = { message: "Book added to library", type: "success" };
     },
     getCategory: (state, { payload }: PayloadAction<string>) => {
       const id = payload;

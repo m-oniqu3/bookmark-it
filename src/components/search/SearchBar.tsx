@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { addSearch } from "../../store/features/search/searchSlice";
+import { useAppDispatch } from "../../store/hooks/hooks";
 
 const StyledSearchBar = styled.form`
   position: relative;
@@ -36,7 +36,7 @@ const StyledSearchBar = styled.form`
 const SearchBar = () => {
   const [query, setQuery] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

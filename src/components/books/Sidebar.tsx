@@ -2,14 +2,13 @@ import { IoIosClose } from "react-icons/io";
 import type { Book } from "../../types/Book";
 
 import { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { RootState } from "../../store";
 import {
   addSearch,
   removeSearch,
 } from "../../store/features/search/searchSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
@@ -97,11 +96,11 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const { books } = props;
-  const colors = useSelector((state: RootState) => state.colours.bookColours);
-  const recentSearches = useSelector(
-    (state: RootState) => state.searches.recentSearches
+  const colors = useAppSelector((state) => state.colours.bookColours);
+  const recentSearches = useAppSelector(
+    (state) => state.searches.recentSearches
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const result = books
@@ -144,7 +143,7 @@ const Sidebar = (props: Props) => {
 
   const searches = recentSearches.map((search, i) => {
     return (
-      <div className="search" key={search}>
+      <div className="search" key={i}>
         <p onClick={() => handleSearch(search)}> {search}</p>
 
         <span onClick={() => deleteSearch(search)}>

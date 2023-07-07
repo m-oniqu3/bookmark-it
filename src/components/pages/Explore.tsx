@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import useExplore from "../../hooks/useExplore";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
 import Container from "../helpers/ui/Container";
@@ -67,7 +66,7 @@ const genres = [
 const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const books = useExplore(selectedCategory);
-  const colors = useSelector((state: RootState) => state.colours.bookColours);
+  const colors = useAppSelector((state) => state.colours.bookColours);
 
   const genreColours = Object.values(colors).slice(0, genres.length);
 

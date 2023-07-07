@@ -10,9 +10,8 @@ import Information from "./Information";
 // @ts-expect-error - no types available
 
 import { ColorExtractor } from "react-color-extractor";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { addBookColors } from "../../store/features/colours/coloursSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { parseColor } from "../utils/parseColor";
 
 const StyledBook = styled.div<{ color: string }>`
@@ -56,9 +55,9 @@ type Props = {
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType } = props;
-  const dispatch = useDispatch();
-  const color = useSelector(
-    (state: RootState) => state.colours.bookColours[book.id]
+  const dispatch = useAppDispatch();
+  const color = useAppSelector(
+    (state) => state.colours.bookColours[book.id]
   ) as string;
 
   const handleModal = () => {

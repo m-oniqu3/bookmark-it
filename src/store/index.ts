@@ -9,7 +9,7 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     colours: coloursReducer,
     searches: searchReducer,
-    library: libraryReducer,
+    bookStore: libraryReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware);

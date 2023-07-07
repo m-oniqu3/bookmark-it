@@ -1,8 +1,7 @@
 import { BsFillBookmarkFill } from "react-icons/bs";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
@@ -126,8 +125,8 @@ const categories = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
-  const color = useSelector(
-    (state: RootState) => state.colours.bookColours[book.id]
+  const color = useAppSelector(
+    (state) => state.colours.bookColours[book.id]
   ) as string;
   const navigate = useNavigate();
 

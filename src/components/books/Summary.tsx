@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useRef } from "react";
 import ReactStars from "react-rating-star-with-type";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
@@ -109,8 +108,8 @@ type Props = {
 };
 const Summary = (props: Props) => {
   const { book } = props;
-  const color = useSelector(
-    (state: RootState) => state.colours.bookColours[book.id]
+  const color = useAppSelector(
+    (state) => state.colours.bookColours[book.id]
   ) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
 

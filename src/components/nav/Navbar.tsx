@@ -142,7 +142,7 @@ const Navbar = () => {
               </li>
 
               <li>
-                <NavLink to="/library/all">Library</NavLink>
+                <NavLink to="/library">Library</NavLink>
               </li>
 
               <li>
@@ -152,11 +152,7 @@ const Navbar = () => {
 
             <div className="nav__group">
               <SearchBar />
-              <Button
-                onClick={() => setActiveModal({ type: ModalEnum.LOGIN_MODAL })}
-              >
-                Login
-              </Button>
+              <Button onClick={() => setActiveModal({ type: ModalEnum.LOGIN_MODAL })}>Login</Button>
             </div>
 
             <div className="nav__icon" onClick={handleMobileMenu}>

@@ -10,7 +10,6 @@ import Home from "./components/pages/Home.tsx";
 import Library from "./components/pages/Library.tsx";
 import SearchResults from "./components/pages/SearchResults.tsx";
 import Shelf from "./components/pages/Shelf.tsx";
-import LibraryLayout from "./layout/LibraryLayout.tsx";
 import RootLayout from "./layout/RootLayout.tsx";
 import { store } from "./store/index.ts";
 
@@ -21,11 +20,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/explore", element: <Explore /> },
-      {
-        path: "/library",
-        element: <LibraryLayout />,
-        children: [{ path: "*", element: <Library /> }],
-      },
+      { path: "/library", element: <Library /> },
       { path: "/shelves", element: <Shelf /> },
       { path: "/search/:query", element: <SearchResults /> },
       { path: "/details/:id", element: <BookDetails /> },

@@ -13,7 +13,6 @@ import Loading from "../helpers/ui/Loading";
 
 const StyledSearchResults = styled.div`
   padding: 1.5rem 0;
-
   width: 100%;
 
   @media (${devices.large}) {
@@ -29,36 +28,35 @@ const StyledSearchResults = styled.div`
 
 const SearchResults = () => {
   const { query } = useParams() as { query: string };
-  const { books, isFetching, isLoading, error, isSuccess } =
-    useGetSearchResultsQuery(
-      query,
-      //select the data we want from the response if there is a query
-      {
-        selectFromResult: (result: any) => {
-          const items = result.data?.items;
+  const { books, isFetching, isLoading, error, isSuccess } = useGetSearchResultsQuery(
+    query,
+    //select the data we want from the response if there is a query
+    {
+      selectFromResult: (result: any) => {
+        const items = result.data?.items;
 
-          return {
-            books: items?.map((item: any) => ({
-              id: item.id,
-              title: item.volumeInfo.title,
-              authors: item.volumeInfo.authors,
-              publishedDate: item.volumeInfo.publishedDate,
-              categories: item.volumeInfo?.categories,
-              description: item.volumeInfo?.description,
-              imageLinks: item.volumeInfo.imageLinks,
-              searchInfo: item.searchInfo,
-              averageRating: item.volumeInfo.averageRating,
-              ratingsCount: item.volumeInfo.ratingsCount,
-            })) as Book[],
+        return {
+          books: items?.map((item: any) => ({
+            id: item.id,
+            title: item.volumeInfo.title,
+            authors: item.volumeInfo.authors,
+            publishedDate: item.volumeInfo.publishedDate,
+            categories: item.volumeInfo?.categories,
+            description: item.volumeInfo?.description,
+            imageLinks: item.volumeInfo.imageLinks,
+            searchInfo: item.searchInfo,
+            averageRating: item.volumeInfo.averageRating,
+            ratingsCount: item.volumeInfo.ratingsCount,
+          })) as Book[],
 
-            isLoading: result.isLoading,
-            error: result.error,
-            isSuccess: result.isSuccess,
-            isFetching: result.isFetching,
-          };
-        },
-      }
-    );
+          isLoading: result.isLoading,
+          error: result.error,
+          isSuccess: result.isSuccess,
+          isFetching: result.isFetching,
+        };
+      },
+    }
+  );
 
   const content = (() => {
     if (isLoading || isFetching) return <Loading />;

@@ -80,7 +80,7 @@ const MobileMenu = (props: Props) => {
           </li>
 
           <li>
-            <NavLink to="/library/all">Library</NavLink>
+            <NavLink to="/library">Library</NavLink>
           </li>
 
           <li>

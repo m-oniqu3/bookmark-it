@@ -39,18 +39,16 @@ const librarySlice = createSlice({
         const duplicateCategory = duplicateBook.category;
 
         if (duplicateCategory === category) {
-          state.toast = {
-            message: "This book is already in your library in this category",
-            type: "warning",
-          };
+          delete state.library[id];
+          state.toast = { message: "Book removed from library", type: "info" };
+        } else {
+          const updatedBook = { ...duplicateBook, category, timeAdded: Date.now() };
+          state.library[id] = updatedBook;
         }
-
-        const updatedBook = { ...duplicateBook, category, timeAdded: Date.now() };
-        state.library[id] = updatedBook;
+      } else {
+        state.library[id] = { bookInfo, category, timeAdded };
+        state.toast = { message: "Book added to library", type: "success" };
       }
-
-      state.library[id] = { bookInfo, category, timeAdded };
-      state.toast = { message: "Book added to library", type: "success" };
     },
     getCategory: (state, { payload }: PayloadAction<string>) => {
       const id = payload;

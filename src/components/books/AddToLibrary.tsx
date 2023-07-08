@@ -102,6 +102,15 @@ const StyledAddToLibrary = styled.div<{ color: string }>`
           place-items: center;
           color: var(--secondary);
         }
+
+        &__active {
+          background-color: var(--secondary);
+          color: var(--neutral-primary);
+
+          span {
+            color: var(--neutral-primary);
+          }
+        }
       }
 
       .tbr {
@@ -155,11 +164,12 @@ const AddToLibrary = (props: Props) => {
 
   const bookCategories = categories.map((category) => {
     const className = category.toLowerCase().split(" ").join("-");
-    const color = duplicateBookCategory === category ? "var(--primary)" : "";
+    const active = duplicateBookCategory === category ? "category__active" : "";
+
     //todo set background color insteads
     return (
-      <p key={category} className={`category ${className}`} onClick={() => handleCategory(category)}>
-        <span style={{ color: `${color}` }}>
+      <p key={category} className={`category ${className} ${active}`} onClick={() => handleCategory(category)}>
+        <span>
           <BsFillBookmarkFill />
         </span>
         {category}

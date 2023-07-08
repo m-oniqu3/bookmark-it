@@ -108,9 +108,7 @@ type Props = {
 };
 const Summary = (props: Props) => {
   const { book } = props;
-  const color = useAppSelector(
-    (state) => state.colours.bookColours[book.id]
-  ) as string;
+  const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
 
   /** the textSnippet includes html tags so use useRef to include the text in the innerHTML
@@ -127,7 +125,7 @@ const Summary = (props: Props) => {
   const src = book.imageLinks?.smallThumbnail;
 
   const author = !book.authors ? "Unknown" : book.authors[0];
-  const categories = !book.categories ? "" : `${book.categories[0]}`;
+  const categories = !book.categories || !book.categories.length ? "" : `${book.categories[0]}`;
 
   return (
     <StyledSummary background={color}>
@@ -143,8 +141,7 @@ const Summary = (props: Props) => {
           <p className="author">{author}</p>
 
           <p className="details">
-            {book.publishedDate &&
-              `${new Date(book.publishedDate).getFullYear().toString()} -  `}
+            {book.publishedDate && `${new Date(book.publishedDate).getFullYear().toString()} -  `}
             {categories}
           </p>
 
@@ -158,9 +155,7 @@ const Summary = (props: Props) => {
             />
             <p className="count">
               {book.ratingsCount || 1}
-              {book.ratingsCount === 1 || !book.ratingsCount
-                ? " review"
-                : " reviews"}
+              {book.ratingsCount === 1 || !book.ratingsCount ? " review" : " reviews"}
             </p>
           </div>
 

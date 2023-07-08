@@ -1,8 +1,25 @@
+import { Fragment, useState } from "react";
 import { styled } from "styled-components";
+import Search from "../../assets/search.svg";
+import useFilterLibrary from "../../hooks/useFilterLibrary";
+import { StyledGrid } from "../../styles/StyledGrid";
+import { devices } from "../../styles/breakpoints";
+import { Filter } from "../../types/Book";
 import Container from "../helpers/ui/Container";
+import Empty from "../helpers/ui/Empty";
 
-const StyledLibrary = styled.div`
+const StyledLibrary = styled(Container)`
   padding: 1.5rem 0;
+
+  @media (${devices.large}) {
+    display: grid;
+    grid-template-columns: 1fr 15.5rem;
+    gap: 3rem;
+
+    .filters {
+      order: 1;
+    }
+  }
 
   .filters {
     display: flex;
@@ -16,6 +33,13 @@ const StyledLibrary = styled.div`
       display: none;
     }
 
+    @media (${devices.large}) {
+      flex-wrap: wrap;
+      position: sticky;
+      top: 12vh;
+      height: fit-content;
+    }
+
     .filter {
       padding: 7px 12px;
       border-radius: 5px;
@@ -25,26 +49,76 @@ const StyledLibrary = styled.div`
       color: #1a1a1a;
       min-width: fit-content;
       background-color: var(--neutral-light);
+      cursor: pointer;
+
+      &.active {
+        background-color: var(--secondary);
+        color: var(--neutral-primary);
+      }
     }
   }
 `;
 
-const filters = ["All", "TBR", "Reading", "Finished", "DNF"];
+const filters: Filter[] = ["All", "TBR", "Reading", "Finished", "DNF"];
 
 const Library = () => {
+  const [activeFilter, setActiveFilter] = useState<Filter>("All");
+  const [activeAuthor, setActiveAuthor] = useState<string>("All");
+
+  const { authors, books } = useFilterLibrary(activeFilter, activeAuthor);
+
+  const handleFilter = (filter: Filter) => {
+    setActiveFilter(filter);
+  };
+
+  const handleAuthor = (author: string) => {
+    setActiveAuthor(author);
+    console.log(author);
+  };
+
   const filterList = filters.map((filter) => {
+    const active = activeFilter === filter ? "active" : "";
+
     return (
-      <div key={filter} className="filter">
+      <div key={filter} className={`filter ${active}`} onClick={() => handleFilter(filter)}>
         {filter}
       </div>
     );
   });
 
+  const authorList = ["All", ...authors].map((author) => {
+    const active = activeAuthor === author ? "active" : "";
+
+    return (
+      <div key={author} onClick={() => handleAuthor(author)}>
+        {author}
+      </div>
+    );
+  });
+
+  const content = (() => {
+    if (books.length > 0) {
+      return <StyledGrid>{books}</StyledGrid>;
+    } else {
+      return (
+        <Empty
+          src={Search}
+          route="/explore"
+          heading="There are no books here as yet"
+          message="Search for a book to add it to your library or visit the explore page to find more books."
+          buttonName="Explore"
+        />
+      );
+    }
+  })();
+
   return (
     <StyledLibrary>
-      <Container>
-        <div className="filters">{filterList}</div>
-      </Container>
+      <div className="filters">
+        <div>{filterList} </div>
+        <div>{authorList}</div>
+      </div>
+      <Fragment>{content}</Fragment>
     </StyledLibrary>
   );
 };

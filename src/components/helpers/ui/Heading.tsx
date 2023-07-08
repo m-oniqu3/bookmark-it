@@ -12,6 +12,10 @@ const HeadingBase = styled.h1`
   }
 `;
 
+const SmallHeading = styled(HeadingBase)`
+  font-size: clamp(1.5rem, 6vw, 2rem);
+`;
+
 const MediumHeading = styled(HeadingBase)`
   font-size: clamp(2rem, 6vw, 3rem);
 `;
@@ -22,7 +26,7 @@ const LargeHeading = styled(HeadingBase)`
 
 type Props = {
   text: string;
-  variant: "medium" | "large";
+  variant: "small" | "medium" | "large";
 };
 
 const Heading = (props: Props) => {
@@ -35,7 +39,18 @@ const Heading = (props: Props) => {
     }
   }, [text]);
 
-  const StyledHeading = variant === "medium" ? MediumHeading : LargeHeading;
+  const StyledHeading = (() => {
+    switch (variant) {
+      case "small":
+        return SmallHeading;
+      case "medium":
+        return MediumHeading;
+      case "large":
+        return LargeHeading;
+      default:
+        return SmallHeading;
+    }
+  })();
 
   return <StyledHeading ref={ref}>{text}</StyledHeading>;
 };

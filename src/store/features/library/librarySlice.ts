@@ -44,6 +44,7 @@ const librarySlice = createSlice({
         } else {
           const updatedBook = { ...duplicateBook, category, timeAdded: Date.now() };
           state.library[id] = updatedBook;
+          state.toast = { message: "Category updated", type: "success" };
         }
       } else {
         state.library[id] = { bookInfo, category, timeAdded };

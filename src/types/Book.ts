@@ -25,3 +25,5 @@ export interface ExploreBooks extends Book {
 }
 
 export type BookCategory = "Reading" | "TBR" | "DNF" | "Finished";
+
+export type Filter = "All" | "TBR" | "Reading" | "Finished" | "DNF";

@@ -4,6 +4,7 @@ import Search from "../../assets/search.svg";
 import useFilterLibrary from "../../hooks/useFilterLibrary";
 import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { Filter } from "../../types/Book";
 import Container from "../helpers/ui/Container";
@@ -23,18 +24,6 @@ const StyledLibrary = styled(Container)`
     }
   }
 
-  .title {
-    display: none;
-
-    @media (${devices.large}) {
-      display: block;
-      padding-bottom: 1rem;
-      color: var(--secondary);
-      font-size: 0.9rem;
-      font-weight: 400;
-    }
-  }
-
   .options {
     display: flex;
     flex-direction: column;
@@ -49,7 +38,10 @@ const StyledLibrary = styled(Container)`
   }
 
   .filters {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(100px, 1fr));
+    text-align: center;
+
     gap: 1rem;
     width: 100%;
     overflow-x: scroll;
@@ -61,7 +53,9 @@ const StyledLibrary = styled(Container)`
     }
 
     @media (${devices.large}) {
+      display: flex;
       flex-wrap: wrap;
+      justify-content: flex-start;
     }
 
     .filter {
@@ -120,8 +114,10 @@ const filters: Filter[] = ["All", "TBR", "Reading", "Finished", "DNF"];
 
 const Library = () => {
   const colors = useAppSelector((state) => state.colours.bookColours);
+  const { library } = useAppSelector((state) => state.bookStore);
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const [activeAuthor, setActiveAuthor] = useState<string>("All");
+  const isLibraryEmpty = Object.keys(library).length === 0;
 
   const { authors, books } = useFilterLibrary(activeFilter, activeAuthor);
 
@@ -172,18 +168,33 @@ const Library = () => {
     }
   })();
 
+  if (isLibraryEmpty) {
+    return (
+      <Empty
+        src={Search}
+        route="/explore"
+        heading="Your library is empty"
+        message="Search for a book to add it to your library or visit the explore page to find more books."
+        buttonName="Explore"
+        adjust={true}
+      />
+    );
+  }
+
   return (
     <StyledLibrary>
       <div className="options">
         <div>
-          <h3 className="title">Categories</h3>
+          <StyledTitle className="title">Categories</StyledTitle>
           <div className="filters">{filterList}</div>
         </div>
 
-        <div>
-          <h3 className="title">Authors</h3>
-          <div className="authors">{authorList}</div>
-        </div>
+        {authorList.length > 1 && (
+          <div>
+            <StyledTitle className="title">Authors</StyledTitle>
+            <div className="authors">{authorList}</div>
+          </div>
+        )}
       </div>
       <Fragment>{content}</Fragment>
     </StyledLibrary>

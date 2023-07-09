@@ -11,6 +11,7 @@ import Loading from "../helpers/ui/Loading";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { parseColor } from "../utils/parseColor";
 
 const StyledDetailsContainer = styled(Container)<StyledProps>`
@@ -23,8 +24,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
   }
 
   @media (${devices.xlarge}) {
-    grid-template-columns: ${({ categories }) =>
-      categories ? "250px 1fr 15.5rem;" : "200px 1fr"};
+    grid-template-columns: ${({ categories }) => (categories ? "250px 1fr 15.5rem;" : "200px 1fr")};
     width: ${({ categories }) => (categories ? "" : "70%")};
     gap: 1rem;
   }
@@ -224,31 +224,30 @@ const BookDetails = () => {
   const { id } = useParams() as { id: string };
   const [colors, setColors] = useState<string[]>([]);
 
-  const { bookDetails, isLoading, isFetching, isSuccess, error } =
-    useGetBookDetailsQuery(id, {
-      selectFromResult: (result: any) => {
-        return {
-          bookDetails: {
-            id: result.data?.id,
-            title: result.data?.volumeInfo.title,
-            subtitle: result.data?.volumeInfo.subtitle,
-            authors: result.data?.volumeInfo.authors,
-            publishedDate: result.data?.volumeInfo.publishedDate,
-            categories: result.data?.volumeInfo?.categories,
-            description: result.data?.volumeInfo?.description,
-            imageLinks: result.data?.volumeInfo.imageLinks,
-            searchInfo: result.data?.searchInfo,
-            averageRating: result.data?.volumeInfo?.averageRating,
-            ratingsCount: result.data?.volumeInfo?.ratingsCount,
-          } as Book,
+  const { bookDetails, isLoading, isFetching, isSuccess, error } = useGetBookDetailsQuery(id, {
+    selectFromResult: (result: any) => {
+      return {
+        bookDetails: {
+          id: result.data?.id,
+          title: result.data?.volumeInfo.title,
+          subtitle: result.data?.volumeInfo.subtitle,
+          authors: result.data?.volumeInfo.authors,
+          publishedDate: result.data?.volumeInfo.publishedDate,
+          categories: result.data?.volumeInfo?.categories,
+          description: result.data?.volumeInfo?.description,
+          imageLinks: result.data?.volumeInfo.imageLinks,
+          searchInfo: result.data?.searchInfo,
+          averageRating: result.data?.volumeInfo?.averageRating,
+          ratingsCount: result.data?.volumeInfo?.ratingsCount,
+        } as Book,
 
-          isLoading: result.isLoading,
-          error: result.error,
-          isSuccess: result.isSuccess,
-          isFetching: result.isFetching,
-        };
-      },
-    });
+        isLoading: result.isLoading,
+        error: result.error,
+        isSuccess: result.isSuccess,
+        isFetching: result.isFetching,
+      };
+    },
+  });
 
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -265,9 +264,7 @@ const BookDetails = () => {
   }, [bookDetails.description]);
 
   //remove duplicate categories, split categories with "/" and flatten array
-  const categorySet = new Set(
-    bookDetails.categories?.map((cat) => cat.split("/"))?.flat()
-  );
+  const categorySet = new Set(bookDetails.categories?.map((cat) => cat.split("/"))?.flat());
   const allCategories = [...categorySet]?.map((category, index) => {
     const newColor = parseColor(colors[index % colors.length]);
 
@@ -294,7 +291,7 @@ const BookDetails = () => {
 
   const background = colors[0];
 
-  // iffe to determine content
+  // iife to determine content
   const content = (() => {
     if (isLoading || isFetching) return <Loading />;
     if (error) return <p>Error</p>;
@@ -303,10 +300,7 @@ const BookDetails = () => {
       const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
       return (
-        <StyledDetailsContainer
-          background={background}
-          categories={!!bookDetails.categories}
-        >
+        <StyledDetailsContainer background={background} categories={!!bookDetails.categories}>
           <div className="background">
             <figure>
               <ColorExtractor getColors={handleColors}>
@@ -318,12 +312,8 @@ const BookDetails = () => {
           <section className="overview">
             <div className="intro">
               <h1 className="title">{bookDetails.title}</h1>
-              {bookDetails.subtitle && (
-                <p className="subtitle">{bookDetails.subtitle}</p>
-              )}
-              {bookDetails.authors && (
-                <p className="author">{bookDetails.authors[0]}</p>
-              )}
+              {bookDetails.subtitle && <p className="subtitle">{bookDetails.subtitle}</p>}
+              {bookDetails.authors && <p className="author">{bookDetails.authors[0]}</p>}
 
               <div className="rating">
                 <ReactStars
@@ -335,17 +325,13 @@ const BookDetails = () => {
                 />
                 <p className="count">
                   {bookDetails.ratingsCount || 1}
-                  {bookDetails.ratingsCount === 1 || !bookDetails.ratingsCount
-                    ? " review"
-                    : " reviews"}
+                  {bookDetails.ratingsCount === 1 || !bookDetails.ratingsCount ? " review" : " reviews"}
                 </p>
               </div>
             </div>
 
             <article className="details">
-              {bookDetails.categories && (
-                <div className="categories">{allCategories}</div>
-              )}
+              {bookDetails.categories && <div className="categories">{allCategories}</div>}
 
               <div>
                 <h2 className="synopsis">Synopsis</h2>
@@ -355,6 +341,7 @@ const BookDetails = () => {
           </section>
           {bookDetails.categories && (
             <aside>
+              <StyledTitle>Genres</StyledTitle>
               <div className="genres">{allCategories}</div>
             </aside>
           )}
@@ -367,26 +354,3 @@ const BookDetails = () => {
 };
 
 export default BookDetails;
-
-/* {openAddToLibraryOptions && (
-              <article className="desktop-library-categories">
-                <Options />
-              </article>
-            )}
-
-             {openAddToLibraryOptions && (
-            <article className="mobile-library-categories">
-              <Options />
-            </article>
-          )}
-          
-            <div className="icon">
-              <BsFillBookmarkPlusFill color="var(--secondary)" />
-            </div>
-            
-   <p className="add" onClick={handleAddToLibraryOptions}>
-              Add to Library
-              <span>
-                <BsFillBookmarkPlusFill color="var(--secondary)" />
-              </span>
-            </p>*/

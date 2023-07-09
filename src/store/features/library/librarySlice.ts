@@ -51,7 +51,7 @@ const librarySlice = createSlice({
         state.toast = { message: "Book added to library", type: "success" };
       }
     },
-    getCategory: (state, { payload }: PayloadAction<string>) => {
+    getActiveBookCategory: (state, { payload }: PayloadAction<string>) => {
       const id = payload;
 
       const book = state.library[id];
@@ -60,6 +60,6 @@ const librarySlice = createSlice({
   },
 });
 
-export const { addToLibrary, getCategory } = librarySlice.actions;
+export const { addToLibrary, getActiveBookCategory } = librarySlice.actions;
 
 export default librarySlice.reducer;

@@ -5,7 +5,7 @@ import { devices } from "../../../styles/breakpoints";
 import Button from "./Button";
 import Heading from "./Heading";
 
-const StyledEmptyShelf = styled.section`
+const StyledEmptyShelf = styled.section<{ adjust?: boolean }>`
   text-align: center;
   display: grid;
   place-content: center;
@@ -16,7 +16,6 @@ const StyledEmptyShelf = styled.section`
 
   @media (${devices.xlarge}) {
     grid-template-columns: 1fr 1fr;
-    /* gap: 1rem; */
     max-width: 56.25rem;
     margin: 0 auto;
     height: 50vh;
@@ -32,7 +31,7 @@ const StyledEmptyShelf = styled.section`
   }
 
   article {
-    max-width: 300px;
+    width: ${(props) => (props.adjust ? "min(85%, 400px);" : "min(75%, 300px)")};
     margin: 0 auto;
 
     @media (${devices.xlarge}) {
@@ -52,16 +51,17 @@ interface Props {
   heading: string;
   message: string;
   buttonName: string;
+  adjust?: boolean;
 }
 
 const Empty = (props: Props) => {
-  const { src, route, message, buttonName, heading } = props;
+  const { src, route, message, buttonName, heading, adjust } = props;
 
   const navigate = useNavigate();
   const handleClick = () => navigate(`${route}`);
 
   return (
-    <StyledEmptyShelf>
+    <StyledEmptyShelf adjust={adjust}>
       <figure>
         <img src={src} alt="Illustration" />
       </figure>

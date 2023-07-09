@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { addToLibrary, getCategory } from "../../store/features/library/librarySlice";
+import { addToLibrary, getActiveBookCategory } from "../../store/features/library/librarySlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { devices } from "../../styles/breakpoints";
@@ -152,7 +152,7 @@ const AddToLibrary = (props: Props) => {
   };
 
   useEffect(() => {
-    dispatch(getCategory(book.id));
+    dispatch(getActiveBookCategory(book.id));
   }, [book.id, dispatch]);
 
   const handleCategory = (category: BookCategory) => {

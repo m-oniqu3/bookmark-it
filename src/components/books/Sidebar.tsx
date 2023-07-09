@@ -6,22 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { addSearch, removeSearch } from "../../store/features/search/searchSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
 
 const StyledSidebar = styled.aside`
-  .title {
-    display: none;
-
-    @media (${devices.large}) {
-      display: block;
-      padding-bottom: 1rem;
-      color: var(--secondary);
-      font-size: 0.9rem;
-      font-weight: 400;
-    }
-  }
-
   .genres,
   .searches {
     display: flex;
@@ -47,7 +36,12 @@ const StyledSidebar = styled.aside`
       font-size: 0.9rem;
       font-weight: 500;
       color: #1a1a1a;
-      min-width: fit-content;
+      min-width: max-content;
+      height: fit-content;
+
+      @media (${devices.large}) {
+        min-width: fit-content;
+      }
     }
   }
 
@@ -151,14 +145,14 @@ const Sidebar = (props: Props) => {
       <div className="recents">
         {recentSearches.length > 0 && (
           <Fragment>
-            <h3 className="title">Recent Searches</h3>
+            <StyledTitle className="title">Recent Searches</StyledTitle>
             <div className="searches">{searches}</div>
           </Fragment>
         )}
       </div>
 
       <div className="genre-group">
-        <h3 className="title">Genres</h3>
+        <StyledTitle className="title">Genres</StyledTitle>
         <div className="genres">{content}</div>
       </div>
     </StyledSidebar>

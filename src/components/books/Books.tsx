@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { ImBookmark } from "react-icons/im";
 import { styled } from "styled-components";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
@@ -14,7 +15,18 @@ import { addBookColors } from "../../store/features/colours/coloursSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { parseColor } from "../utils/parseColor";
 
-const StyledBook = styled.div<{ color: string }>`
+const StyledBook = styled.div<{ color: string; showIcon: boolean }>`
+  position: relative;
+
+  .icon {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    z-index: 1;
+    display: ${({ showIcon }) => (showIcon ? "block" : "none")};
+    filter: brightness(60%);
+  }
+
   .bg-container {
     background-color: ${({ color }) => `rgba(${parseColor(color)},
        0.5)`};
@@ -22,7 +34,7 @@ const StyledBook = styled.div<{ color: string }>`
     border-radius: 5px;
   }
 
-  figure {
+  figure.cover {
     position: relative;
     cursor: pointer;
     height: 6rem;
@@ -50,15 +62,15 @@ const StyledBook = styled.div<{ color: string }>`
 type Props = {
   book: Book;
   modalType: "library" | "shelf";
+  showBookmarkIcon: boolean;
 };
 
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
-  const { book, modalType } = props;
+  const { book, modalType, showBookmarkIcon } = props;
   const dispatch = useAppDispatch();
-  const color = useAppSelector(
-    (state) => state.colours.bookColours[book.id]
-  ) as string;
+  const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
+  const { library } = useAppSelector((state) => state.bookStore);
 
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -67,22 +79,10 @@ const Books = (props: Props) => {
   const modalContent = (() => {
     switch (activeModal?.type) {
       case ModalEnum.INFO_MODAL:
-        return (
-          <Information
-            book={book}
-            modalType={modalType}
-            setActiveModal={setActiveModal}
-          />
-        );
+        return <Information book={book} modalType={modalType} setActiveModal={setActiveModal} />;
 
       case ModalEnum.ADD_TO_LIBRARY_MODAL:
-        return (
-          <AddToLibrary
-            book={book}
-            setActiveModal={setActiveModal}
-            modalType={modalType}
-          />
-        );
+        return <AddToLibrary book={book} setActiveModal={setActiveModal} modalType={modalType} />;
 
       default:
         return null;
@@ -94,12 +94,16 @@ const Books = (props: Props) => {
   };
 
   const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+  const icon = <ImBookmark size={30} color={color} />;
+
+  const isBookInLibrary = !!library[book.id] && showBookmarkIcon;
 
   return (
     <Fragment>
-      <StyledBook color={color}>
+      <StyledBook color={color} showIcon={isBookInLibrary}>
+        <div className="icon">{icon}</div>
         <div className="bg-container">
-          <figure onClick={handleModal}>
+          <figure className="cover" onClick={handleModal}>
             <ColorExtractor getColors={handleColors}>
               <img src={src} alt={book.title} />
             </ColorExtractor>

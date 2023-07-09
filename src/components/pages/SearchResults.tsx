@@ -77,7 +77,7 @@ const SearchResults = () => {
               // remove books without an image
               .filter((book) => book.imageLinks?.smallThumbnail !== undefined)
               .map((book) => {
-                return <Books key={book.id} book={book} modalType="library" />;
+                return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
               })}
           </StyledGrid>
         </StyledSearchResults>

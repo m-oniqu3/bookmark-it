@@ -8,14 +8,12 @@ const useExplore = (subject: string) => {
     }
 
     return exploreBooks.filter((book) => {
-      return book.subject
-        .map((subject) => subject.toLowerCase())
-        .includes(subject.toLowerCase());
+      return book.subject.map((subject) => subject.toLowerCase()).includes(subject.toLowerCase());
     });
   })();
 
   const allBooks = results.map((book) => {
-    return <Books key={book.id} book={book} modalType="library" />;
+    return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
   });
 
   return allBooks;

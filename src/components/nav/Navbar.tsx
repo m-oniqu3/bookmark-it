@@ -18,7 +18,7 @@ const StyledNavContainer = styled.div`
   border-bottom: 1px solid rgba(230, 230, 230, 0.688);
   position: fixed;
   width: 100%;
-  z-index: 1;
+  z-index: 5;
   padding: 1rem 0;
 
   .nav {

@@ -1,6 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { styled } from "styled-components";
 import BookSitting from "../../assets/book_sitting.png";
+import { StyledText } from "../../styles/StyledText";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 
@@ -17,7 +18,7 @@ const StyledLogin = styled(Container)`
 
   .intro {
     padding: 1rem 0;
-    line-height: 135%;
+
     max-width: 450px;
     margin: 0 auto;
   }
@@ -48,10 +49,10 @@ const Login = () => {
   return (
     <StyledLogin>
       <h1>Start Organizing</h1>
-      <p className="intro">
-        Join Bookmark and access all your favourites in one place. Organize your
-        books by adding them to your library and shelves.
-      </p>
+      <StyledText className="intro">
+        Join Bookmark and access all your favourites in one place. Organize your books by adding them to your library
+        and shelves.
+      </StyledText>
 
       <figure>
         <img src={BookSitting} alt="Illustration of a girl sitting on a book" />

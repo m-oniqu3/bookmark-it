@@ -11,6 +11,8 @@ import Loading from "../helpers/ui/Loading";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { ImBookmark } from "react-icons/im";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledTitle } from "../../styles/StyledTitle";
 import { parseColor } from "../utils/parseColor";
 
@@ -36,6 +38,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     border-radius: 5px;
     margin: 0 auto 1rem;
     width: fit-content;
+    position: relative;
 
     @media (${devices.semiLarge}) {
       width: fit-content;
@@ -46,6 +49,14 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     @media (${devices.large}) {
       margin: 0;
       margin-left: auto;
+    }
+
+    .icon {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      z-index: 1;
+      filter: brightness(60%);
     }
 
     figure {
@@ -248,10 +259,9 @@ const BookDetails = () => {
       };
     },
   });
+  const { library } = useAppSelector((state) => state.bookStore);
 
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
-
-  // const [openAddToLibraryOptions, setOpenAddToLibraryOptions] = useState(false);
 
   if (!id) <Navigate to="/" />;
 
@@ -262,6 +272,8 @@ const BookDetails = () => {
       descriptionRef.current.innerHTML = "No description available";
     }
   }, [bookDetails.description]);
+
+  const isBookInLibrary = !!library[id];
 
   //remove duplicate categories, split categories with "/" and flatten array
   const categorySet = new Set(bookDetails.categories?.map((cat) => cat.split("/"))?.flat());
@@ -293,6 +305,8 @@ const BookDetails = () => {
 
   // iife to determine content
   const content = (() => {
+    const icon = <ImBookmark size={30} color={colors[3]} />;
+
     if (isLoading || isFetching) return <Loading />;
     if (error) return <p>Error</p>;
 
@@ -302,6 +316,7 @@ const BookDetails = () => {
       return (
         <StyledDetailsContainer background={background} categories={!!bookDetails.categories}>
           <div className="background">
+            {isBookInLibrary && <div className="icon">{icon}</div>}
             <figure>
               <ColorExtractor getColors={handleColors}>
                 <img src={src} alt={bookDetails.title} />

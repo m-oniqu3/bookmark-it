@@ -21,7 +21,7 @@ const StyledBook = styled.div<{ color: string; $showicon: boolean }>`
   .icon {
     position: absolute;
     top: 0;
-    right: 12px;
+    right: 15px;
     z-index: 1;
     display: ${({ $showicon }) => ($showicon ? "block" : "none")};
     filter: brightness(60%);
@@ -94,6 +94,7 @@ const Books = (props: Props) => {
   };
 
   const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+
   const icon = <ImBookmark size={30} color={color} />;
 
   const isBookInLibrary = !!library[book.id] && showBookmarkIcon;

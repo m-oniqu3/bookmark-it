@@ -30,7 +30,7 @@ const useFilterLibrary = (filter: Filter, author: string) => {
     return author;
   });
 
-  const authors = [...new Set(allAuthors)];
+  const authors = [...new Set(allAuthors)].sort();
   //   console.log(authors);
 
   const books = authorResults.map((record) => {

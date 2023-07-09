@@ -4,10 +4,7 @@ import type { Book } from "../../types/Book";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import {
-  addSearch,
-  removeSearch,
-} from "../../store/features/search/searchSlice";
+import { addSearch, removeSearch } from "../../store/features/search/searchSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import { parseColor } from "../utils/parseColor";
@@ -20,6 +17,8 @@ const StyledSidebar = styled.aside`
       display: block;
       padding-bottom: 1rem;
       color: var(--secondary);
+      font-size: 0.9rem;
+      font-weight: 400;
     }
   }
 
@@ -97,9 +96,7 @@ type Props = {
 const Sidebar = (props: Props) => {
   const { books } = props;
   const colors = useAppSelector((state) => state.colours.bookColours);
-  const recentSearches = useAppSelector(
-    (state) => state.searches.recentSearches
-  );
+  const recentSearches = useAppSelector((state) => state.searches.recentSearches);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -122,11 +119,7 @@ const Sidebar = (props: Props) => {
     const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
 
     return (
-      <div
-        className="genre"
-        style={{ backgroundColor: background }}
-        key={genre}
-      >
+      <div className="genre" style={{ backgroundColor: background }} key={genre}>
         {genre.toLowerCase()}
       </div>
     );

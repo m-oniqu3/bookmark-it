@@ -47,6 +47,6 @@ export const StyledGrid = styled.div`
 
   @media (${devices.large}) {
     grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-    gap: 1.8rem;
+    gap: 1.7rem;
   }
 `;

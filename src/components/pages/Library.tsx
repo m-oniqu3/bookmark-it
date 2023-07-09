@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Search from "../../assets/search.svg";
 import useFilterLibrary from "../../hooks/useFilterLibrary";
@@ -125,6 +125,12 @@ const Library = () => {
 
   const handleFilter = (filter: Filter) => setActiveFilter(filter);
   const handleAuthor = (author: string) => setActiveAuthor(author);
+
+  useEffect(() => {
+    if (!authors.includes(activeAuthor)) {
+      setActiveAuthor("All");
+    }
+  }, [authors, activeAuthor]);
 
   const filterList = filters.map((filter) => {
     const active = activeFilter === filter ? "active" : "";

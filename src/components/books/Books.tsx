@@ -15,7 +15,7 @@ import { addBookColors } from "../../store/features/colours/coloursSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { parseColor } from "../utils/parseColor";
 
-const StyledBook = styled.div<{ color: string; showIcon: boolean }>`
+const StyledBook = styled.div<{ color: string; $showicon: boolean }>`
   position: relative;
 
   .icon {
@@ -23,7 +23,7 @@ const StyledBook = styled.div<{ color: string; showIcon: boolean }>`
     top: 0;
     right: 12px;
     z-index: 1;
-    display: ${({ showIcon }) => (showIcon ? "block" : "none")};
+    display: ${({ $showicon }) => ($showicon ? "block" : "none")};
     filter: brightness(60%);
   }
 
@@ -100,7 +100,7 @@ const Books = (props: Props) => {
 
   return (
     <Fragment>
-      <StyledBook color={color} showIcon={isBookInLibrary}>
+      <StyledBook color={color} $showicon={isBookInLibrary}>
         <div className="icon">{icon}</div>
         <div className="bg-container">
           <figure className="cover" onClick={handleModal}>

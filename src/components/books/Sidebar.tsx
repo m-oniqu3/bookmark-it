@@ -128,9 +128,9 @@ const Sidebar = (props: Props) => {
     dispatch(removeSearch(search));
   };
 
-  const searches = recentSearches.map((search, i) => {
+  const searches = recentSearches.map((search) => {
     return (
-      <div className="search" key={i}>
+      <div className="search" key={search}>
         <p onClick={() => handleSearch(search)}> {search}</p>
 
         <span onClick={() => deleteSearch(search)}>

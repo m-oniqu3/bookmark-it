@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useEffect, useRef, useState } from "react";
+import { ImBookmark } from "react-icons/im";
 import ReactStars from "react-rating-star-with-type";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
+import { useAppSelector } from "../../store/hooks/hooks";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import Container from "../helpers/ui/Container";
 import Loading from "../helpers/ui/Loading";
+import { parseColor } from "../utils/parseColor";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
-import { ImBookmark } from "react-icons/im";
-import { useAppSelector } from "../../store/hooks/hooks";
-import { StyledTitle } from "../../styles/StyledTitle";
-import { parseColor } from "../utils/parseColor";
 
 const StyledDetailsContainer = styled(Container)<StyledProps>`
   padding: 2rem 0;
@@ -118,6 +118,18 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       color: var(--secondary);
       font-size: 1rem;
       font-weight: 600;
+      padding-bottom: 3px;
+      width: fit-content;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      background-position: 0 90%;
+
+      &:hover {
+        background: ${({ background }) => `linear-gradient(to left, #000000c5, rgba(${parseColor(background)}) 100%)`};
+        background-position: 0 100%;
+        background-size: 100% 2px;
+        background-repeat: no-repeat;
+      }
     }
 
     .rating {
@@ -234,6 +246,13 @@ type StyledProps = {
 const BookDetails = () => {
   const { id } = useParams() as { id: string };
   const [colors, setColors] = useState<string[]>([]);
+  const { library } = useAppSelector((state) => state.bookStore);
+  const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+
+  const navigate = useNavigate();
+  const background = colors[0];
+
+  if (!id) <Navigate to="/" />;
 
   const { bookDetails, isLoading, isFetching, isSuccess, error } = useGetBookDetailsQuery(id, {
     selectFromResult: (result: any) => {
@@ -259,11 +278,18 @@ const BookDetails = () => {
       };
     },
   });
-  const { library } = useAppSelector((state) => state.bookStore);
 
-  const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+  //handlers
+  const handleColors = (colors: string[]) => {
+    setColors(colors);
+  };
 
-  if (!id) <Navigate to="/" />;
+  const handleAuthor = () => {
+    const author = bookDetails.authors ? bookDetails.authors[0] : "";
+    if (author) {
+      navigate(`/search/${author}`);
+    }
+  };
 
   useEffect(() => {
     if (bookDetails.description && descriptionRef.current) {
@@ -280,28 +306,13 @@ const BookDetails = () => {
   const allCategories = [...categorySet]?.map((category, index) => {
     const newColor = parseColor(colors[index % colors.length]);
 
+    const color = `rgba(${newColor}, 0.5)`;
     return (
-      <p
-        className="category"
-        key={category}
-        style={{
-          backgroundColor: `rgba(${newColor}, 0.5)`,
-        }}
-      >
+      <p className="category" key={category} style={{ backgroundColor: `${color}` }}>
         {category}
       </p>
     );
   });
-
-  // const handleAddToLibraryOptions = () => {
-  //   setOpenAddToLibraryOptions((state) => !state);
-  // };
-
-  const handleColors = (colors: string[]) => {
-    setColors(colors);
-  };
-
-  const background = colors[0];
 
   // iife to determine content
   const content = (() => {
@@ -328,7 +339,11 @@ const BookDetails = () => {
             <div className="intro">
               <h1 className="title">{bookDetails.title}</h1>
               {bookDetails.subtitle && <p className="subtitle">{bookDetails.subtitle}</p>}
-              {bookDetails.authors && <p className="author">{bookDetails.authors[0]}</p>}
+              {bookDetails.authors && (
+                <p className="author" onClick={handleAuthor}>
+                  {bookDetails.authors[0]}
+                </p>
+              )}
 
               <div className="rating">
                 <ReactStars
@@ -354,6 +369,7 @@ const BookDetails = () => {
               </div>
             </article>
           </section>
+
           {bookDetails.categories && (
             <aside>
               <StyledTitle>Genres</StyledTitle>

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useRef } from "react";
 import ReactStars from "react-rating-star-with-type";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
@@ -53,6 +54,19 @@ const StyledSummary = styled.section<{ background: string }>`
         color: var(--secondary);
         font-size: 0.95rem;
         font-weight: 500;
+        padding: 3px 0;
+        width: fit-content;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        background-position: 0 90%;
+
+        &:hover {
+          background: ${({ background }) =>
+            `linear-gradient(to left, #000000c5, rgba(${parseColor(background)}) 100%)`};
+          background-position: 0 100%;
+          background-size: 100% 2px;
+          background-repeat: no-repeat;
+        }
       }
 
       .details {
@@ -110,6 +124,7 @@ const Summary = (props: Props) => {
   const { book } = props;
   const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
+  const navigate = useNavigate();
 
   /** the textSnippet includes html tags so use useRef to include the text in the innerHTML
    * if there is no snippet then show description or alternative text
@@ -124,8 +139,14 @@ const Summary = (props: Props) => {
 
   const src = book.imageLinks?.smallThumbnail;
 
-  const author = !book.authors ? "Unknown" : book.authors[0];
+  const author = !book.authors ? "" : book.authors[0];
   const categories = !book.categories || !book.categories.length ? "" : `${book.categories[0]}`;
+
+  const handleAuthor = () => {
+    if (author) {
+      navigate(`/search/${author}`);
+    }
+  };
 
   return (
     <StyledSummary background={color}>
@@ -138,10 +159,13 @@ const Summary = (props: Props) => {
 
         <article>
           <h1 className="title">{book.title}</h1>
-          <p className="author">{author}</p>
+          <p className="author" onClick={handleAuthor}>
+            {author}
+          </p>
 
           <p className="details">
-            {book.publishedDate && `${new Date(book.publishedDate).getFullYear().toString()} -  `}
+            {book.publishedDate && `${new Date(book.publishedDate).getFullYear().toString()} `}
+            {book.publishedDate && categories && " - "}
             {categories}
           </p>
 

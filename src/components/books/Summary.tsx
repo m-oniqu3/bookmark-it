@@ -127,9 +127,11 @@ const StyledSummary = styled.section<StyledProps>`
 `;
 type Props = {
   book: Book;
+  showBookmarkIcon: boolean;
 };
+
 const Summary = (props: Props) => {
-  const { book } = props;
+  const { book, showBookmarkIcon } = props;
   const { library } = useAppSelector((state) => state.bookStore);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
@@ -146,7 +148,7 @@ const Summary = (props: Props) => {
     } else snippetRef.current!.innerHTML = "Visit Details & More";
   }, [book]);
 
-  const isBookInLibrary = !!library[book.id];
+  const isBookInLibrary = !!library[book.id] && showBookmarkIcon;
   const src = book.imageLinks?.smallThumbnail;
 
   const author = !book.authors ? "" : book.authors[0];

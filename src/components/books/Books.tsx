@@ -80,10 +80,24 @@ const Books = (props: Props) => {
   const modalContent = (() => {
     switch (activeModal?.type) {
       case ModalEnum.INFO_MODAL:
-        return <Information book={book} modalType={modalType} setActiveModal={setActiveModal} />;
+        return (
+          <Information
+            book={book}
+            modalType={modalType}
+            setActiveModal={setActiveModal}
+            showBookmarkIcon={showBookmarkIcon}
+          />
+        );
 
       case ModalEnum.ADD_TO_LIBRARY_MODAL:
-        return <AddToLibrary book={book} setActiveModal={setActiveModal} modalType={modalType} />;
+        return (
+          <AddToLibrary
+            book={book}
+            setActiveModal={setActiveModal}
+            modalType={modalType}
+            showBookmarkIcon={showBookmarkIcon}
+          />
+        );
 
       default:
         return null;

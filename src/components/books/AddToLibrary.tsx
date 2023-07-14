@@ -143,18 +143,19 @@ type Props = {
   book: Book;
   setActiveModal: (modal: ModalType | null) => void;
   modalType: "library" | "shelf";
+  showBookmarkIcon: boolean;
 };
 
 const categories: BookCategory[] = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
-  const { book, setActiveModal, modalType } = props;
+  const { book, setActiveModal, modalType, showBookmarkIcon } = props;
   const dispatch = useAppDispatch();
   const duplicateBookCategory = useAppSelector((state) => state.bookStore.duplicateBookCategory);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
   const { library } = useAppSelector((state) => state.bookStore);
   const navigate = useNavigate();
-  const isBookInLibrary = !!library[book.id];
+  const isBookInLibrary = !!library[book.id] && showBookmarkIcon;
 
   const src = book.imageLinks?.smallThumbnail;
 

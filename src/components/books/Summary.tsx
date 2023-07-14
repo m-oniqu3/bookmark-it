@@ -5,11 +5,12 @@ import ReactStars from "react-rating-star-with-type";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppSelector } from "../../store/hooks/hooks";
-import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
 
-const StyledSummary = styled.section<{ background: string; $showicon: boolean }>`
+type StyledProps = { background: string; $showicon: boolean };
+
+const StyledSummary = styled.section<StyledProps>`
   .summary {
     display: grid;
     grid-template-columns: 100px auto;
@@ -18,7 +19,7 @@ const StyledSummary = styled.section<{ background: string; $showicon: boolean }>
     .background {
       background-color: ${({ background }) => `rgba(${parseColor(background)},
        0.5)`};
-      padding: 0.8rem;
+      padding: 10px;
       border-radius: 5px;
       display: grid;
       place-items: center;
@@ -35,7 +36,7 @@ const StyledSummary = styled.section<{ background: string; $showicon: boolean }>
     }
 
     figure {
-      height: 128px;
+      height: 122px;
       width: 75px;
 
       img {
@@ -120,10 +121,6 @@ const StyledSummary = styled.section<{ background: string; $showicon: boolean }>
         font-style: normal;
         position: relative;
         bottom: 0px;
-
-        @media (${devices.xsmall}) {
-          -webkit-line-clamp: 3;
-        }
       }
     }
   }
@@ -189,7 +186,7 @@ const Summary = (props: Props) => {
             <ReactStars
               value={book.averageRating || 1}
               count={5}
-              size={16}
+              size={15}
               activeColor={color}
               inactiveColor={`rgba(${parseColor(color)}, 0.8)`}
             />

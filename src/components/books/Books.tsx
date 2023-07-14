@@ -1,21 +1,22 @@
 import { Fragment, useState } from "react";
 import { ImBookmark } from "react-icons/im";
 import { styled } from "styled-components";
+import { addBookColors } from "../../store/features/colours/coloursSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Modal from "../helpers/ui/Modal";
+import { parseColor } from "../utils/parseColor";
 import AddToLibrary from "./AddToLibrary";
 import Information from "./Information";
 
 // @ts-expect-error - no types available
-
 import { ColorExtractor } from "react-color-extractor";
-import { addBookColors } from "../../store/features/colours/coloursSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
-import { parseColor } from "../utils/parseColor";
 
-const StyledBook = styled.div<{ color: string; $showicon: boolean }>`
+type StyledProps = { color: string; $showicon: boolean };
+
+const StyledBook = styled.div<StyledProps>`
   position: relative;
 
   .icon {

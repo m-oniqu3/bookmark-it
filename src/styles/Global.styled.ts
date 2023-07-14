@@ -26,7 +26,8 @@ export const GlobalStyles = createGlobalStyle`
     --neutral-medium: rgba(0, 0, 0, 0.45);
     --neutral-light: #f2f2f2;   
     
-   
+    --toastify-color-success: var(--primary);
+    --toastify-icon-color-success: var(--primary);
   }
 
 `;

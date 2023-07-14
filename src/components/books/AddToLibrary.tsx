@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BsFillBookmarkFill } from "react-icons/bs";
+import { ImBookmark } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { addToLibrary, getActiveBookCategory } from "../../store/features/library/librarySlice";
@@ -11,7 +12,9 @@ import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import { parseColor } from "../utils/parseColor";
 
-const StyledAddToLibrary = styled.div<{ color: string }>`
+type StyledProps = { color: string; $showicon: boolean };
+
+const StyledAddToLibrary = styled.div<StyledProps>`
   .content {
     display: grid;
     grid-template-columns: 100px auto;
@@ -21,10 +24,20 @@ const StyledAddToLibrary = styled.div<{ color: string }>`
   .background {
     background-color: ${({ color }) => `rgba(${parseColor(color)},
        0.5)`};
-    padding: 0.8rem;
+    padding: 10px;
     border-radius: 5px;
     display: grid;
     place-items: center;
+    position: relative;
+
+    .icon {
+      position: absolute;
+      top: 0;
+      right: 0px;
+      z-index: 1;
+      display: ${({ $showicon }) => ($showicon ? "block" : "none")};
+      filter: brightness(60%);
+    }
   }
 
   figure {
@@ -139,7 +152,9 @@ const AddToLibrary = (props: Props) => {
   const dispatch = useAppDispatch();
   const duplicateBookCategory = useAppSelector((state) => state.bookStore.duplicateBookCategory);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
+  const { library } = useAppSelector((state) => state.bookStore);
   const navigate = useNavigate();
+  const isBookInLibrary = !!library[book.id];
 
   const src = book.imageLinks?.smallThumbnail;
 
@@ -150,6 +165,8 @@ const AddToLibrary = (props: Props) => {
   const handleDetails = () => {
     navigate(`/details/${book.id}`);
   };
+
+  const icon = <ImBookmark size={25} color={color} />;
 
   useEffect(() => {
     dispatch(getActiveBookCategory(book.id));
@@ -178,9 +195,10 @@ const AddToLibrary = (props: Props) => {
   });
 
   return (
-    <StyledAddToLibrary color={color}>
+    <StyledAddToLibrary color={color} $showicon={isBookInLibrary}>
       <div className="content">
         <div className="background">
+          <div className="icon">{icon}</div>
           <figure>
             <img src={src} alt={book.title} />
           </figure>

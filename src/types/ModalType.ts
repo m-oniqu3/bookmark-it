@@ -4,6 +4,7 @@ export enum ModalEnum {
   INFO_MODAL = "INFO_MODAL",
   LOGIN_MODAL = "LOGIN_MODAL",
   ADD_TO_LIBRARY_MODAL = "ADD_TO_LIBRARY_MODAL",
+  CREATE_SHELF_MODAL = "CREATE_SHELF_MODAL",
 }
 
 export type InfoModal = {
@@ -21,4 +22,8 @@ export type AddToLibraryModal = {
   book: Book;
 };
 
-export type ModalType = InfoModal | LoginModal | AddToLibraryModal;
+export type CreateShelfModal = {
+  type: ModalEnum.CREATE_SHELF_MODAL;
+};
+
+export type ModalType = InfoModal | LoginModal | AddToLibraryModal | CreateShelfModal;

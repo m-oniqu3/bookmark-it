@@ -1,6 +1,13 @@
+import { useState } from "react";
 import { styled } from "styled-components";
+import shelves from "../../assets/shelves.svg";
+import { useAppSelector } from "../../store/hooks/hooks";
+import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
+import Empty from "../helpers/ui/Empty";
+import Modal from "../helpers/ui/Modal";
+import CreateShelf from "../shelves/CreateShelf";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -43,20 +50,49 @@ const StyledShelf = styled(Container)`
 const tempShelves = ["All", "Romance", "Mystery", "Humor", "Fantasy", "Horror"];
 
 const Shelf = () => {
+  const { library } = useAppSelector((state) => state.bookStore);
+  const isLibraryEmpty = Object.keys(library).length === 0;
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
+
+  const handleShelf = () => {
+    setActiveModal({ type: ModalEnum.CREATE_SHELF_MODAL });
+  };
+
   const userShelves = tempShelves.map((shelf) => (
     <div className="shelf">
       <p>{shelf}</p>
     </div>
   ));
 
-  return (
-    <StyledShelf>
-      <div className="created-shelves">
-        <Button onClick={() => console.log("click")}>New Shelf</Button>
+  if (isLibraryEmpty) {
+    return (
+      <Empty
+        src={shelves}
+        route="/explore"
+        heading="Your shelves are empty"
+        message="Search for a book to add it to your library to start populating your shelves."
+        buttonName="Explore"
+        adjust={true}
+      />
+    );
+  }
 
-        <> {userShelves}</>
-      </div>
-    </StyledShelf>
+  return (
+    <>
+      <StyledShelf>
+        <div className="created-shelves">
+          <Button onClick={handleShelf}>New Shelf</Button>
+
+          <> {userShelves}</>
+        </div>
+      </StyledShelf>
+
+      {activeModal && (
+        <Modal closeModal={() => setActiveModal(null)}>
+          <CreateShelf closeModal={() => setActiveModal(null)} />
+        </Modal>
+      )}
+    </>
   );
 };
 

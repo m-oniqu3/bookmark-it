@@ -49,19 +49,12 @@ const StyledExplore = styled(Container)`
       color: #1a1a1a;
       min-width: fit-content;
       cursor: pointer;
+      height: 31px;
     }
   }
 `;
 
-const genres = [
-  "All",
-  "Romance",
-  "Easy Reads",
-  "Tiktok",
-  "Fiction",
-  "spice",
-  "Fantasy",
-];
+const genres = ["All", "Romance", "Easy Reads", "Tiktok", "Fiction", "spice", "Fantasy"];
 
 const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -78,12 +71,7 @@ const Explore = () => {
     return genres.map((genre, i) => {
       const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
       return (
-        <div
-          key={i}
-          className="category"
-          style={{ backgroundColor: background }}
-          onClick={() => handleCategory(genre)}
-        >
+        <div key={i} className="category" style={{ backgroundColor: background }} onClick={() => handleCategory(genre)}>
           {genre}
         </div>
       );

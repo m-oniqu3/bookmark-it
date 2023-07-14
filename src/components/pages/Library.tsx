@@ -68,6 +68,7 @@ const StyledLibrary = styled(Container)`
       min-width: fit-content;
       background-color: var(--neutral-light);
       cursor: pointer;
+      height: 31px;
 
       &.active {
         background-color: var(--secondary);
@@ -101,6 +102,7 @@ const StyledLibrary = styled(Container)`
       color: #1a1a1a;
       min-width: fit-content;
       cursor: pointer;
+      height: 31px;
 
       &.active {
         background-color: var(--secondary) !important;
@@ -142,7 +144,7 @@ const Library = () => {
     );
   });
 
-  const authorList = ["All", ...authors].map((author, i) => {
+  const authorList = ["All"].concat(authors).map((author, i) => {
     const active = activeAuthor === author ? "active" : "";
     const background = `rgba(${parseColor(authorColours[i])}, 0.5)`;
 

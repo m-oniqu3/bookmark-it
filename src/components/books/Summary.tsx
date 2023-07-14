@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useRef } from "react";
+import { ImBookmark } from "react-icons/im";
 import ReactStars from "react-rating-star-with-type";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -8,7 +9,7 @@ import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
 
-const StyledSummary = styled.section<{ background: string }>`
+const StyledSummary = styled.section<{ background: string; $showicon: boolean }>`
   .summary {
     display: grid;
     grid-template-columns: 100px auto;
@@ -21,10 +22,20 @@ const StyledSummary = styled.section<{ background: string }>`
       border-radius: 5px;
       display: grid;
       place-items: center;
+      position: relative;
+
+      .icon {
+        position: absolute;
+        top: 0;
+        right: 0px;
+        z-index: 1;
+        display: ${({ $showicon }) => ($showicon ? "block" : "none")};
+        filter: brightness(60%);
+      }
     }
 
     figure {
-      height: 122px;
+      height: 128px;
       width: 75px;
 
       img {
@@ -122,6 +133,7 @@ type Props = {
 };
 const Summary = (props: Props) => {
   const { book } = props;
+  const { library } = useAppSelector((state) => state.bookStore);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
   const navigate = useNavigate();
@@ -137,6 +149,7 @@ const Summary = (props: Props) => {
     } else snippetRef.current!.innerHTML = "Visit Details & More";
   }, [book]);
 
+  const isBookInLibrary = !!library[book.id];
   const src = book.imageLinks?.smallThumbnail;
 
   const author = !book.authors ? "" : book.authors[0];
@@ -148,10 +161,13 @@ const Summary = (props: Props) => {
     }
   };
 
+  const icon = <ImBookmark size={25} color={color} />;
+
   return (
-    <StyledSummary background={color}>
+    <StyledSummary background={color} $showicon={isBookInLibrary}>
       <div className="summary">
         <div className="background">
+          <div className="icon">{icon}</div>
           <figure>
             <img src={src} alt={book.title} />
           </figure>

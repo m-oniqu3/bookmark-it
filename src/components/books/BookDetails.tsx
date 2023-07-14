@@ -54,7 +54,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     .icon {
       position: absolute;
       top: 0;
-      right: 15px;
+      right: -1px;
       z-index: 1;
       filter: brightness(60%);
     }
@@ -316,7 +316,7 @@ const BookDetails = () => {
 
   // iife to determine content
   const content = (() => {
-    const icon = <ImBookmark size={30} color={colors[3]} />;
+    const icon = <ImBookmark size={28} color={colors[3]} />;
 
     if (isLoading || isFetching) return <Loading />;
     if (error) return <p>Error</p>;

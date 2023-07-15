@@ -6,7 +6,7 @@ const App = () => {
   return (
     <>
       <GlobalStyles />
-      <ToastContainer position="top-left" autoClose={2000} />
+      <ToastContainer position="top-left" autoClose={2000} limit={3} />
     </>
   );
 };

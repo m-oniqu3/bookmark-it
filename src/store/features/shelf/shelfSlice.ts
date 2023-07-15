@@ -14,7 +14,6 @@ type InitialShelfState = {
   shelves: Shelf;
   books: BooksOnShelf;
   isShelfEmpty: boolean;
-  currentBookShelves: string[];
   toast: { message: string; type: "success" | "warning" | "error" | "info" | null };
 };
 
@@ -42,7 +41,6 @@ const initialState: InitialShelfState = {
   },
   books: {},
   isShelfEmpty: true,
-  currentBookShelves: [],
   toast: { message: "", type: null },
 };
 

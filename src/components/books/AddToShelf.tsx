@@ -1,4 +1,4 @@
-import { BsCheckSquareFill } from "react-icons/bs";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { addBooksToShelf, addShelfToBook } from "../../store/features/shelf/shelfSlice";
@@ -17,7 +17,6 @@ const StyledShelf = styled.div<StyledProps>`
     display: grid;
     grid-template-columns: 100px auto;
     gap: 1rem;
-    height: 142px;
   }
 
   .background {
@@ -44,15 +43,13 @@ const StyledShelf = styled.div<StyledProps>`
 
   article {
     position: relative;
+    max-height: 142px;
+    overflow-y: hidden;
 
     .title {
       font-size: 1.2rem;
       color: var(--secondary);
       width: calc(100% - 1rem);
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
       font-family: "Rubik", sans-serif;
       font-weight: bold;
     }
@@ -102,9 +99,13 @@ const AddToShelf = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
   const navigate = useNavigate();
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
-  const { shelves } = useAppSelector((state) => state.bookShelf);
-
+  const { shelves, books } = useAppSelector((state) => state.bookShelf);
+  const [currentBookShelves, setCurrentBookShelves] = useState<string[]>([]);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setCurrentBookShelves(books[book.id] || []);
+  }, [book.id, books]);
 
   const handleSummary = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -127,9 +128,11 @@ const AddToShelf = (props: Props) => {
   };
 
   const availableShelves = sortedShelves.map((shelf) => {
+    const isChecked = currentBookShelves.includes(shelf);
+
     return (
       <div key={shelf} className="shelf">
-        <input type="checkbox" value={shelf} onChange={handleUpdates} />
+        <input type="checkbox" value={shelf} onChange={handleUpdates} checked={isChecked} />
         <p key={shelf}>{shelf}</p>
       </div>
     );
@@ -145,12 +148,8 @@ const AddToShelf = (props: Props) => {
         </div>
 
         <article>
-          <h1 className="title">Select the shelf</h1>
+          <h1 className="title">Choose your shelves</h1>
           <div className="shelves">{availableShelves}</div>
-
-          <div className="save">
-            <BsCheckSquareFill color="green" size={20} />
-          </div>
         </article>
       </div>
 

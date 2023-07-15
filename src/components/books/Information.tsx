@@ -5,6 +5,7 @@ import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
+
 import Summary from "./Summary";
 
 const StyledInfo = styled.div`
@@ -45,6 +46,10 @@ const Information = (props: Props) => {
     switch (modalType) {
       case "library":
         setActiveModal({ type: ModalEnum.ADD_TO_LIBRARY_MODAL, book });
+        break;
+
+      case "shelf":
+        setActiveModal({ type: ModalEnum.ADD_TO_SHELF_MODAL, book });
         break;
 
       default:

@@ -184,7 +184,7 @@ const AddToLibrary = (props: Props) => {
     const className = category.toLowerCase().split(" ").join("-");
     const active = duplicateBookCategory === category ? "category__active" : "";
 
-    //todo set background color insteads
+    //todo set background color instead
     return (
       <p key={category} className={`category ${className} ${active}`} onClick={() => handleCategory(category)}>
         <span>

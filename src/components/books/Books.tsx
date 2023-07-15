@@ -13,6 +13,7 @@ import Information from "./Information";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import AddToShelf from "./AddToShelf";
 
 type StyledProps = { color: string; $showicon: boolean };
 
@@ -98,6 +99,9 @@ const Books = (props: Props) => {
             showBookmarkIcon={showBookmarkIcon}
           />
         );
+
+      case ModalEnum.ADD_TO_SHELF_MODAL:
+        return <AddToShelf book={book} setActiveModal={setActiveModal} modalType={modalType} />;
 
       default:
         return null;

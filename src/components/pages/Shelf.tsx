@@ -4,6 +4,7 @@ import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
 import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
+import { devices } from "../../styles/breakpoints";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
@@ -13,6 +14,16 @@ import CreateShelf from "../shelves/CreateShelf";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
+
+  @media (${devices.large}) {
+    display: grid;
+    grid-template-columns: 1fr 15.5rem;
+    gap: 3rem;
+
+    .created-shelves {
+      order: 1;
+    }
+  }
 
   .created-shelves {
     display: flex;
@@ -26,10 +37,16 @@ const StyledShelf = styled(Container)`
       display: none;
     }
 
+    @media (${devices.large}) {
+      flex-wrap: wrap;
+      position: sticky;
+      top: 12vh;
+      height: fit-content;
+    }
+
     .shelf {
       padding: 7px 12px;
       border-radius: 5px;
-      text-transform: capitalize;
       font-size: 0.9rem;
       font-weight: 500;
       color: #1a1a1a;

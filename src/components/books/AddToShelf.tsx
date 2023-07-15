@@ -92,6 +92,7 @@ const AddToShelf = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
   const navigate = useNavigate();
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
+  const { shelves } = useAppSelector((state) => state.bookShelf);
 
   const handleSummary = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -103,28 +104,11 @@ const AddToShelf = (props: Props) => {
 
   const src = book.imageLinks?.smallThumbnail;
 
-  const tempShelves = [
-    "romance",
-    "fantasy",
-    "fiction",
-    "non-fiction",
-    "thriller",
-    "mystery",
-    "horror",
-    "comedy",
-    "drama",
-    "action",
-    "adventure",
-    "biography",
-    "history",
-    "science",
-    "poetry",
-    "children",
-    "young-adult",
-    "other",
-  ];
+  const sortedShelves: string[] = Object.entries(shelves)
+    .sort((a, b) => b[1].createdAt - a[1].createdAt)
+    .map((shelf) => shelf["0"]);
 
-  const availableShelves = tempShelves.map((shelf) => {
+  const availableShelves = sortedShelves.map((shelf) => {
     return (
       <div key={shelf} className="shelf">
         <input type="checkbox" id={shelf} name={shelf} value={shelf} />

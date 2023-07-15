@@ -3,6 +3,7 @@ import { apiSlice } from "./features/api/apiSlice";
 import coloursReducer from "./features/colours/coloursSlice";
 import libraryReducer from "./features/library/librarySlice";
 import searchReducer from "./features/search/searchSlice";
+import shelfReducer from "./features/shelf/shelfSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     colours: coloursReducer,
     searches: searchReducer,
     bookStore: libraryReducer,
+    bookShelf: shelfReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware);

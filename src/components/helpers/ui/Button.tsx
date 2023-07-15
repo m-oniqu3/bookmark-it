@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-  onClick: () => void;
+  onClick: () => void | ((e: React.FormEvent<HTMLFormElement>) => void);
   type?: "button" | "submit" | "reset" | undefined;
   children: React.ReactNode;
   buttonType?: "action";
@@ -48,11 +48,7 @@ const Button = (props: Props) => {
   const handleButtonClick = () => onClick();
 
   if (buttonType === "action") {
-    return (
-      <StyledActionButton onClick={handleButtonClick}>
-        {children}
-      </StyledActionButton>
-    );
+    return <StyledActionButton onClick={handleButtonClick}>{children}</StyledActionButton>;
   }
 
   return (

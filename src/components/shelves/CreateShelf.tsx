@@ -1,4 +1,7 @@
+import { FormEvent, useState } from "react";
 import { styled } from "styled-components";
+import { createShelf } from "../../store/features/shelf/shelfSlice";
+import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
 import { StyledText } from "../../styles/StyledText";
 import Button from "../helpers/ui/Button";
@@ -44,7 +47,22 @@ type Props = {
 };
 
 const CreateShelf = (props: Props) => {
+  const [shelfName, setShelfName] = useState<string>("");
+  const dispatch = useAppDispatch();
   const { closeModal } = props;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShelfName(e.target.value);
+  };
+
+  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    console.log(shelfName);
+
+    dispatch(createShelf(shelfName));
+    closeModal();
+  };
+
   return (
     <StyledShelf>
       <div className="header">
@@ -52,15 +70,23 @@ const CreateShelf = (props: Props) => {
         <StyledText> Get creative and place the books in your library in custom shelves.</StyledText>
       </div>
 
-      <form>
-        <input type="text" placeholder="Eg. My Mafia Faves" required maxLength={40} autoFocus />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Eg. My Mafia Faves"
+          required
+          maxLength={40}
+          autoFocus
+          value={shelfName}
+          onChange={handleChange}
+        />
       </form>
 
       <StyledButtonGroup>
         <Button buttonType="action" onClick={closeModal}>
           Cancel
         </Button>
-        <Button buttonType="action" onClick={() => console.log("click")}>
+        <Button buttonType="action" onClick={handleSubmit}>
           Create Shelf
         </Button>
       </StyledButtonGroup>

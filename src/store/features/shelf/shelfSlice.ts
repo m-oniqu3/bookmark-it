@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Book } from "../../../types/Book";
 
+type Books = { bookId: Pick<Book, "id">; timeAdded: number };
+
 type Shelf = {
-  [key: string]: { bookId: Pick<Book, "id">; timeAdded: number }[];
+  [key: string]: { createdAt: number; books: Books[] };
 };
 
 type BooksOnShelf = {
@@ -10,25 +12,41 @@ type BooksOnShelf = {
 };
 
 type InitialShelfState = {
-  shelf: Shelf;
+  shelves: Shelf;
   books: BooksOnShelf;
   isShelfEmpty: boolean;
   currentBookShelves: string[];
-  shelfFeedback: { message: string; type: string };
+  toast: { message: string; type: "success" | "warning" | "error" | "info" | null };
 };
 
 const initialState: InitialShelfState = {
-  shelf: {},
+  shelves: {},
   books: {},
   isShelfEmpty: true,
   currentBookShelves: [],
-  shelfFeedback: { message: "", type: "" },
+  toast: { message: "", type: null },
 };
 
 const shelfSlice = createSlice({
   name: "shelf",
   initialState,
-  reducers: {},
+  reducers: {
+    createShelf: (state, { payload }: PayloadAction<string>) => {
+      const isDuplicateShelf = !!Object.getOwnPropertyDescriptor(state.shelves, payload);
+
+      //check if shelf exist
+      if (isDuplicateShelf) {
+        state.toast = {
+          message: "This shelf already exists",
+          type: "error",
+        };
+      } else {
+        state.shelves[payload] = { createdAt: Date.now(), books: [] };
+        state.toast = { message: "Shelf created", type: "success" };
+      }
+    },
+  },
 });
 
+export const { createShelf } = shelfSlice.actions;
 export default shelfSlice.reducer;

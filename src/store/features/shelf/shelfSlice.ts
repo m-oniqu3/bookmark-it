@@ -103,8 +103,23 @@ const shelfSlice = createSlice({
         currentShelf[bookId] = { bookId, timeAdded: Date.now() };
       }
     },
+    removeShelf: (state, { payload }: PayloadAction<string>) => {
+      const selectedShelf = payload;
+
+      // delete it from shelves
+      delete state.shelves[selectedShelf];
+
+      // delete it from books
+      const shelvesForBooks = Object.values(state.books);
+      shelvesForBooks.map((shelves) => {
+        const index = shelves.indexOf(selectedShelf);
+        shelves.splice(index, 1);
+      });
+
+      state.toast = { message: "Shelf Removed", type: "success" };
+    },
   },
 });
 
-export const { createShelf, addBooksToShelf, addShelfToBook } = shelfSlice.actions;
+export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf } = shelfSlice.actions;
 export default shelfSlice.reducer;

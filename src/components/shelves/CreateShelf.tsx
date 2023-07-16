@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { createShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
-import { StyledText } from "../../styles/StyledText";
 import Button from "../helpers/ui/Button";
 import Heading from "../helpers/ui/Heading";
 
@@ -25,8 +24,7 @@ const StyledShelf = styled.div`
 
   form {
     padding: 1rem 0;
-    width: 100%;
-    max-width: 350px;
+    width: min(80%, 350px);
     margin: 0 auto;
 
     input {
@@ -59,7 +57,7 @@ const CreateShelf = (props: Props) => {
     e?.preventDefault();
     console.log(shelfName);
 
-    dispatch(createShelf(shelfName));
+    dispatch(createShelf(shelfName.trim()));
     closeModal();
   };
 
@@ -67,7 +65,7 @@ const CreateShelf = (props: Props) => {
     <StyledShelf>
       <div className="header">
         <Heading variant="small" text="Create New Shelf" />
-        <StyledText> Get creative and place the books in your library in custom shelves.</StyledText>
+        <p> Get creative and place the books in your library in custom shelves.</p>
       </div>
 
       <form onSubmit={handleSubmit}>

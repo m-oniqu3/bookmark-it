@@ -12,6 +12,7 @@ import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Modal from "../helpers/ui/Modal";
 import CreateShelf from "../shelves/CreateShelf";
+import RemoveShelf from "../shelves/RemoveShelf";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -98,20 +99,20 @@ const Shelf = () => {
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
   const results = useFilterShelf(activeFilter);
+  const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const handleNewShelf = () => {
     setActiveModal({ type: ModalEnum.CREATE_SHELF_MODAL });
   };
 
-  const handleRemoveShelf = (name: string) => {
-    console.log(name);
+  const handleRemoveShelf = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, name: string) => {
+    e.stopPropagation();
+    setActiveModal({ type: ModalEnum.REMOVE_SHELF_MODAL, shelfName: name });
   };
 
   const sortedShelves: string[] = Object.entries(shelves)
     .sort((a, b) => b[1].createdAt - a[1].createdAt)
     .map((shelf) => shelf["0"]);
-
-  const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const renderShelves = ["All"].concat(sortedShelves).map((shelf) => {
     const active = activeFilter === shelf ? "active" : "";
@@ -121,7 +122,7 @@ const Shelf = () => {
           <>{shelf}</>
 
           {shelf !== "All" && (
-            <span onClick={() => handleRemoveShelf(shelf)}>
+            <span onClick={(e) => handleRemoveShelf(e, shelf)}>
               <IoIosClose size={20} />
             </span>
           )}
@@ -130,18 +131,23 @@ const Shelf = () => {
     );
   });
 
-  if (isLibraryEmpty) {
-    return (
-      <Empty
-        src={shelvesImage}
-        route="/explore"
-        heading="Your shelves are empty"
-        message="Search for a book to add it to your library to start populating your shelves."
-        buttonName="Explore"
-        adjust={true}
-      />
-    );
-  }
+  const modalContent = (() => {
+    switch (activeModal?.type) {
+      case ModalEnum.CREATE_SHELF_MODAL:
+        return <CreateShelf closeModal={() => setActiveModal(null)} />;
+      case ModalEnum.REMOVE_SHELF_MODAL:
+        return (
+          <RemoveShelf
+            closeModal={() => setActiveModal(null)}
+            shelfName={activeModal.shelfName}
+            setActiveFilter={setActiveFilter}
+            activeFilter={activeFilter}
+          />
+        );
+      default:
+        return null;
+    }
+  })();
 
   const content = (() => {
     if (results.length > 0) {
@@ -160,6 +166,19 @@ const Shelf = () => {
     );
   })();
 
+  if (isLibraryEmpty) {
+    return (
+      <Empty
+        src={shelvesImage}
+        route="/explore"
+        heading="Your shelves are empty"
+        message="Search for a book to add it to your library to start populating your shelves."
+        buttonName="Explore"
+        adjust={true}
+      />
+    );
+  }
+
   return (
     <>
       <StyledShelf>
@@ -172,11 +191,7 @@ const Shelf = () => {
         <Fragment>{content}</Fragment>
       </StyledShelf>
 
-      {activeModal && (
-        <Modal closeModal={() => setActiveModal(null)}>
-          <CreateShelf closeModal={() => setActiveModal(null)} />
-        </Modal>
-      )}
+      {activeModal && <Modal closeModal={() => setActiveModal(null)}>{modalContent}</Modal>}
     </>
   );
 };

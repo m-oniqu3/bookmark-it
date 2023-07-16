@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { IoIosClose } from "react-icons/io";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
@@ -54,6 +55,29 @@ const StyledShelf = styled(Container)`
       background-color: var(--neutral-light);
       cursor: pointer;
       height: 31px;
+
+      &.active {
+        background-color: var(--secondary);
+        color: var(--neutral-primary);
+      }
+
+      &__name {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        span {
+          svg {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
     }
 
     button {
@@ -68,15 +92,19 @@ const StyledShelf = styled(Container)`
 
 const Shelf = () => {
   const { shelves } = useAppSelector((state) => state.bookShelf);
-  // const { library } = useAppSelector((state) => state.bookStore);
-  // const isLibraryEmpty = Object.keys(library).length === 0;
+  const { library } = useAppSelector((state) => state.bookStore);
+  const isLibraryEmpty = Object.keys(library).length === 0;
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
   const results = useFilterShelf(activeFilter);
 
-  const handleShelf = () => {
+  const handleNewShelf = () => {
     setActiveModal({ type: ModalEnum.CREATE_SHELF_MODAL });
+  };
+
+  const handleRemoveShelf = (name: string) => {
+    console.log(name);
   };
 
   const sortedShelves: string[] = Object.entries(shelves)
@@ -86,25 +114,34 @@ const Shelf = () => {
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const renderShelves = ["All"].concat(sortedShelves).map((shelf) => {
+    const active = activeFilter === shelf ? "active" : "";
     return (
-      <div className="shelf" key={shelf}>
-        <p onClick={() => handleFilter(shelf)}>{shelf}</p>
+      <div className={`shelf ${active}`} key={shelf} onClick={() => handleFilter(shelf)}>
+        <p className="shelf__name">
+          <>{shelf}</>
+
+          {shelf !== "All" && (
+            <span onClick={() => handleRemoveShelf(shelf)}>
+              <IoIosClose size={20} />
+            </span>
+          )}
+        </p>
       </div>
     );
   });
 
-  // if (isLibraryEmpty) {
-  //   return (
-  //     <Empty
-  //       src={shelves}
-  //       route="/explore"
-  //       heading="Your shelves are empty"
-  //       message="Search for a book to add it to your library to start populating your shelves."
-  //       buttonName="Explore"
-  //       adjust={true}
-  //     />
-  //   );
-  // }
+  if (isLibraryEmpty) {
+    return (
+      <Empty
+        src={shelvesImage}
+        route="/explore"
+        heading="Your shelves are empty"
+        message="Search for a book to add it to your library to start populating your shelves."
+        buttonName="Explore"
+        adjust={true}
+      />
+    );
+  }
 
   const content = (() => {
     if (results.length > 0) {
@@ -115,7 +152,7 @@ const Shelf = () => {
       <Empty
         src={shelvesImage}
         route="/explore"
-        heading="Your shelves are empty"
+        heading="No books here yet"
         message="Search for a book to add it to your library to start populating your shelves."
         buttonName="Explore"
         adjust={true}
@@ -127,7 +164,7 @@ const Shelf = () => {
     <>
       <StyledShelf>
         <div className="created-shelves">
-          <Button onClick={handleShelf}>New Shelf</Button>
+          <Button onClick={handleNewShelf}>New Shelf</Button>
 
           <> {renderShelves}</>
         </div>

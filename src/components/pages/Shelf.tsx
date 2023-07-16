@@ -3,16 +3,18 @@ import { IoIosClose } from "react-icons/io";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
-import { useAppSelector } from "../../store/hooks/hooks";
+import { removeShelf } from "../../store/features/shelf/shelfSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
 import { ModalEnum, ModalType } from "../../types/ModalType";
+import { PopoverEnum, PopoverType } from "../../types/PopoverType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Modal from "../helpers/ui/Modal";
+import Popover from "../helpers/ui/Popover";
 import CreateShelf from "../shelves/CreateShelf";
-import RemoveShelf from "../shelves/RemoveShelf";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -97,6 +99,9 @@ const Shelf = () => {
   const isLibraryEmpty = Object.keys(library).length === 0;
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
+  const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
+  const dispatch = useAppDispatch();
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const results = useFilterShelf(activeFilter);
   const handleFilter = (filter: string) => setActiveFilter(filter);
@@ -107,7 +112,18 @@ const Shelf = () => {
 
   const handleRemoveShelf = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, name: string) => {
     e.stopPropagation();
-    setActiveModal({ type: ModalEnum.REMOVE_SHELF_MODAL, shelfName: name });
+    setActivePopover({ type: PopoverEnum.DELETE_POPOVER, name });
+    setOffset({ x: e.clientX, y: e.clientY });
+  };
+
+  const deleteShelf = () => {
+    if (activePopover?.type === PopoverEnum.DELETE_POPOVER) {
+      const shelf = activePopover.name;
+      if (activeFilter === shelf) setActiveFilter("All");
+      dispatch(removeShelf(shelf));
+    }
+
+    setActivePopover(null);
   };
 
   const sortedShelves: string[] = Object.entries(shelves)
@@ -135,15 +151,7 @@ const Shelf = () => {
     switch (activeModal?.type) {
       case ModalEnum.CREATE_SHELF_MODAL:
         return <CreateShelf closeModal={() => setActiveModal(null)} />;
-      case ModalEnum.REMOVE_SHELF_MODAL:
-        return (
-          <RemoveShelf
-            closeModal={() => setActiveModal(null)}
-            shelfName={activeModal.shelfName}
-            setActiveFilter={setActiveFilter}
-            activeFilter={activeFilter}
-          />
-        );
+
       default:
         return null;
     }
@@ -192,6 +200,11 @@ const Shelf = () => {
       </StyledShelf>
 
       {activeModal && <Modal closeModal={() => setActiveModal(null)}>{modalContent}</Modal>}
+      {activePopover && (
+        <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
+          <button onClick={deleteShelf}>Delete</button>
+        </Popover>
+      )}
     </>
   );
 };

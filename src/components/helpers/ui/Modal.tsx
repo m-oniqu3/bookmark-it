@@ -28,8 +28,7 @@ const StyledPrimaryModal = styled(ModalBase)`
     background-color: var(--neutral-primary);
     border-radius: 8px;
 
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-      rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
     padding: 0.5rem;
 
     @media (${devices.medium}) {
@@ -59,8 +58,7 @@ const StyledSecondaryModal = styled(ModalBase)`
     border-radius: 10px;
     width: calc(100vw - 1rem);
     border: 15px solid var(--neutral-light);
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-      rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
     padding: 0.5rem;
     max-width: 420px;
 
@@ -83,10 +81,10 @@ const Modal = (props: Props) => {
     e.stopPropagation();
   };
 
-  const Modal = variant ? StyledSecondaryModal : StyledPrimaryModal;
+  const StyledModal = variant ? StyledSecondaryModal : StyledPrimaryModal;
 
   return ReactDOM.createPortal(
-    <Modal onClick={closeModal}>
+    <StyledModal onClick={closeModal}>
       <div className="children" onClick={handleEvent}>
         <div className="icon-container" onClick={closeModal}>
           <IoIosClose size="35px" className="icon" color="var(--secondary)" />
@@ -94,7 +92,7 @@ const Modal = (props: Props) => {
 
         {children}
       </div>
-    </Modal>,
+    </StyledModal>,
     document.querySelector("#modal") as HTMLDivElement
   );
 };

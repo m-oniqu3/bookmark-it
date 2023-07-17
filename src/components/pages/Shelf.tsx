@@ -1,5 +1,5 @@
 import { Fragment, MouseEvent, useState } from "react";
-import { IoIosClose } from "react-icons/io";
+import { IoIosMore } from "react-icons/io";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
@@ -7,15 +7,12 @@ import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice"
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
-import { ModalEnum, ModalType } from "../../types/ModalType";
 import { PopoverEnum, PopoverType } from "../../types/PopoverType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
-import Modal from "../helpers/ui/Modal";
 import Popover from "../helpers/ui/Popover";
 import BaseShelfPopover from "../shelves/BaseShelfPopover";
-import CreateShelf from "../shelves/CreateShelf";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -98,7 +95,6 @@ const Shelf = () => {
   const { shelves } = useAppSelector((state) => state.bookShelf);
   const { library } = useAppSelector((state) => state.bookStore);
   const isLibraryEmpty = Object.keys(library).length === 0;
-  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
   const dispatch = useAppDispatch();
@@ -124,7 +120,7 @@ const Shelf = () => {
   // };
 
   const deleteShelf = () => {
-    if (activePopover?.type === PopoverEnum.DELETE_POPOVER) {
+    if (activePopover?.type === PopoverEnum.SHELF_MENU_POPOVER) {
       const shelf = activePopover.name;
       if (activeFilter === shelf) setActiveFilter("All");
       dispatch(removeShelf(shelf));
@@ -142,11 +138,11 @@ const Shelf = () => {
     return (
       <div className={`shelf ${active}`} key={shelf} onClick={() => handleFilter(shelf)}>
         <p className="shelf__name">
-          <>{shelf}</>
+          <Fragment>{shelf}</Fragment>
 
           {shelf !== "All" && (
             <span>
-              <IoIosClose size={20} />
+              <IoIosMore size={20} />
             </span>
           )}
         </p>
@@ -154,22 +150,12 @@ const Shelf = () => {
     );
   });
 
-  const modalContent = (() => {
-    switch (activeModal?.type) {
-      case ModalEnum.CREATE_SHELF_MODAL:
-        return <CreateShelf closeModal={() => setActiveModal(null)} />;
-
-      default:
-        return null;
-    }
-  })();
-
   const popoverContent = (() => {
     switch (activePopover?.type) {
       case PopoverEnum.NEW_SHELF_POPOVER:
         return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
 
-      case PopoverEnum.DELETE_POPOVER:
+      case PopoverEnum.SHELF_MENU_POPOVER:
         return <button onClick={deleteShelf}>Delete</button>;
 
       default:
@@ -219,7 +205,6 @@ const Shelf = () => {
         <Fragment>{content}</Fragment>
       </StyledShelf>
 
-      {activeModal && <Modal closeModal={() => setActiveModal(null)}>{modalContent}</Modal>}
       {activePopover && (
         <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
           {popoverContent}

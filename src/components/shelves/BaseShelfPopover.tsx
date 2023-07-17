@@ -63,7 +63,7 @@ const StyledBaseShelfPopover = styled.div`
 `;
 
 type Props = {
-  content: { title: string; text: string; submitFn: ActionCreatorWithPayload<string, "shelf/createShelf"> };
+  content: { title: string; text: string; submitFn: ActionCreatorWithPayload<string> };
   closePopover: () => void;
 };
 
@@ -85,7 +85,7 @@ const BaseShelfPopover = (props: Props) => {
 
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-    dispatch(submitFn(name));
+    dispatch(submitFn(name.trim()));
 
     closePopover();
   };

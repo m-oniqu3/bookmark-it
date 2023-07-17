@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
@@ -14,6 +14,7 @@ import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Modal from "../helpers/ui/Modal";
 import Popover from "../helpers/ui/Popover";
+import BaseShelfPopover from "../shelves/BaseShelfPopover";
 import CreateShelf from "../shelves/CreateShelf";
 
 const StyledShelf = styled(Container)`
@@ -106,15 +107,21 @@ const Shelf = () => {
   const results = useFilterShelf(activeFilter);
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
-  const handleNewShelf = () => {
-    setActiveModal({ type: ModalEnum.CREATE_SHELF_MODAL });
+  const handleNewShelf = (e: MouseEvent<HTMLButtonElement>) => {
+    setOffset({ x: e.clientX, y: e.clientY });
+    setActivePopover({
+      type: PopoverEnum.NEW_SHELF_POPOVER,
+      title: "Create Shelf",
+      text: "Create a shelf to organize your books.",
+      submitFn: () => console.log("test"),
+    });
   };
 
-  const handleRemoveShelf = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, name: string) => {
-    e.stopPropagation();
-    setActivePopover({ type: PopoverEnum.DELETE_POPOVER, name });
-    setOffset({ x: e.clientX, y: e.clientY });
-  };
+  // const handleRemoveShelf = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, name: string) => {
+  //   e.stopPropagation();
+  //   setActivePopover({ type: PopoverEnum.DELETE_POPOVER, name });
+  //   setOffset({ x: e.pageX, y: e.pageY });
+  // };
 
   const deleteShelf = () => {
     if (activePopover?.type === PopoverEnum.DELETE_POPOVER) {
@@ -138,7 +145,7 @@ const Shelf = () => {
           <>{shelf}</>
 
           {shelf !== "All" && (
-            <span onClick={(e) => handleRemoveShelf(e, shelf)}>
+            <span>
               <IoIosClose size={20} />
             </span>
           )}
@@ -151,6 +158,19 @@ const Shelf = () => {
     switch (activeModal?.type) {
       case ModalEnum.CREATE_SHELF_MODAL:
         return <CreateShelf closeModal={() => setActiveModal(null)} />;
+
+      default:
+        return null;
+    }
+  })();
+
+  const popoverContent = (() => {
+    switch (activePopover?.type) {
+      case PopoverEnum.NEW_SHELF_POPOVER:
+        return <BaseShelfPopover content={activePopover} />;
+
+      case PopoverEnum.DELETE_POPOVER:
+        return <button onClick={deleteShelf}>Delete</button>;
 
       default:
         return null;
@@ -174,24 +194,24 @@ const Shelf = () => {
     );
   })();
 
-  if (isLibraryEmpty) {
-    return (
-      <Empty
-        src={shelvesImage}
-        route="/explore"
-        heading="Your shelves are empty"
-        message="Search for a book to add it to your library to start populating your shelves."
-        buttonName="Explore"
-        adjust={true}
-      />
-    );
-  }
+  // if (isLibraryEmpty) {
+  //   return (
+  //     <Empty
+  //       src={shelvesImage}
+  //       route="/explore"
+  //       heading="Your shelves are empty"
+  //       message="Search for a book to add it to your library to start populating your shelves."
+  //       buttonName="Explore"
+  //       adjust={true}
+  //     />
+  //   );
+  // }
 
   return (
     <>
       <StyledShelf>
         <div className="created-shelves">
-          <Button onClick={handleNewShelf}>New Shelf</Button>
+          <Button onClick={(e: MouseEvent<HTMLButtonElement>) => handleNewShelf(e)}>New Shelf</Button>
 
           <> {renderShelves}</>
         </div>
@@ -202,7 +222,7 @@ const Shelf = () => {
       {activeModal && <Modal closeModal={() => setActiveModal(null)}>{modalContent}</Modal>}
       {activePopover && (
         <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
-          <button onClick={deleteShelf}>Delete</button>
+          {popoverContent}
         </Popover>
       )}
     </>

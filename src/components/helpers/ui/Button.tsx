@@ -1,11 +1,12 @@
+import { MouseEvent } from "react";
 import styled from "styled-components";
 
-interface Props {
-  onClick: () => void | ((e: React.FormEvent<HTMLFormElement>) => void);
+type Props = {
+  onClick: ((e: MouseEvent<HTMLButtonElement>) => void) | (() => void);
   type?: "button" | "submit" | "reset" | undefined;
   children: React.ReactNode;
   buttonType?: "action";
-}
+};
 
 const ButtonBase = styled.button`
   font-size: 0.9rem;
@@ -45,7 +46,7 @@ const StyledActionButton = styled(ButtonBase)`
 const Button = (props: Props) => {
   const { onClick, type, children, buttonType } = props;
 
-  const handleButtonClick = () => onClick();
+  const handleButtonClick = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => onClick(e);
 
   if (buttonType === "action") {
     return <StyledActionButton onClick={handleButtonClick}>{children}</StyledActionButton>;

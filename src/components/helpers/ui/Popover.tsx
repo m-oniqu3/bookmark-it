@@ -9,26 +9,15 @@ type StyledProps = {
 
 const StyledPopover = styled.div<StyledProps>`
   position: absolute;
-  top: ${(props) => props.offsets.y + 10}px;
-  left: ${(props) => props.offsets.x - 25}px;
-  background-color: gainsboro;
-  border: 1px solid #b6b6b6;
+
+  top: calc(${(props) => props.offsets.y + 25}px);
+  left: calc(${(props) => props.offsets.x - 20}px);
+
+  background-color: var(--neutral-primary);
+  border: 1px solid #dbdbdb;
   border-radius: 5px;
-  padding: 0.3rem;
-
-  button {
-    font-size: 0.9rem;
-    padding: 4px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    border: none;
-
-    &:hover {
-      background-color: #737373;
-      color: var(--neutral-primary);
-    }
-  }
+  padding: 1rem;
+  z-index: 20;
 `;
 
 type Props = {
@@ -40,7 +29,25 @@ type Props = {
 const Popover = (props: Props) => {
   const { children, closePopover, offsets } = props;
   const popoverRef = useRef<HTMLDivElement | null>(null);
+
   useDetectClick({ ref: popoverRef, closeElement: closePopover });
+
+  //check if popover will fit in the screen
+  useEffect(() => {
+    const popover = popoverRef.current;
+    if (popover) {
+      const { width, height } = popover.getBoundingClientRect();
+      const { innerWidth, innerHeight } = window;
+      const { x, y } = offsets;
+
+      if (x + width > innerWidth) {
+        popover.style.left = `${innerWidth - width - 20}px`;
+      }
+      if (y + height > innerHeight) {
+        popover.style.top = `${innerHeight - height - 25}px`;
+      }
+    }
+  }, [offsets]);
 
   useEffect(() => {
     window.addEventListener("resize", closePopover);
@@ -50,9 +57,7 @@ const Popover = (props: Props) => {
 
   return ReactDOM.createPortal(
     <StyledPopover onClick={closePopover} offsets={offsets} ref={popoverRef}>
-      <div className="content" style={{ top: props.offsets.y, left: props.offsets.x }}>
-        {children}
-      </div>
+      <div className="content">{children}</div>
     </StyledPopover>,
     document.getElementById("popover") as HTMLDivElement
   );

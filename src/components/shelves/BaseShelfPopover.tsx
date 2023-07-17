@@ -1,4 +1,7 @@
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { FormEvent, useState } from "react";
 import { styled } from "styled-components";
+import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
 const StyledBaseShelfPopover = styled.div`
@@ -32,9 +35,13 @@ const StyledBaseShelfPopover = styled.div`
       }
 
       input {
-        padding: 0.3rem;
+        padding: 0.3rem 0.5rem;
         border: 1px solid gainsboro;
         border-radius: 5px;
+
+        &:focus {
+          outline: none;
+        }
       }
     }
   }
@@ -56,28 +63,44 @@ const StyledBaseShelfPopover = styled.div`
 `;
 
 type Props = {
-  content: { title: string; text: string; submitFn: () => void };
+  content: { title: string; text: string; submitFn: ActionCreatorWithPayload<string, "shelf/createShelf"> };
+  closePopover: () => void;
 };
 
 const BaseShelfPopover = (props: Props) => {
   const {
     content: { title, text, submitFn },
+    closePopover,
   } = props;
+  const [name, setName] = useState("");
+  const dispatch = useAppDispatch();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+  };
+
+  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    dispatch(submitFn(name));
+
+    closePopover();
   };
 
   return (
     <StyledBaseShelfPopover onClick={(e) => handleClick(e)}>
       <p className="title">{title}</p>
       <StyledText>{text}</StyledText>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="content">
           <label>Name</label>
-          <input type="text" />
+          <input type="text" required maxLength={40} autoFocus value={name} onChange={handleChange} />
         </div>
 
-        <button>Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </StyledBaseShelfPopover>
   );

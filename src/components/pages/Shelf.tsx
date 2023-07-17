@@ -3,7 +3,7 @@ import { IoIosClose } from "react-icons/io";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
-import { removeShelf } from "../../store/features/shelf/shelfSlice";
+import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
@@ -113,7 +113,7 @@ const Shelf = () => {
       type: PopoverEnum.NEW_SHELF_POPOVER,
       title: "Create Shelf",
       text: "Create a shelf to organize your books.",
-      submitFn: () => console.log("test"),
+      submitFn: createShelf,
     });
   };
 
@@ -167,7 +167,7 @@ const Shelf = () => {
   const popoverContent = (() => {
     switch (activePopover?.type) {
       case PopoverEnum.NEW_SHELF_POPOVER:
-        return <BaseShelfPopover content={activePopover} />;
+        return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
 
       case PopoverEnum.DELETE_POPOVER:
         return <button onClick={deleteShelf}>Delete</button>;

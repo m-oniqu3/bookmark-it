@@ -1,6 +1,8 @@
+import { Dispatch, MouseEvent, SetStateAction } from "react";
 import { styled } from "styled-components";
-import { removeShelf } from "../../store/features/shelf/shelfSlice";
+import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
+import { PopoverEnum, PopoverType } from "../../types/PopoverType";
 
 const StyledShelfOptions = styled.div`
   display: flex;
@@ -14,6 +16,7 @@ const StyledShelfOptions = styled.div`
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: none;
+    /* min-width: max-content; */
 
     &:hover {
       background-color: var(--secondary);
@@ -27,10 +30,12 @@ type Props = {
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
   closePopover: () => void;
+  setOffset: Dispatch<SetStateAction<{ x: number; y: number }>>;
+  setActivePopover: Dispatch<SetStateAction<PopoverType | null>>;
 };
 
 const ShelfOptions = (props: Props) => {
-  const { shelf, activeFilter, setActiveFilter, closePopover } = props;
+  const { shelf, activeFilter, setActiveFilter, closePopover, setActivePopover, setOffset } = props;
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
@@ -40,11 +45,25 @@ const ShelfOptions = (props: Props) => {
     closePopover();
   };
 
+  const handleRename = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setOffset({ x: e.clientX, y: e.clientY });
+    setActivePopover({
+      type: PopoverEnum.RENAME_SHELF_POPOVER,
+      title: "Rename Shelf",
+      text: "Enter a new name.",
+      submitFn: createShelf,
+      shelfName: shelf,
+    });
+  };
+
   return (
-    <StyledShelfOptions>
-      <button onClick={handleDelete}>Delete Shelf</button>
-      <button>Rename Shelf</button>
-    </StyledShelfOptions>
+    <>
+      <StyledShelfOptions>
+        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleRename}>Rename</button>
+      </StyledShelfOptions>
+    </>
   );
 };
 

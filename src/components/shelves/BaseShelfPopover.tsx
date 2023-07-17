@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { styled } from "styled-components";
 import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
+import { PopoverEnum } from "../../types/PopoverType";
 
 const StyledBaseShelfPopover = styled.div`
   width: 250px;
@@ -64,16 +65,24 @@ const StyledBaseShelfPopover = styled.div`
 `;
 
 type Props = {
-  content: { title: string; text: string; submitFn: ActionCreatorWithPayload<string> };
+  content: {
+    title: string;
+    text: string;
+    submitFn: ActionCreatorWithPayload<string>;
+    type: PopoverEnum.NEW_SHELF_POPOVER | PopoverEnum.RENAME_SHELF_POPOVER;
+    shelfName?: string;
+  };
   closePopover: () => void;
 };
 
 const BaseShelfPopover = (props: Props) => {
   const {
-    content: { title, text, submitFn },
+    content: { title, text, submitFn, type, shelfName },
     closePopover,
   } = props;
-  const [name, setName] = useState("");
+
+  //type PopoverType = ShelfMenu | NewShelfPopover | RenameShelfPopover
+  const [name, setName] = useState(type === PopoverEnum.RENAME_SHELF_POPOVER && shelfName ? shelfName : "");
   const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

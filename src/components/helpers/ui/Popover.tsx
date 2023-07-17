@@ -38,12 +38,18 @@ const Popover = (props: Props) => {
       const { innerWidth, innerHeight } = window;
       const { x, y } = offsets;
 
+      let newLeft = x;
+      let newTop = y;
+
       if (x + width > innerWidth) {
-        popover.style.left = `${innerWidth - width - 20}px`;
+        newLeft = innerWidth - width - 20;
       }
       if (y + height > innerHeight) {
-        popover.style.top = `${innerHeight - height - 25}px`;
+        newTop = innerHeight - height - 25;
       }
+
+      popover.style.left = `${newLeft}px`;
+      popover.style.top = `${newTop}px`;
     }
   }, [offsets]);
 

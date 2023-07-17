@@ -162,8 +162,13 @@ const Shelf = () => {
             activeFilter={activeFilter}
             setActiveFilter={setActiveFilter}
             closePopover={() => setActivePopover(null)}
+            setActivePopover={setActivePopover}
+            setOffset={setOffset}
           />
         );
+
+      case PopoverEnum.RENAME_SHELF_POPOVER:
+        return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
 
       default:
         return null;

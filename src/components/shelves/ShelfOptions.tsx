@@ -1,8 +1,10 @@
-import { Dispatch, MouseEvent, SetStateAction } from "react";
+import { MouseEvent, useState } from "react";
 import { styled } from "styled-components";
 import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
-import { PopoverEnum, PopoverType } from "../../types/PopoverType";
+import { PopoverEnum, RenameShelfPopover } from "../../types/PopoverType";
+import Popover from "../helpers/ui/Popover";
+import BaseShelfPopover from "./BaseShelfPopover";
 
 const StyledShelfOptions = styled.div`
   display: flex;
@@ -30,13 +32,14 @@ type Props = {
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
   closePopover: () => void;
-  setOffset: Dispatch<SetStateAction<{ x: number; y: number }>>;
-  setActivePopover: Dispatch<SetStateAction<PopoverType | null>>;
+  offset: { x: number; y: number };
 };
 
 const ShelfOptions = (props: Props) => {
-  const { shelf, activeFilter, setActiveFilter, closePopover, setActivePopover, setOffset } = props;
+  const { shelf, activeFilter, setActiveFilter, closePopover, offset } = props;
   const dispatch = useAppDispatch();
+  //   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [activePopover, setActivePopover] = useState<RenameShelfPopover | null>(null);
 
   const handleDelete = () => {
     if (activeFilter === shelf) setActiveFilter("All");
@@ -47,7 +50,7 @@ const ShelfOptions = (props: Props) => {
 
   const handleRename = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setOffset({ x: e.clientX, y: e.clientY });
+    // setOffset({ x: e.clientX, y: e.clientY });
     setActivePopover({
       type: PopoverEnum.RENAME_SHELF_POPOVER,
       title: "Rename Shelf",
@@ -55,6 +58,8 @@ const ShelfOptions = (props: Props) => {
       submitFn: createShelf,
       shelfName: shelf,
     });
+
+    // closePopover();
   };
 
   return (
@@ -63,6 +68,12 @@ const ShelfOptions = (props: Props) => {
         <button onClick={handleDelete}>Delete</button>
         <button onClick={handleRename}>Rename</button>
       </StyledShelfOptions>
+
+      {activePopover && (
+        <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
+          <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />
+        </Popover>
+      )}
     </>
   );
 };

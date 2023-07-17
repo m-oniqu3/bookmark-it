@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { styled } from "styled-components";
 import useDetectClick from "../../../hooks/useDetectClick";
+import { devices } from "../../../styles/breakpoints";
 
 type StyledProps = {
   offsets: { x: number; y: number };
@@ -12,10 +13,15 @@ const StyledPopover = styled.div<StyledProps>`
   border-radius: 5px;
   z-index: 20;
   top: calc(${(props) => props.offsets.y + 25}px);
-  left: calc(${(props) => props.offsets.x - 20}px);
+  left: calc(${(props) => props.offsets.x - props.offsets.x}px);
   background-color: var(--neutral-primary);
   border: 1px solid #dbdbdb;
   padding: 0.5rem;
+
+  @media (${devices.medium}) {
+    top: calc(${(props) => props.offsets.y + 25}px);
+    left: calc(${(props) => props.offsets.x - 20}px);
+  }
 `;
 
 type Props = {
@@ -38,18 +44,12 @@ const Popover = (props: Props) => {
       const { innerWidth, innerHeight } = window;
       const { x, y } = offsets;
 
-      let newLeft = x;
-      let newTop = y;
-
       if (x + width > innerWidth) {
-        newLeft = innerWidth - width - 20;
+        popover.style.left = `${innerWidth - width - 20}px`;
       }
       if (y + height > innerHeight) {
-        newTop = innerHeight - height - 25;
+        popover.style.top = `${innerHeight - height - 25}px`;
       }
-
-      popover.style.left = `${newLeft}px`;
-      popover.style.top = `${newTop}px`;
     }
   }, [offsets]);
 

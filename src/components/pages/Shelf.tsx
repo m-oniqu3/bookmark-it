@@ -110,6 +110,8 @@ const Shelf = () => {
 
   const results = useFilterShelf(activeFilter);
 
+  console.log(activePopover, offset);
+
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const handleNewShelf = (e: MouseEvent<HTMLButtonElement>) => {
@@ -162,13 +164,9 @@ const Shelf = () => {
             activeFilter={activeFilter}
             setActiveFilter={setActiveFilter}
             closePopover={() => setActivePopover(null)}
-            setActivePopover={setActivePopover}
-            setOffset={setOffset}
+            offset={offset}
           />
         );
-
-      case PopoverEnum.RENAME_SHELF_POPOVER:
-        return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
 
       default:
         return null;

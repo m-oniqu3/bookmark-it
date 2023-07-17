@@ -1,10 +1,10 @@
 import { Fragment, MouseEvent, useState } from "react";
-import { IoIosMore } from "react-icons/io";
+import { GrMoreVertical } from "react-icons/gr";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
-import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
+import { createShelf } from "../../store/features/shelf/shelfSlice";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
 import { PopoverEnum, PopoverType } from "../../types/PopoverType";
@@ -13,6 +13,7 @@ import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Popover from "../helpers/ui/Popover";
 import BaseShelfPopover from "../shelves/BaseShelfPopover";
+import ShelfOptions from "../shelves/ShelfOptions";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -68,9 +69,17 @@ const StyledShelf = styled(Container)`
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 0.5rem;
         height: 100%;
 
         span {
+          padding: 2px;
+          border-radius: 2px;
+          transition: all 0.3s ease-in-out;
+
+          &:hover {
+            background-color: #d2d2d2;
+          }
           svg {
             height: 100%;
             display: flex;
@@ -97,10 +106,10 @@ const Shelf = () => {
   const isLibraryEmpty = Object.keys(library).length === 0;
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
-  const dispatch = useAppDispatch();
   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const results = useFilterShelf(activeFilter);
+
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const handleNewShelf = (e: MouseEvent<HTMLButtonElement>) => {
@@ -113,20 +122,10 @@ const Shelf = () => {
     });
   };
 
-  // const handleRemoveShelf = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, name: string) => {
-  //   e.stopPropagation();
-  //   setActivePopover({ type: PopoverEnum.DELETE_POPOVER, name });
-  //   setOffset({ x: e.pageX, y: e.pageY });
-  // };
-
-  const deleteShelf = () => {
-    if (activePopover?.type === PopoverEnum.SHELF_MENU_POPOVER) {
-      const shelf = activePopover.name;
-      if (activeFilter === shelf) setActiveFilter("All");
-      dispatch(removeShelf(shelf));
-    }
-
-    setActivePopover(null);
+  const handleShelfMenu = (e: MouseEvent<HTMLSpanElement>, name: string) => {
+    e.stopPropagation();
+    setActivePopover({ type: PopoverEnum.SHELF_MENU_POPOVER, name });
+    setOffset({ x: e.clientX, y: e.clientY });
   };
 
   const sortedShelves: string[] = Object.entries(shelves)
@@ -135,14 +134,15 @@ const Shelf = () => {
 
   const renderShelves = ["All"].concat(sortedShelves).map((shelf) => {
     const active = activeFilter === shelf ? "active" : "";
+
     return (
       <div className={`shelf ${active}`} key={shelf} onClick={() => handleFilter(shelf)}>
         <p className="shelf__name">
           <Fragment>{shelf}</Fragment>
 
           {shelf !== "All" && (
-            <span>
-              <IoIosMore size={20} />
+            <span onClick={(e) => handleShelfMenu(e, shelf)}>
+              <GrMoreVertical size={12} />
             </span>
           )}
         </p>
@@ -156,7 +156,14 @@ const Shelf = () => {
         return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
 
       case PopoverEnum.SHELF_MENU_POPOVER:
-        return <button onClick={deleteShelf}>Delete</button>;
+        return (
+          <ShelfOptions
+            shelf={activePopover.name}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+            closePopover={() => setActivePopover(null)}
+          />
+        );
 
       default:
         return null;

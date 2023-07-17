@@ -9,15 +9,13 @@ type StyledProps = {
 
 const StyledPopover = styled.div<StyledProps>`
   position: absolute;
-
+  border-radius: 5px;
+  z-index: 20;
   top: calc(${(props) => props.offsets.y + 25}px);
   left: calc(${(props) => props.offsets.x - 20}px);
-
   background-color: var(--neutral-primary);
   border: 1px solid #dbdbdb;
-  border-radius: 5px;
-  padding: 1rem;
-  z-index: 20;
+  padding: 0.5rem;
 `;
 
 type Props = {

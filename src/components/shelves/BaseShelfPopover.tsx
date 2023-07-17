@@ -6,6 +6,7 @@ import { StyledText } from "../../styles/StyledText";
 
 const StyledBaseShelfPopover = styled.div`
   width: 250px;
+  padding: 0.2rem;
 
   .title {
     font-size: 1rem;

@@ -5,7 +5,7 @@ export enum PopoverEnum {
   SHELF_MENU_POPOVER = "SHELF_MENU_POPOVER",
 }
 
-export type DeletePopover = {
+export type ShelfMenu = {
   type: PopoverEnum.SHELF_MENU_POPOVER;
   name: string;
 };
@@ -17,4 +17,4 @@ export type NewShelfPopover = {
   submitFn: ActionCreatorWithPayload<string>;
 };
 
-export type PopoverType = DeletePopover | NewShelfPopover;
+export type PopoverType = ShelfMenu | NewShelfPopover;

@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { styled } from "styled-components";
+import { renameShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
@@ -77,13 +78,17 @@ const RenameShelf = (props: Props) => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     setName(e.target.value);
   };
 
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
+    console.log(currentShelf, name);
+    dispatch(renameShelf({ currentShelf, newShelf: name }));
 
     closePopover();
+    // closePopover();
   };
 
   return (

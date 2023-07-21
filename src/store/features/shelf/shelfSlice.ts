@@ -118,8 +118,39 @@ const shelfSlice = createSlice({
 
       state.toast = { message: "Shelf Removed", type: "success" };
     },
+
+    renameShelf: (state, { payload }: PayloadAction<{ currentShelf: string; newShelf: string }>) => {
+      const { currentShelf, newShelf } = payload;
+      const { shelves, books } = state;
+
+      // check if shelf exist
+      const isShelfCreated = !!Object.getOwnPropertyDescriptor(shelves, currentShelf);
+
+      if (!isShelfCreated) {
+        state.toast = { message: "Shelf does not exist", type: "error" };
+      }
+
+      shelves[newShelf] = Object.assign({}, shelves[currentShelf]);
+      console.log(shelves[newShelf]);
+      delete shelves[currentShelf];
+
+      // update books
+
+      const booksOnShelf = Object.values(books);
+
+      booksOnShelf.map((shelves) => {
+        // get index of current shelf then replace it with new shelf
+        const index = shelves.indexOf(currentShelf);
+
+        if (index !== -1) {
+          shelves[index] = newShelf;
+        }
+      });
+
+      state.toast = { message: "Shelf Renamed", type: "success" };
+    },
   },
 });
 
-export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf } = shelfSlice.actions;
+export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf, renameShelf } = shelfSlice.actions;
 export default shelfSlice.reducer;

@@ -109,8 +109,6 @@ const Shelf = () => {
 
   const results = useFilterShelf(activeFilter);
 
-  console.log(activePopover, offset);
-
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
   const handleNewShelf = (e: MouseEvent<HTMLButtonElement>) => {

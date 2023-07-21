@@ -49,7 +49,6 @@ const ShelfOptions = (props: Props) => {
 
   const handleRename = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
     setActivePopover({ type: PopoverEnum.RENAME_SHELF_POPOVER, currentShelf: shelf });
   };
 

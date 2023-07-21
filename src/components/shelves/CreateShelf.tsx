@@ -5,7 +5,6 @@ import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
 const StyledCreateShelf = styled.div`
-  width: 250px;
   padding: 0.2rem;
 
   .title {
@@ -64,31 +63,27 @@ const StyledCreateShelf = styled.div`
 `;
 
 type Props = {
-  closePopover: () => void;
+  closeModal: () => void;
 };
 
 const CreateShelf = (props: Props) => {
   const [name, setName] = useState("");
   const dispatch = useAppDispatch();
-  const { closePopover } = props;
+  const { closeModal } = props;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
-  };
-
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
   };
 
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     dispatch(createShelf(name.trim()));
 
-    closePopover();
+    closeModal();
   };
 
   return (
-    <StyledCreateShelf onClick={(e) => handleClick(e)}>
+    <StyledCreateShelf>
       <p className="title">Create Shelf</p>
       <StyledText>Create a shelf to organize your books.</StyledText>
 

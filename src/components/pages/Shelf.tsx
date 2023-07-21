@@ -7,10 +7,12 @@ import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
 import { PopoverEnum, PopoverType } from "../../types/PopoverType";
+import { SmallModalEnum, SmallModalTypes } from "../../types/SmallModalTypes";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Popover from "../helpers/ui/Popover";
+import { SmallModal } from "../helpers/ui/SmallModal";
 import CreateShelf from "../shelves/CreateShelf";
 import ShelfOptions from "../shelves/ShelfOptions";
 
@@ -106,16 +108,14 @@ const Shelf = () => {
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [activeShelfModal, setActiveShelfModal] = useState<SmallModalTypes | null>(null);
 
   const results = useFilterShelf(activeFilter);
 
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
-  const handleNewShelf = (e: MouseEvent<HTMLButtonElement>) => {
-    setOffset({ x: e.clientX, y: e.clientY });
-    setActivePopover({
-      type: PopoverEnum.NEW_SHELF_POPOVER,
-    });
+  const handleNewShelf = () => {
+    setActiveShelfModal({ type: SmallModalEnum.NEW_SHELF_MODAL });
   };
 
   const handleShelfMenu = (e: MouseEvent<HTMLSpanElement>, name: string) => {
@@ -148,9 +148,6 @@ const Shelf = () => {
 
   const popoverContent = (() => {
     switch (activePopover?.type) {
-      case PopoverEnum.NEW_SHELF_POPOVER:
-        return <CreateShelf closePopover={() => setActivePopover(null)} />;
-
       case PopoverEnum.SHELF_MENU_POPOVER:
         return (
           <ShelfOptions
@@ -158,7 +155,6 @@ const Shelf = () => {
             activeFilter={activeFilter}
             setActiveFilter={setActiveFilter}
             closePopover={() => setActivePopover(null)}
-            offset={offset}
           />
         );
 
@@ -201,7 +197,7 @@ const Shelf = () => {
     <>
       <StyledShelf>
         <div className="created-shelves">
-          <Button onClick={(e: MouseEvent<HTMLButtonElement>) => handleNewShelf(e)}>New Shelf</Button>
+          <Button onClick={handleNewShelf}>New Shelf</Button>
 
           <> {renderShelves}</>
         </div>
@@ -213,6 +209,12 @@ const Shelf = () => {
         <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
           {popoverContent}
         </Popover>
+      )}
+
+      {activeShelfModal && (
+        <SmallModal closeModal={() => setActiveShelfModal(null)}>
+          <CreateShelf closeModal={() => setActiveShelfModal(null)} />
+        </SmallModal>
       )}
     </>
   );

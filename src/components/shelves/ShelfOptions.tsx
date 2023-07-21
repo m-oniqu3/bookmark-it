@@ -2,8 +2,8 @@ import { MouseEvent, useState } from "react";
 import { styled } from "styled-components";
 import { removeShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
-import { PopoverEnum, RenameShelfPopover } from "../../types/PopoverType";
-import Popover from "../helpers/ui/Popover";
+import { SmallModalEnum, SmallModalTypes } from "../../types/SmallModalTypes";
+import { SmallModal } from "../helpers/ui/SmallModal";
 import RenameShelf from "./RenameShelf";
 
 const StyledShelfOptions = styled.div`
@@ -32,13 +32,12 @@ type Props = {
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
   closePopover: () => void;
-  offset: { x: number; y: number };
 };
 
 const ShelfOptions = (props: Props) => {
-  const { shelf, activeFilter, setActiveFilter, closePopover, offset } = props;
+  const { shelf, activeFilter, setActiveFilter, closePopover } = props;
   const dispatch = useAppDispatch();
-  const [activePopover, setActivePopover] = useState<RenameShelfPopover | null>(null);
+  const [activeShelfModal, setActiveShelfModal] = useState<SmallModalTypes | null>(null);
 
   const handleDelete = () => {
     if (activeFilter === shelf) setActiveFilter("All");
@@ -49,8 +48,11 @@ const ShelfOptions = (props: Props) => {
 
   const handleRename = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setActivePopover({ type: PopoverEnum.RENAME_SHELF_POPOVER, currentShelf: shelf });
+
+    setActiveShelfModal({ type: SmallModalEnum.RENAME_SHELF_MODAL, currentShelf: shelf });
   };
+
+  const closeModal = () => setActiveShelfModal(null);
 
   return (
     <>
@@ -59,10 +61,16 @@ const ShelfOptions = (props: Props) => {
         <button onClick={handleRename}>Rename</button>
       </StyledShelfOptions>
 
-      {activePopover && (
-        <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
-          <RenameShelf closePopover={() => setActivePopover(null)} currentShelf={activePopover.currentShelf} />
-        </Popover>
+      {activeShelfModal && activeShelfModal.type === SmallModalEnum.RENAME_SHELF_MODAL && (
+        <SmallModal closeModal={closeModal}>
+          <RenameShelf
+            closePopover={closePopover}
+            closeModal={closeModal}
+            currentShelf={activeShelfModal.currentShelf}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+          />
+        </SmallModal>
       )}
     </>
   );

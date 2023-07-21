@@ -5,7 +5,6 @@ import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
 const StyledRenameShelf = styled.div`
-  width: 250px;
   padding: 0.2rem;
 
   .title {
@@ -65,36 +64,36 @@ const StyledRenameShelf = styled.div`
 
 type Props = {
   closePopover: () => void;
+  closeModal: () => void;
   currentShelf: string;
+  activeFilter: string;
+  setActiveFilter: (filter: string) => void;
 };
 
 const RenameShelf = (props: Props) => {
-  const { closePopover, currentShelf } = props;
+  const { closeModal, closePopover, currentShelf, activeFilter, setActiveFilter } = props;
   const [name, setName] = useState(currentShelf);
   const dispatch = useAppDispatch();
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-  };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
     setName(e.target.value);
   };
 
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-    console.log(currentShelf, name);
-    dispatch(renameShelf({ currentShelf, newShelf: name }));
 
+    if (name.trim() === currentShelf) return;
+
+    dispatch(renameShelf({ currentShelf, newShelf: name.trim() }));
+    if (activeFilter === currentShelf) setActiveFilter(name.trim());
     closePopover();
-    // closePopover();
+    closeModal();
   };
 
   return (
-    <StyledRenameShelf onClick={(e) => handleClick(e)}>
-      <p className="title">Create Shelf</p>
-      <StyledText>Create a shelf to organize your books.</StyledText>
+    <StyledRenameShelf>
+      <p className="title">Rename Shelf</p>
+      <StyledText>Set a new name for this shelf.</StyledText>
 
       <form onSubmit={handleSubmit}>
         <div className="content">

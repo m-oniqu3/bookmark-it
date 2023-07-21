@@ -38,6 +38,7 @@ type Props = {
 
 export const SmallModal = (props: Props) => {
   const { children, closeModal } = props;
+
   const handleEvent = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
   };

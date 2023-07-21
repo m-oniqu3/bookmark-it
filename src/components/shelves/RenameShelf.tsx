@@ -79,8 +79,8 @@ const RenameShelf = (props: Props) => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (name.trim() === currentShelf) return;
 
@@ -95,7 +95,7 @@ const RenameShelf = (props: Props) => {
       <p className="title">Rename Shelf</p>
       <StyledText>Set a new name for this shelf.</StyledText>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <div className="content">
           <label>Name</label>
           <input type="text" required maxLength={40} autoFocus value={name} onChange={handleChange} />

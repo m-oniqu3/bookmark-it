@@ -93,7 +93,10 @@ const CreateShelf = (props: Props) => {
           <input type="text" required maxLength={40} autoFocus value={name} onChange={handleChange} />
         </div>
 
-        <button type="submit">Submit</button>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <button type="submit" onClick={(e) => handleSubmit(e as any)}>
+          Submit
+        </button>
       </form>
     </StyledCreateShelf>
   );

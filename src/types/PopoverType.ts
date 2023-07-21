@@ -13,9 +13,6 @@ export type ShelfMenu = {
 
 export type NewShelfPopover = {
   type: PopoverEnum.NEW_SHELF_POPOVER;
-  title: string;
-  text: string;
-  submitFn: ActionCreatorWithPayload<string>;
 };
 
 export type RenameShelfPopover = {

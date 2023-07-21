@@ -3,7 +3,6 @@ import { GrMoreVertical } from "react-icons/gr";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
-import { createShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
@@ -12,7 +11,7 @@ import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Popover from "../helpers/ui/Popover";
-import BaseShelfPopover from "../shelves/BaseShelfPopover";
+import CreateShelf from "../shelves/CreateShelf";
 import ShelfOptions from "../shelves/ShelfOptions";
 
 const StyledShelf = styled(Container)`
@@ -118,9 +117,6 @@ const Shelf = () => {
     setOffset({ x: e.clientX, y: e.clientY });
     setActivePopover({
       type: PopoverEnum.NEW_SHELF_POPOVER,
-      title: "Create Shelf",
-      text: "Create a shelf to organize your books.",
-      submitFn: createShelf,
     });
   };
 
@@ -155,7 +151,7 @@ const Shelf = () => {
   const popoverContent = (() => {
     switch (activePopover?.type) {
       case PopoverEnum.NEW_SHELF_POPOVER:
-        return <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />;
+        return <CreateShelf closePopover={() => setActivePopover(null)} />;
 
       case PopoverEnum.SHELF_MENU_POPOVER:
         return (

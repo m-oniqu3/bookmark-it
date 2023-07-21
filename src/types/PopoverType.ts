@@ -1,5 +1,3 @@
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-
 export enum PopoverEnum {
   NEW_SHELF_POPOVER = "NEW_SHELF_POPOVER",
   SHELF_MENU_POPOVER = "SHELF_MENU_POPOVER",
@@ -17,10 +15,7 @@ export type NewShelfPopover = {
 
 export type RenameShelfPopover = {
   type: PopoverEnum.RENAME_SHELF_POPOVER;
-  title: string;
-  text: string;
-  submitFn: ActionCreatorWithPayload<string>;
-  shelfName: string;
+  currentShelf: string;
 };
 
 export type PopoverType = ShelfMenu | NewShelfPopover | RenameShelfPopover;

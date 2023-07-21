@@ -1,11 +1,9 @@
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { styled } from "styled-components";
 import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
-import { PopoverEnum } from "../../types/PopoverType";
 
-const StyledBaseShelfPopover = styled.div`
+const StyledRenameShelf = styled.div`
   width: 250px;
   padding: 0.2rem;
 
@@ -65,45 +63,34 @@ const StyledBaseShelfPopover = styled.div`
 `;
 
 type Props = {
-  content: {
-    title: string;
-    text: string;
-    submitFn: ActionCreatorWithPayload<string>;
-    type: PopoverEnum.NEW_SHELF_POPOVER | PopoverEnum.RENAME_SHELF_POPOVER;
-    shelfName?: string;
-  };
   closePopover: () => void;
+  currentShelf: string;
 };
 
-const BaseShelfPopover = (props: Props) => {
-  const {
-    content: { title, text, submitFn, type, shelfName },
-    closePopover,
-  } = props;
-
-  //type PopoverType = ShelfMenu | NewShelfPopover | RenameShelfPopover
-  const [name, setName] = useState(type === PopoverEnum.RENAME_SHELF_POPOVER && shelfName ? shelfName : "");
+const RenameShelf = (props: Props) => {
+  const { closePopover, currentShelf } = props;
+  const [name, setName] = useState(currentShelf);
   const dispatch = useAppDispatch();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-    dispatch(submitFn(name.trim()));
 
     closePopover();
   };
 
   return (
-    <StyledBaseShelfPopover onClick={(e) => handleClick(e)}>
-      <p className="title">{title}</p>
-      <StyledText>{text}</StyledText>
+    <StyledRenameShelf onClick={(e) => handleClick(e)}>
+      <p className="title">Create Shelf</p>
+      <StyledText>Create a shelf to organize your books.</StyledText>
+
       <form onSubmit={handleSubmit}>
         <div className="content">
           <label>Name</label>
@@ -112,8 +99,8 @@ const BaseShelfPopover = (props: Props) => {
 
         <button type="submit">Submit</button>
       </form>
-    </StyledBaseShelfPopover>
+    </StyledRenameShelf>
   );
 };
 
-export default BaseShelfPopover;
+export default RenameShelf;

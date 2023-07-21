@@ -1,10 +1,10 @@
 import { MouseEvent, useState } from "react";
 import { styled } from "styled-components";
-import { createShelf, removeShelf } from "../../store/features/shelf/shelfSlice";
+import { removeShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch } from "../../store/hooks/hooks";
 import { PopoverEnum, RenameShelfPopover } from "../../types/PopoverType";
 import Popover from "../helpers/ui/Popover";
-import BaseShelfPopover from "./BaseShelfPopover";
+import RenameShelf from "./RenameShelf";
 
 const StyledShelfOptions = styled.div`
   display: flex;
@@ -38,7 +38,6 @@ type Props = {
 const ShelfOptions = (props: Props) => {
   const { shelf, activeFilter, setActiveFilter, closePopover, offset } = props;
   const dispatch = useAppDispatch();
-  //   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [activePopover, setActivePopover] = useState<RenameShelfPopover | null>(null);
 
   const handleDelete = () => {
@@ -50,16 +49,8 @@ const ShelfOptions = (props: Props) => {
 
   const handleRename = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // setOffset({ x: e.clientX, y: e.clientY });
-    setActivePopover({
-      type: PopoverEnum.RENAME_SHELF_POPOVER,
-      title: "Rename Shelf",
-      text: "Enter a new name.",
-      submitFn: createShelf,
-      shelfName: shelf,
-    });
 
-    // closePopover();
+    setActivePopover({ type: PopoverEnum.RENAME_SHELF_POPOVER, currentShelf: shelf });
   };
 
   return (
@@ -71,7 +62,7 @@ const ShelfOptions = (props: Props) => {
 
       {activePopover && (
         <Popover offsets={offset} closePopover={() => setActivePopover(null)}>
-          <BaseShelfPopover content={activePopover} closePopover={() => setActivePopover(null)} />
+          <RenameShelf closePopover={() => setActivePopover(null)} currentShelf={activePopover.currentShelf} />
         </Popover>
       )}
     </>

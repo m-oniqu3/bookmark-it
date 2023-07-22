@@ -15,6 +15,7 @@ import { parseColor } from "../utils/parseColor";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import Options from "./Options";
 type StyledProps = {
   background: string;
   categories: boolean;
@@ -276,6 +277,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       &:hover {
         background-color: ${({ background }) => `rgba(${parseColor(background)},
       0.8)`};
+        color: var(--neutral-primary);
       }
 
       @media (${devices.medium}) {
@@ -290,6 +292,7 @@ const BookDetails = () => {
   const [colors, setColors] = useState<string[]>([]);
   const { library } = useAppSelector((state) => state.bookStore);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+  const [options, setOptions] = useState(false);
 
   const navigate = useNavigate();
   const background = colors[0];
@@ -332,6 +335,8 @@ const BookDetails = () => {
       navigate(`/search/${author}`);
     }
   };
+
+  const handleOptions = () => setOptions((state) => !state);
 
   useEffect(() => {
     if (bookDetails.description && descriptionRef.current) {
@@ -379,7 +384,8 @@ const BookDetails = () => {
             </div>
 
             <div className="options">
-              <button onClick={() => console.log("hi")}>Add to Library</button>
+              <button onClick={handleOptions}>Add to Library</button>
+              {options && <Options book={bookDetails} closeOptions={() => setOptions(false)} />}
             </div>
           </div>
 

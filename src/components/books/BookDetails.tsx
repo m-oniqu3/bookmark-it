@@ -15,6 +15,10 @@ import { parseColor } from "../utils/parseColor";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+type StyledProps = {
+  background: string;
+  categories: boolean;
+};
 
 const StyledDetailsContainer = styled(Container)<StyledProps>`
   padding: 2rem 0;
@@ -115,11 +119,13 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
     }
 
     .author {
+      margin: 0 auto;
       color: var(--secondary);
       font-size: 1rem;
       font-weight: 600;
       padding-bottom: 3px;
       width: fit-content;
+
       cursor: pointer;
       transition: all 0.3s ease-in-out;
       background-position: 0 90%;
@@ -129,6 +135,11 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
         background-position: 0 100%;
         background-size: 100% 2px;
         background-repeat: no-repeat;
+      }
+
+      @media (${devices.medium}) {
+        margin: 0;
+        margin-right: auto;
       }
     }
 
@@ -236,12 +247,43 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       }
     }
   }
-`;
 
-type StyledProps = {
-  background: string;
-  categories: boolean;
-};
+  .options {
+    display: grid;
+    /* justify-content: center; */
+    place-items: center;
+
+    padding: 0.5rem 0;
+
+    @media (${devices.large}) {
+      place-items: end;
+      padding: 1rem 0;
+    }
+
+    button {
+      width: 139.594px;
+      font-size: 0.9rem;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      border: none;
+      color: #1a1a1a;
+      font-weight: 500;
+      background-color: ${({ background }) => `rgba(${parseColor(background)},
+       0.5)`};
+
+      &:hover {
+        background-color: ${({ background }) => `rgba(${parseColor(background)},
+      0.8)`};
+      }
+
+      @media (${devices.medium}) {
+        width: 169.594px;
+      }
+    }
+  }
+`;
 
 const BookDetails = () => {
   const { id } = useParams() as { id: string };
@@ -326,13 +368,19 @@ const BookDetails = () => {
 
       return (
         <StyledDetailsContainer background={background} categories={!!bookDetails.categories}>
-          <div className="background">
-            {isBookInLibrary && <div className="icon">{icon}</div>}
-            <figure>
-              <ColorExtractor getColors={handleColors}>
-                <img src={src} alt={bookDetails.title} />
-              </ColorExtractor>
-            </figure>
+          <div>
+            <div className="background">
+              {isBookInLibrary && <div className="icon">{icon}</div>}
+              <figure>
+                <ColorExtractor getColors={handleColors}>
+                  <img src={src} alt={bookDetails.title} />
+                </ColorExtractor>
+              </figure>
+            </div>
+
+            <div className="options">
+              <button onClick={() => console.log("hi")}>Add to Library</button>
+            </div>
           </div>
 
           <section className="overview">

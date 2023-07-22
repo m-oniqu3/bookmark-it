@@ -13,6 +13,7 @@ import Information from "./Information";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import NewShelf from "../shelves/NewShelf";
 import AddToShelf from "./AddToShelf";
 
 type StyledProps = { color: string; $showicon: boolean };
@@ -32,7 +33,7 @@ const StyledBook = styled.div<StyledProps>`
   .bg-container {
     background-color: ${({ color }) => `rgba(${parseColor(color)},
        0.5)`};
-    padding: 0.8rem;
+    padding: 12px;
     border-radius: 5px;
   }
 
@@ -102,6 +103,9 @@ const Books = (props: Props) => {
 
       case ModalEnum.ADD_TO_SHELF_MODAL:
         return <AddToShelf book={book} setActiveModal={setActiveModal} modalType={modalType} />;
+
+      case ModalEnum.NEW_SHELF_MODAL:
+        return <NewShelf book={book} setActiveModal={setActiveModal} />;
 
       default:
         return null;

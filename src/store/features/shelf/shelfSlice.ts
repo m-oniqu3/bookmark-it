@@ -19,14 +19,14 @@ type InitialShelfState = {
 
 const initialState: InitialShelfState = {
   shelves: {
-    romance: { createdAt: 1625563200000, books: {} },
-    sad: { createdAt: 1625563200000, books: {} },
-    spicy: { createdAt: 1625563200000, books: {} },
-    mystery: { createdAt: 1625563200000, books: {} },
-    horror: { createdAt: 1625563200000, books: {} },
-    easy: { createdAt: 1625563200000, books: {} },
-    fantasy: { createdAt: 1625563200000, books: {} },
-    fiction: { createdAt: 1625563200000, books: {} },
+    // romance: { createdAt: 1625563200000, books: {} },
+    // sad: { createdAt: 1625563200000, books: {} },
+    // spicy: { createdAt: 1625563200000, books: {} },
+    // mystery: { createdAt: 1625563200000, books: {} },
+    // horror: { createdAt: 1625563200000, books: {} },
+    // easy: { createdAt: 1625563200000, books: {} },
+    // fantasy: { createdAt: 1625563200000, books: {} },
+    // fiction: { createdAt: 1625563200000, books: {} },
   },
   books: {},
   isShelfEmpty: true,

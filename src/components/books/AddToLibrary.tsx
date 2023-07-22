@@ -24,7 +24,7 @@ const StyledAddToLibrary = styled.div<StyledProps>`
   .background {
     background-color: ${({ color }) => `rgba(${parseColor(color)},
        0.5)`};
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
     display: grid;
     place-items: center;

@@ -20,7 +20,7 @@ const StyledSummary = styled.section<StyledProps>`
     .background {
       background-color: ${({ background }) => `rgba(${parseColor(background)},
        0.5)`};
-      padding: 10px;
+      padding: 12px;
       border-radius: 5px;
       display: grid;
       place-items: center;

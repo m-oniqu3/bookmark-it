@@ -40,7 +40,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
   .background {
     background-color: ${({ background }) => `rgba(${parseColor(background)},
        0.5)`};
-    padding: 0.8rem;
+    padding: 13px;
     border-radius: 5px;
     margin: 0 auto 1rem;
     width: fit-content;

@@ -6,6 +6,7 @@ import { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 
+import { useAppSelector } from "../../store/hooks/hooks";
 import Summary from "./Summary";
 
 const StyledInfo = styled.div`
@@ -39,8 +40,11 @@ type Props = {
 const Information = (props: Props) => {
   const navigate = useNavigate();
   const { book, modalType, setActiveModal, showBookmarkIcon } = props;
+  const { shelves } = useAppSelector((state) => state.bookShelf);
 
   const text = modalType === "library" ? "Library" : "Shelf";
+
+  const isShelvesEmpty = Object.keys(shelves).length === 0;
 
   const handleAdd = () => {
     switch (modalType) {
@@ -49,7 +53,11 @@ const Information = (props: Props) => {
         break;
 
       case "shelf":
-        setActiveModal({ type: ModalEnum.ADD_TO_SHELF_MODAL, book });
+        if (isShelvesEmpty) {
+          setActiveModal({ type: ModalEnum.NEW_SHELF_MODAL, book });
+        } else {
+          setActiveModal({ type: ModalEnum.ADD_TO_SHELF_MODAL, book });
+        }
         break;
 
       default:

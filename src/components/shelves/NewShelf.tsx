@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { createShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledButtonGroup } from "../../styles/StyledButtonGroup";
-import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
@@ -90,20 +89,17 @@ const StyledShelf = styled.div<StyledProps>`
 
     .form {
       padding-top: 0.2rem;
-      position: relative;
+      position: absolute;
 
-      @media (${devices.medium}) {
-        padding-top: 0;
-        top: 20%;
-        transform: translateY(-20%);
-      }
+      bottom: 0;
+      width: 100%;
 
       input {
         padding: 0.4rem 0;
         border-radius: 0;
         border: none;
         border-bottom: 1px solid gainsboro;
-
+        font-size: 0.9rem;
         width: 100%;
 
         &:focus {

@@ -38,6 +38,14 @@ const shelfSlice = createSlice({
   initialState,
   reducers: {
     createShelf: (state, { payload }: PayloadAction<string>) => {
+      if (payload.toLowerCase() === "all") {
+        state.toast = {
+          message: "This shelf name is reserved",
+          type: "error",
+        };
+        return;
+      }
+
       const isDuplicateShelf = !!Object.getOwnPropertyDescriptor(state.shelves, payload);
 
       //check if shelf exist

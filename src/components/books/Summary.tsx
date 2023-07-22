@@ -4,7 +4,8 @@ import { ImBookmark } from "react-icons/im";
 import ReactStars from "react-rating-star-with-type";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAppSelector } from "../../store/hooks/hooks";
+import { addSearch } from "../../store/features/search/searchSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
 
@@ -69,8 +70,6 @@ const StyledSummary = styled.section<StyledProps>`
         padding: 3px 0;
         width: fit-content;
         cursor: pointer;
-        transition: all 0.3s ease-in-out;
-        background-position: 0 90%;
 
         &:hover {
           background: ${({ background }) =>
@@ -136,6 +135,7 @@ const Summary = (props: Props) => {
   const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const snippetRef = useRef<HTMLParagraphElement | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   /** the textSnippet includes html tags so use useRef to include the text in the innerHTML
    * if there is no snippet then show description or alternative text
@@ -157,6 +157,7 @@ const Summary = (props: Props) => {
   const handleAuthor = () => {
     if (author) {
       navigate(`/search/${author}`);
+      dispatch(addSearch(author));
     }
   };
 

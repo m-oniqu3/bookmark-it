@@ -5,7 +5,7 @@ import ReactStars from "react-rating-star-with-type";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
-import { useAppSelector } from "../../store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
@@ -15,6 +15,7 @@ import { parseColor } from "../utils/parseColor";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { addSearch } from "../../store/features/search/searchSlice";
 import Options from "./Options";
 type StyledProps = {
   background: string;
@@ -126,10 +127,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       font-weight: 600;
       padding-bottom: 3px;
       width: fit-content;
-
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      background-position: 0 90%;
 
       &:hover {
         background: ${({ background }) => `linear-gradient(to left, #000000c5, rgba(${parseColor(background)}) 100%)`};
@@ -293,6 +291,7 @@ const BookDetails = () => {
   const { library } = useAppSelector((state) => state.bookStore);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
   const [options, setOptions] = useState(false);
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
   const background = colors[0];
@@ -333,6 +332,7 @@ const BookDetails = () => {
     const author = bookDetails.authors ? bookDetails.authors[0] : "";
     if (author) {
       navigate(`/search/${author}`);
+      dispatch(addSearch(author));
     }
   };
 

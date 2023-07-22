@@ -47,7 +47,7 @@ const StyledOptions = styled.div`
   }
 `;
 
-const categories: BookCategory[] = ["Reading", "TBR", "DNF", "Finished"];
+const categories: BookCategory[] = ["TBR", "Reading", "Finished", "DNF"];
 
 type Props = {
   book: Book;

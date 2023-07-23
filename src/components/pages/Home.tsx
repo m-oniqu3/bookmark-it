@@ -19,16 +19,7 @@ const genreContent = {
     "If you're looking for a way to keep track of all your favorite books, then BookMark is the app for you! Access all your favorites in one central location. Create your bookshelf and add all your favorite titles to it.",
   src: reading,
   alt: "person reading a book",
-  genres: [
-    "Fiction",
-    "Fantasy",
-    "Romance",
-    "Humour",
-    "Horror",
-    "New Adult",
-    "Non-Fiction",
-    "Mystery",
-  ],
+  genres: ["Fiction", "Fantasy", "Romance", "Humour", "Horror", "New Adult", "Non-Fiction", "Mystery"],
 };
 
 const topPicksContent = {
@@ -40,12 +31,7 @@ const topPicksContent = {
 const Home = () => {
   return (
     <Fragment>
-      <Hero
-        heading={heroContent.heading}
-        text={heroContent.text}
-        button={heroContent.button}
-        background={background}
-      />
+      <Hero heading={heroContent.heading} text={heroContent.text} button={heroContent.button} background={background} />
       <Genre
         heading={genreContent.heading}
         paragraph={genreContent.paragraph}
@@ -53,10 +39,7 @@ const Home = () => {
         src={genreContent.src}
         alt={genreContent.alt}
       />
-      <TopPicks
-        heading={topPicksContent.heading}
-        paragraph={topPicksContent.paragraph}
-      />
+      <TopPicks heading={topPicksContent.heading} paragraph={topPicksContent.paragraph} filter="easy reads" />
       <Booktok />
       <Reviews />
     </Fragment>

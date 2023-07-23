@@ -13,6 +13,7 @@ const ModalBase = styled.div`
   width: 100%;
   z-index: 5;
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 
   display: flex;
   justify-content: center;

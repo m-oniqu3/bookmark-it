@@ -5,7 +5,11 @@ import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Heading from "../helpers/ui/Heading";
 
-const StyledHero = styled.div<{ url: string }>`
+type StyledProps = {
+  url: string;
+};
+
+const StyledHero = styled.div<StyledProps>`
   background-image: url(${(props) => props.url});
   background-size: cover;
   background-position: center;

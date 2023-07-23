@@ -58,12 +58,13 @@ const StyledPicks = styled.div`
 type Props = {
   heading: string;
   paragraph: string;
+  filter: string;
 };
 
 const TopPicks = (props: Props) => {
-  const picks = useExplore("easy reads");
+  const { heading, paragraph, filter } = props;
+  const picks = useExplore(filter);
   const limitedPicks = picks.slice(0, 6);
-  const { heading, paragraph } = props;
 
   return (
     <StyledPicks>

@@ -5,8 +5,8 @@ import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import BookDetails from "./components/books/BookDetails.tsx";
-import AuthHome from "./components/pages/AuthHome.tsx";
 import Explore from "./components/pages/Explore.tsx";
+import Home from "./components/pages/Home.tsx";
 import Library from "./components/pages/Library.tsx";
 import SearchResults from "./components/pages/SearchResults.tsx";
 import Shelf from "./components/pages/Shelf.tsx";
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { path: "/", element: <AuthHome /> },
+      { path: "/", element: <Home /> },
       { path: "/explore", element: <Explore /> },
       { path: "/library", element: <Library /> },
       { path: "/shelves", element: <Shelf /> },

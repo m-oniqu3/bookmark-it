@@ -6,6 +6,7 @@ import Genre from "../home/Genre";
 import Hero from "../home/Hero";
 import Reviews from "../home/Reviews";
 import TopPicks from "../home/TopPicks";
+import Footer from "../nav/Footer";
 
 const heroContent = {
   heading: "Your <span>online</span> bookshelf",
@@ -42,6 +43,7 @@ const Home = () => {
       <TopPicks heading={topPicksContent.heading} paragraph={topPicksContent.paragraph} filter="easy reads" />
       <Booktok />
       <Reviews />
+      <Footer mode="dark" />
     </Fragment>
   );
 };

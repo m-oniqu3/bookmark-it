@@ -72,7 +72,8 @@ const StyledGenre = styled.div`
     margin-top: 2rem;
 
     img {
-      width: 100%;
+      width: 90%;
+      margin: 0 auto;
 
       object-fit: cover;
     }

@@ -3,6 +3,7 @@ import reading from "../../assets/book_sitting.png";
 import AuthHero from "../home/AuthHero";
 import Genre from "../home/Genre";
 import TopPicks from "../home/TopPicks";
+import Footer from "../nav/Footer";
 
 const topPicksContent = {
   heading: "You might <span>like</span> these",
@@ -41,6 +42,7 @@ const AuthHome = () => {
         src={genreContent.src}
         alt={genreContent.alt}
       />
+      <Footer mode="light" />
     </Fragment>
   );
 };

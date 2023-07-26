@@ -22,4 +22,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetSearchResultsQuery, useGetBookDetailsQuery, useLazyGetSpecificCategoryQuery } = apiSlice;
+export const { useGetSearchResultsQuery, useGetBookDetailsQuery, useGetSpecificCategoryQuery } = apiSlice;

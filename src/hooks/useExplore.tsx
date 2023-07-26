@@ -1,7 +1,7 @@
-import Books from "../components/books/Books";
 import { exploreBooks } from "../components/utils/exploreBooks";
 
 const useExplore = (subject: string) => {
+  console.log(subject);
   const results = (() => {
     if (subject === "all") {
       return exploreBooks;
@@ -12,11 +12,11 @@ const useExplore = (subject: string) => {
     });
   })();
 
-  const allBooks = results.map((book) => {
-    return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
-  });
+  // const allBooks = results.map((book) => {
+  //   return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
+  // });
 
-  return allBooks;
+  return results;
 };
 
 export default useExplore;

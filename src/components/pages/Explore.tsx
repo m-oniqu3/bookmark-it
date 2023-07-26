@@ -1,11 +1,13 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Fragment, useState } from "react";
 import { styled } from "styled-components";
 import useExplore from "../../hooks/useExplore";
-import { useAppSelector } from "../../store/hooks/hooks";
-import { StyledGrid } from "../../styles/StyledGrid";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
+import { Book } from "../../types/Book";
+import ExploreGenres from "../explore/ExploreGenres";
+import ExploreSubjects from "../explore/ExploreSubjects";
 import Container from "../helpers/ui/Container";
-import { parseColor } from "../utils/parseColor";
 
 const StyledExplore = styled(Container)`
   padding: 1.5rem 0;
@@ -15,73 +17,147 @@ const StyledExplore = styled(Container)`
     grid-template-columns: 1fr 15.5rem;
     gap: 3rem;
 
-    .categories {
+    aside {
       order: 1;
     }
   }
 
-  .categories {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    padding-bottom: 1rem;
-    height: fit-content;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    @media (${devices.large}) {
-      flex-wrap: wrap;
-      position: sticky;
-      top: 12vh;
+  aside {
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      overflow-x: scroll;
+      scrollbar-width: none;
+      padding-bottom: 1rem;
       height: fit-content;
-    }
 
-    .category {
-      padding: 7px 12px;
-      border-radius: 5px;
-      text-transform: capitalize;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #1a1a1a;
-      min-width: fit-content;
-      cursor: pointer;
-      height: 31px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 `;
 
-const genres = ["All", "Romance", "Easy Reads", "Tiktok", "Fiction", "spice", "Fantasy"];
+type Source = "api" | "local";
 
 const Explore = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const books = useExplore(selectedCategory);
-  const colors = useAppSelector((state) => state.colours.bookColours);
+  const [selectedGenre, setSelectedGenre] = useState<{ genre: string; type: Source }>({
+    genre: "all",
+    type: "local",
+  });
 
-  const genreColours = Object.values(colors).slice(0, genres.length);
+  const exploreBooks = useExplore(selectedGenre.genre) as Book[];
 
-  const handleCategory = (value: string) => {
-    setSelectedCategory(value.toLowerCase());
-  };
+  // const [dataSource, setDataSource] = useState<Book[]>(exploreBooks);
+  // const [trigger, { books, error, isFetching, isLoading, isSuccess }] = useLazyGetSpecificCategoryQuery({
+  //   selectFromResult(result: any) {
+  //     const items = result.data?.items;
 
-  const renderCategories = () => {
-    return genres.map((genre, i) => {
-      const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
-      return (
-        <div key={i} className="category" style={{ backgroundColor: background }} onClick={() => handleCategory(genre)}>
-          {genre}
-        </div>
-      );
-    });
-  };
+  //     return {
+  //       books: items?.map((item: any) => ({
+  //         id: item.id,
+  //         title: item.volumeInfo.title,
+  //         authors: item.volumeInfo.authors,
+  //         publishedDate: item.volumeInfo.publishedDate,
+  //         categories: item.volumeInfo?.categories,
+  //         description: item.volumeInfo?.description,
+  //         imageLinks: item.volumeInfo.imageLinks,
+  //         searchInfo: item.searchInfo,
+  //         averageRating: item.volumeInfo.averageRating,
+  //         ratingsCount: item.volumeInfo.ratingsCount,
+  //       })) as Book[],
+
+  //       isLoading: result.isLoading,
+  //       error: result.error,
+  //       isSuccess: result.isSuccess,
+  //       isFetching: result.isFetching,
+  //     };
+  //   },
+  // });
+
+  // const content = (() => {
+  //   if (selectedGenre.type === "local") {
+  //     return (
+  //       <StyledExplore>
+  //         <aside>
+  //           <div className="categories">
+  //             <StyledTitle className="title">Bookmark's Picks</StyledTitle>
+  //             <Fragment>{renderedGenres}</Fragment>
+  //           </div>
+  //           <div className="categories">
+  //             <StyledTitle className="title">Other Genres</StyledTitle>
+  //             <Fragment>{renderedSubjects}</Fragment>
+  //           </div>
+  //         </aside>
+
+  //         <StyledGrid>
+  //           {dataSource
+  //             .filter((book) => {
+  //               return book.imageLinks?.smallThumbnail !== undefined;
+  //             })
+  //             .map((book) => {
+  //               return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
+  //             })}
+  //         </StyledGrid>
+  //       </StyledExplore>
+  //     );
+  //   } else if (selectedGenre.type === "api") {
+  //     if (isLoading || isFetching) return <Loading />;
+
+  //     if (error) return <p>Error</p>;
+
+  //     if (!isSuccess || !books) return <p>No results</p>;
+
+  //     if (isSuccess && books) {
+  //       if (books.length === 0) return <p>No results found</p>;
+
+  //       return (
+  //         <StyledExplore>
+  //           <aside>
+  //             <div className="categories">
+  //               <StyledTitle className="title">Bookmark's Picks</StyledTitle>
+  //               <Fragment>{renderedGenres}</Fragment>
+  //             </div>
+  //             <div className="categories">
+  //               <StyledTitle className="title">Other Genres</StyledTitle>
+  //               <Fragment>{renderedSubjects}</Fragment>
+  //             </div>
+  //           </aside>
+  //           <StyledGrid>
+  //             {dataSource
+  //               .filter((book) => {
+  //                 return book.imageLinks?.smallThumbnail !== undefined;
+  //               })
+  //               .map((book) => {
+  //                 return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
+  //               })}
+  //           </StyledGrid>
+  //         </StyledExplore>
+  //       );
+  //     }
+  //   }
+  // })();
+
   return (
-    <StyledExplore>
-      <div className="categories">{renderCategories()}</div>
-      <StyledGrid>{books}</StyledGrid>
-    </StyledExplore>
+    <Fragment>
+      <StyledExplore>
+        <aside>
+          <StyledTitle className="title">Bookmark's Picks</StyledTitle>
+          <div className="list">
+            <ExploreGenres />
+          </div>
+
+          <StyledTitle className="title">Other Genres</StyledTitle>
+          <div className="list">
+            <ExploreSubjects />
+          </div>
+        </aside>
+
+        <div>books go here</div>
+      </StyledExplore>
+    </Fragment>
   );
 };
 

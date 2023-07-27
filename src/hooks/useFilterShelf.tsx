@@ -35,7 +35,15 @@ const useFilterShelf = (filter: string, author: string) => {
   const authors = [...new Set(allAuthors)].sort();
 
   const books = authorResults.map((book) => {
-    return <Books key={book.bookInfo.id} book={book.bookInfo} modalType="shelf" showBookmarkIcon={false} />;
+    return (
+      <Books
+        key={book.bookInfo.id}
+        book={book.bookInfo}
+        modalType="shelf"
+        showBookmarkIcon={false}
+        showShelfIcon={{ display: true, size: "small" }}
+      />
+    );
   });
 
   return { authors, books };

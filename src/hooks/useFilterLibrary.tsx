@@ -34,7 +34,15 @@ const useFilterLibrary = (filter: Filter, author: string) => {
   //   console.log(authors);
 
   const books = authorResults.map((record) => {
-    return <Books key={record.bookInfo.id} book={record.bookInfo} modalType="library" showBookmarkIcon={false} />;
+    return (
+      <Books
+        key={record.bookInfo.id}
+        book={record.bookInfo}
+        modalType="library"
+        showBookmarkIcon={false}
+        showShelfIcon={{ display: false, size: null }}
+      />
+    );
   });
 
   return { authors, books };

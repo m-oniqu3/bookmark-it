@@ -51,7 +51,15 @@ const Recs = () => {
             // remove books without an image
             .filter((book) => book.imageLinks?.smallThumbnail !== undefined)
             .map((book) => {
-              return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
+              return (
+                <Books
+                  key={book.id}
+                  book={book}
+                  modalType="library"
+                  showBookmarkIcon={true}
+                  showShelfIcon={{ display: true, size: "medium" }}
+                />
+              );
             })}
         </StyledGrid>
       );

@@ -5,7 +5,7 @@ export const StyledTitle = styled.h3`
   display: none;
 
   @media (${devices.large}) {
-    display: block;
+    display: block !important;
     padding-bottom: 1rem;
     color: var(--secondary);
     font-size: 0.9rem;

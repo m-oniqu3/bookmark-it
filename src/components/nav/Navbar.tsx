@@ -62,7 +62,7 @@ const StyledNavContainer = styled.div`
           color: var(--neutral-medium);
           font-size: 0.95rem;
           font-weight: 400;
-          font-stretch: condensed; /* Added font-stretch property */
+          font-stretch: condensed;
           width: 50px;
 
           &.active {
@@ -138,7 +138,7 @@ const Navbar = () => {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink to="/explore">Explore</NavLink>
+                <NavLink to="/explore/picks/all">Explore</NavLink>
               </li>
 
               <li>

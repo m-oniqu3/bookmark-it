@@ -57,7 +57,7 @@ const StyledShelf = styled(Container)`
       min-width: fit-content;
       background-color: var(--neutral-light);
       cursor: pointer;
-      height: 31px;
+      /* height: 31px; */
 
       &.active {
         background-color: var(--secondary);

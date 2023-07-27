@@ -38,7 +38,6 @@ const StyledSidebar = styled.aside`
       color: #1a1a1a;
       min-width: max-content;
       height: fit-content;
-      height: 31px;
 
       @media (${devices.large}) {
         min-width: fit-content;
@@ -58,7 +57,6 @@ const StyledSidebar = styled.aside`
       align-content: center;
       justify-content: center;
       cursor: pointer;
-      height: 31px;
 
       p {
         margin: 0;

@@ -9,8 +9,6 @@ import Loading from "../helpers/ui/Loading";
 const Recs = () => {
   const { category } = useParams<{ category: string }>() as { category: string };
 
-  console.log(category);
-
   const { books, error, isFetching, isLoading, isSuccess } = useGetSpecificCategoryQuery(category, {
     selectFromResult(result: any) {
       const items = result.data?.items;

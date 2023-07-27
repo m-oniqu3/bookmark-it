@@ -3,7 +3,17 @@ import { devices } from "./breakpoints";
 
 export const StyledCategories = styled.div`
   display: flex;
+
   gap: 1rem;
+  width: 100%;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
+  height: fit-content;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .category {
     padding: 7px 12px;
@@ -15,7 +25,13 @@ export const StyledCategories = styled.div`
     background-color: var(--neutral-light);
     min-width: fit-content;
     cursor: pointer;
-    height: 31px;
+    /* height: 31px; */
+    text-decoration: none;
+
+    &.active {
+      background-color: var(--secondary) !important;
+      color: var(--neutral-light);
+    }
   }
 
   @media (${devices.large}) {

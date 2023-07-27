@@ -16,7 +16,7 @@ import { ColorExtractor } from "react-color-extractor";
 import NewShelf from "../shelves/NewShelf";
 import AddToShelf from "./AddToShelf";
 
-type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean; iconSize: "small" | "medium" | null };
+type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean };
 
 const StyledBook = styled.div<StyledProps>`
   position: relative;
@@ -33,7 +33,7 @@ const StyledBook = styled.div<StyledProps>`
   .shelf-icon {
     position: absolute;
     top: 0;
-    right: ${({ iconSize }) => (iconSize === "small" ? "2px" : "-3px")};
+    right: 2px;
     z-index: 1;
     display: ${({ $showShelfIcon }) => ($showShelfIcon ? "block" : "none")};
     filter: brightness(40%);
@@ -75,7 +75,7 @@ type Props = {
   book: Book;
   modalType: "library" | "shelf";
   showBookmarkIcon: boolean;
-  showShelfIcon: { display: boolean; size: "small" | "medium" | null };
+  showShelfIcon: boolean;
 };
 
 const Books = (props: Props) => {
@@ -130,19 +130,14 @@ const Books = (props: Props) => {
   const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
   const icon = <ImBookmark size={25} color={color} />;
-  const shelfIcon = <ImBookmark size={showShelfIcon.size === "small" ? 25 : 35} color={color} />;
+  const shelfIcon = <ImBookmark size={25} color={color} />;
 
   const isBookInLibrary = !!library[book.id] && showBookmarkIcon;
-  const isBookInShelf = !!books[book.id] && showShelfIcon.display;
+  const isBookInShelf = !!books[book.id] && showShelfIcon;
 
   return (
     <Fragment>
-      <StyledBook
-        color={color}
-        $showicon={isBookInLibrary}
-        $showShelfIcon={isBookInShelf}
-        iconSize={showShelfIcon?.size}
-      >
+      <StyledBook color={color} $showicon={isBookInLibrary} $showShelfIcon={isBookInShelf}>
         <div className="icon">{icon}</div>
         <div className="shelf-icon">{shelfIcon}</div>
         <div className="bg-container">

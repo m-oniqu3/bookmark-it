@@ -7,8 +7,11 @@ import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import Books from "../books/Books";
 
+import server_down from "../../assets/server_down.svg";
+import web_search from "../../assets/web_search.svg";
 import Sidebar from "../books/Sidebar";
 import Container from "../helpers/ui/Container";
+import Empty from "../helpers/ui/Empty";
 import Loading from "../helpers/ui/Loading";
 
 const StyledSearchResults = styled.div`
@@ -61,12 +64,40 @@ const SearchResults = () => {
   const content = (() => {
     if (isLoading || isFetching) return <Loading />;
 
-    if (error) return <p>Error</p>;
+    if (error)
+      return (
+        <Empty
+          src={server_down}
+          heading="Something went wrong"
+          message="Try searching for another book or visit the Explore page."
+          buttonName="Explore"
+          route="/explore/picks/all"
+        />
+      );
 
-    if (!isSuccess || !books) return <p>No results</p>;
+    if (!isSuccess || !books)
+      return (
+        <Empty
+          src={web_search}
+          heading="No results found"
+          message="Try searching for another book or visit the Explore page."
+          buttonName="Explore"
+          route="/explore/picks/all"
+        />
+      );
 
     if (isSuccess && books) {
-      if (books.length === 0) return <p>No results found</p>;
+      if (books.length === 0) {
+        return (
+          <Empty
+            src={web_search}
+            heading="No results found"
+            message="Try searching for another book or visit the Explore page."
+            buttonName="Explore"
+            route="/explore/picks/all"
+          />
+        );
+      }
 
       return (
         <StyledSearchResults>
@@ -77,7 +108,9 @@ const SearchResults = () => {
               // remove books without an image
               .filter((book) => book.imageLinks?.smallThumbnail !== undefined)
               .map((book) => {
-                return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} />;
+                return (
+                  <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} showShelfIcon={false} />
+                );
               })}
           </StyledGrid>
         </StyledSearchResults>

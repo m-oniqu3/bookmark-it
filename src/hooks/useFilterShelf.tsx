@@ -41,7 +41,7 @@ const useFilterShelf = (filter: string, author: string) => {
         book={book.bookInfo}
         modalType="shelf"
         showBookmarkIcon={false}
-        showShelfIcon={{ display: true, size: "small" }}
+        showShelfIcon={true}
       />
     );
   });

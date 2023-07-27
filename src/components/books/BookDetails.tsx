@@ -4,19 +4,23 @@ import { ImBookmark } from "react-icons/im";
 import ReactStars from "react-rating-star-with-type";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import server_down from "../../assets/server_down.svg";
+import web_search from "../../assets/web_search.svg";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
+import { addSearch } from "../../store/features/search/searchSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { Book } from "../../types/Book";
 import Container from "../helpers/ui/Container";
+import Empty from "../helpers/ui/Empty";
 import Loading from "../helpers/ui/Loading";
 import { parseColor } from "../utils/parseColor";
+import Options from "./Options";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
-import { addSearch } from "../../store/features/search/searchSlice";
-import Options from "./Options";
+
 type StyledProps = {
   background: string;
   categories: boolean;
@@ -366,7 +370,27 @@ const BookDetails = () => {
     const icon = <ImBookmark size={28} color={colors[3]} />;
 
     if (isLoading || isFetching) return <Loading />;
-    if (error) return <p>Error</p>;
+    if (error)
+      return (
+        <Empty
+          src={server_down}
+          heading="Something went wrong"
+          message="Try searching for another book or visit the Explore page."
+          buttonName="Explore"
+          route="/explore/picks/all"
+        />
+      );
+
+    if (!isSuccess || !bookDetails)
+      return (
+        <Empty
+          src={web_search}
+          heading="No results found"
+          message="Try refreshing the page or visit the Explore page."
+          buttonName="Explore"
+          route="/explore/picks/all"
+        />
+      );
 
     if (isSuccess && bookDetails) {
       const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;

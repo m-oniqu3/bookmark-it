@@ -40,7 +40,7 @@ const useFilterLibrary = (filter: Filter, author: string) => {
         book={record.bookInfo}
         modalType="library"
         showBookmarkIcon={false}
-        showShelfIcon={{ display: false, size: null }}
+        showShelfIcon={false}
       />
     );
   });

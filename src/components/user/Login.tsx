@@ -38,9 +38,18 @@ const StyledLogin = styled(Container)`
     max-width: 250px;
     margin: 1.5rem auto 0;
 
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #e6e6e6;
+    background-color: var(--neutral-light);
+
     span {
       display: grid;
       place-items: center;
+    }
+
+    &:hover {
+      border: 1px solid transparent;
     }
   }
 `;

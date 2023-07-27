@@ -1,7 +1,7 @@
 import Books from "../components/books/Books";
 import { useAppSelector } from "../store/hooks/hooks";
 
-const useFilterShelf = (filter: string) => {
+const useFilterShelf = (filter: string, author: string) => {
   const { library } = useAppSelector((state) => state.bookStore);
   const { shelves } = useAppSelector((state) => state.bookShelf);
 
@@ -16,9 +16,29 @@ const useFilterShelf = (filter: string) => {
     }
   })();
 
-  return filterResults.map((book) => {
+  const authorResults = (() => {
+    if (author !== "All") {
+      return filterResults
+        .filter((book) => {
+          const bookAuthor = book.bookInfo.authors ? book.bookInfo.authors[0] : "";
+          return bookAuthor === author;
+        })
+        .sort((a, b) => b.timeAdded - a.timeAdded);
+    } else return filterResults;
+  })();
+
+  const allAuthors = Object.values(library).map((book) => {
+    const author = book.bookInfo.authors ? book.bookInfo.authors[0] : "";
+    return author;
+  });
+
+  const authors = [...new Set(allAuthors)].sort();
+
+  const books = authorResults.map((book) => {
     return <Books key={book.bookInfo.id} book={book.bookInfo} modalType="shelf" showBookmarkIcon={false} />;
   });
+
+  return { authors, books };
 };
 
 export default useFilterShelf;

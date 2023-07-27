@@ -1,10 +1,11 @@
-import { Fragment, MouseEvent, useState } from "react";
+import { Fragment, MouseEvent, useEffect, useState } from "react";
 import { GrMoreVertical } from "react-icons/gr";
 import { styled } from "styled-components";
 import shelvesImage from "../../assets/shelves.svg";
 import useFilterShelf from "../../hooks/useFilterShelf";
 import { useAppSelector } from "../../store/hooks/hooks";
 import { StyledGrid } from "../../styles/StyledGrid";
+import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import { PopoverEnum, PopoverType } from "../../types/PopoverType";
 import { SmallModalEnum, SmallModalTypes } from "../../types/SmallModalTypes";
@@ -15,6 +16,7 @@ import Popover from "../helpers/ui/Popover";
 import { SmallModal } from "../helpers/ui/SmallModal";
 import CreateShelf from "../shelves/CreateShelf";
 import ShelfOptions from "../shelves/ShelfOptions";
+import { parseColor } from "../utils/parseColor";
 
 const StyledShelf = styled(Container)`
   padding: 1.5rem 0;
@@ -24,13 +26,14 @@ const StyledShelf = styled(Container)`
     grid-template-columns: 1fr 15.5rem;
     gap: 3rem;
 
-    .created-shelves {
+    .options {
       order: 1;
     }
   }
 
-  .created-shelves {
+  .options {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     width: 100%;
     overflow-x: scroll;
@@ -48,6 +51,22 @@ const StyledShelf = styled(Container)`
       height: fit-content;
     }
 
+    .shelves {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      overflow-x: scroll;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (${devices.large}) {
+        flex-wrap: wrap;
+      }
+    }
+
     .shelf {
       padding: 7px 12px;
       border-radius: 5px;
@@ -57,7 +76,7 @@ const StyledShelf = styled(Container)`
       min-width: fit-content;
       background-color: var(--neutral-light);
       cursor: pointer;
-      /* height: 31px; */
+      height: 31px;
 
       &.active {
         background-color: var(--secondary);
@@ -98,19 +117,55 @@ const StyledShelf = styled(Container)`
       min-width: fit-content;
       height: 31px;
     }
+
+    .authors {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      overflow-x: scroll;
+      scrollbar-width: none;
+      padding-bottom: 1rem;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (${devices.large}) {
+        flex-wrap: wrap;
+      }
+
+      .author {
+        padding: 7px 12px;
+        border-radius: 5px;
+        text-transform: capitalize;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #1a1a1a;
+        min-width: fit-content;
+        cursor: pointer;
+        height: 31px;
+
+        &.active {
+          background-color: var(--secondary) !important;
+          color: var(--neutral-primary) !important;
+        }
+      }
+    }
   }
 `;
 
 const Shelf = () => {
   const { shelves } = useAppSelector((state) => state.bookShelf);
   const { library } = useAppSelector((state) => state.bookStore);
+  const colors = useAppSelector((state) => state.colours.bookColours);
   const isLibraryEmpty = Object.keys(library).length === 0;
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [activeShelfModal, setActiveShelfModal] = useState<SmallModalTypes | null>(null);
+  const [activeAuthor, setActiveAuthor] = useState<string>("All");
 
-  const results = useFilterShelf(activeFilter);
+  const { authors, books } = useFilterShelf(activeFilter, activeAuthor);
 
   const handleFilter = (filter: string) => setActiveFilter(filter);
 
@@ -146,6 +201,32 @@ const Shelf = () => {
     );
   });
 
+  const handleAuthor = (author: string) => setActiveAuthor(author);
+
+  const authorColours = Object.values(colors).slice(0, authors.length + 1);
+
+  useEffect(() => {
+    if (!authors.includes(activeAuthor)) {
+      setActiveAuthor("All");
+    }
+  }, [authors, activeAuthor]);
+
+  const authorList = ["All"].concat(authors).map((author, i) => {
+    const active = activeAuthor === author ? "active" : "";
+    const background = `rgba(${parseColor(authorColours[i])}, 0.5)`;
+
+    return (
+      <div
+        key={author}
+        className={`author ${active}`}
+        onClick={() => handleAuthor(author)}
+        style={{ backgroundColor: background }}
+      >
+        {author}
+      </div>
+    );
+  });
+
   const popoverContent = (() => {
     switch (activePopover?.type) {
       case PopoverEnum.SHELF_MENU_POPOVER:
@@ -164,14 +245,14 @@ const Shelf = () => {
   })();
 
   const content = (() => {
-    if (results.length > 0) {
-      return <StyledGrid>{results}</StyledGrid>;
+    if (books.length > 0) {
+      return <StyledGrid>{books}</StyledGrid>;
     }
 
     return (
       <Empty
         src={shelvesImage}
-        route="/explore"
+        route="/explore/picks/all"
         heading="No books here yet"
         message="Search for a book to add it to your library to start populating your shelves."
         buttonName="Explore"
@@ -184,7 +265,7 @@ const Shelf = () => {
   //   return (
   //     <Empty
   //       src={shelvesImage}
-  //       route="/explore"
+  //       route="/explore/picks/all"
   //       heading="Your shelves are empty"
   //       message="Search for a book to add it to your library to start populating your shelves."
   //       buttonName="Explore"
@@ -196,10 +277,22 @@ const Shelf = () => {
   return (
     <>
       <StyledShelf>
-        <div className="created-shelves">
-          <Button onClick={handleNewShelf}>New Shelf</Button>
+        <div className="options">
+          <div>
+            <StyledTitle className="title">Shelves</StyledTitle>
+            <div className="shelves">
+              <Button onClick={handleNewShelf}>New Shelf</Button>
 
-          <> {renderShelves}</>
+              <Fragment> {renderShelves}</Fragment>
+            </div>
+          </div>
+
+          {authorList.length > 1 && (
+            <div>
+              <StyledTitle className="title">Authors</StyledTitle>
+              <div className="authors">{authorList}</div>
+            </div>
+          )}
         </div>
 
         <Fragment>{content}</Fragment>

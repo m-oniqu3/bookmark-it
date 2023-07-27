@@ -10,7 +10,7 @@ const searchSlice = createSlice({
       const { payload } = action;
       const { recentSearches } = state;
 
-      if (recentSearches.length === 5) {
+      if (recentSearches.length === 10) {
         recentSearches.pop();
       }
 

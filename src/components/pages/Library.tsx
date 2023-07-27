@@ -167,7 +167,7 @@ const Library = () => {
       return (
         <Empty
           src={Search}
-          route="/explore"
+          route="/explore/picks/all"
           heading="There are no books here as yet"
           message="Search for a book to add it to your library or visit the explore page to find more books."
           buttonName="Explore"
@@ -180,7 +180,7 @@ const Library = () => {
     return (
       <Empty
         src={Search}
-        route="/explore"
+        route="/explore/picks/all"
         heading="Your library is empty"
         message="Search for a book to add it to your library or visit the explore page to find more books."
         buttonName="Explore"

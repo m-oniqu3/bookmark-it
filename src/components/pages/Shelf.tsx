@@ -261,18 +261,18 @@ const Shelf = () => {
     );
   })();
 
-  // if (isLibraryEmpty) {
-  //   return (
-  //     <Empty
-  //       src={shelvesImage}
-  //       route="/explore/picks/all"
-  //       heading="Your shelves are empty"
-  //       message="Search for a book to add it to your library to start populating your shelves."
-  //       buttonName="Explore"
-  //       adjust={true}
-  //     />
-  //   );
-  // }
+  if (isLibraryEmpty) {
+    return (
+      <Empty
+        src={shelvesImage}
+        route="/explore/picks/all"
+        heading="Your shelves are empty"
+        message="Search for a book to add it to your library to start populating your shelves."
+        buttonName="Explore"
+        adjust={true}
+      />
+    );
+  }
 
   return (
     <>

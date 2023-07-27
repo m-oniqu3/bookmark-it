@@ -37,7 +37,7 @@ const StyledLogin = styled(Container)`
     width: 100%;
     max-width: 250px;
     margin: 1.5rem auto 0;
-
+    padding: 7px 20px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: 1px solid #e6e6e6;

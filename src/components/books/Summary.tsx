@@ -65,7 +65,7 @@ const StyledSummary = styled.section<StyledProps>`
 
       .author {
         color: var(--secondary);
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 500;
         padding: 3px 0;
         width: fit-content;
@@ -86,7 +86,7 @@ const StyledSummary = styled.section<StyledProps>`
         padding: 3px 0;
         flex-wrap: wrap-reverse;
         text-transform: capitalize;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 500;
       }
 
@@ -114,7 +114,7 @@ const StyledSummary = styled.section<StyledProps>`
         width: calc(100% - 1rem);
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         color: var(--secondary);
         font-style: normal;

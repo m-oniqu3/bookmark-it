@@ -4,38 +4,16 @@ import server_down from "../../assets/server_down.svg";
 import web_search from "../../assets/web_search.svg";
 import { useGetSpecificCategoryQuery } from "../../store/features/api/apiSlice";
 import { StyledGrid } from "../../styles/StyledGrid";
-import { Book } from "../../types/Book";
 import Books from "../books/Books";
 import Empty from "../helpers/ui/Empty";
 import Loading from "../helpers/ui/Loading";
+import { selectSearchResults } from "../utils/selectors";
 
 const Recs = () => {
   const { category } = useParams<{ category: string }>() as { category: string };
 
   const { books, error, isFetching, isLoading, isSuccess } = useGetSpecificCategoryQuery(category, {
-    selectFromResult(result: any) {
-      const items = result.data?.items;
-
-      return {
-        books: items?.map((item: any) => ({
-          id: item.id,
-          title: item.volumeInfo.title,
-          authors: item.volumeInfo.authors,
-          publishedDate: item.volumeInfo.publishedDate,
-          categories: item.volumeInfo?.categories,
-          description: item.volumeInfo?.description,
-          imageLinks: item.volumeInfo.imageLinks,
-          searchInfo: item.searchInfo,
-          averageRating: item.volumeInfo.averageRating,
-          ratingsCount: item.volumeInfo.ratingsCount,
-        })) as Book[],
-
-        isLoading: result.isLoading,
-        error: result.error,
-        isSuccess: result.isSuccess,
-        isFetching: result.isFetching,
-      };
-    },
+    selectFromResult: (result: any) => selectSearchResults(result),
   });
 
   const content = (() => {

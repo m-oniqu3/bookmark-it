@@ -4,7 +4,6 @@ import { styled } from "styled-components";
 import { useGetSearchResultsQuery } from "../../store/features/api/apiSlice";
 import { StyledGrid } from "../../styles/StyledGrid";
 import { devices } from "../../styles/breakpoints";
-import type { Book } from "../../types/Book";
 import Books from "../books/Books";
 
 import server_down from "../../assets/server_down.svg";
@@ -13,6 +12,7 @@ import Sidebar from "../books/Sidebar";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Loading from "../helpers/ui/Loading";
+import { selectSearchResults } from "../utils/selectors";
 
 const StyledSearchResults = styled.div`
   padding: 1.5rem 0;
@@ -34,31 +34,7 @@ const SearchResults = () => {
   const { books, isFetching, isLoading, error, isSuccess } = useGetSearchResultsQuery(
     query,
     //select the data we want from the response if there is a query
-    {
-      selectFromResult: (result: any) => {
-        const items = result.data?.items;
-
-        return {
-          books: items?.map((item: any) => ({
-            id: item.id,
-            title: item.volumeInfo.title,
-            authors: item.volumeInfo.authors,
-            publishedDate: item.volumeInfo.publishedDate,
-            categories: item.volumeInfo?.categories,
-            description: item.volumeInfo?.description,
-            imageLinks: item.volumeInfo.imageLinks,
-            searchInfo: item.searchInfo,
-            averageRating: item.volumeInfo.averageRating,
-            ratingsCount: item.volumeInfo.ratingsCount,
-          })) as Book[],
-
-          isLoading: result.isLoading,
-          error: result.error,
-          isSuccess: result.isSuccess,
-          isFetching: result.isFetching,
-        };
-      },
-    }
+    { selectFromResult: (result: any) => selectSearchResults(result) }
   );
 
   const content = (() => {

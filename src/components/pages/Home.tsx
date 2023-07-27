@@ -24,7 +24,7 @@ const genreContent = {
 };
 
 const topPicksContent = {
-  heading: "Top picks of the <span>month</span>",
+  heading: "Check <span>these</span> books out ",
   paragraph:
     "These books are all great reads that will keep you entertained for hours on end. If you're looking for something new to read, be sure to check out one of these books!",
 };

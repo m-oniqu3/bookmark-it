@@ -36,7 +36,7 @@ const StyledBook = styled.div<StyledProps>`
     right: 2px;
     z-index: 1;
     display: ${({ $showShelfIcon }) => ($showShelfIcon ? "block" : "none")};
-    filter: brightness(40%);
+    filter: brightness(70%);
   }
 
   .bg-container {

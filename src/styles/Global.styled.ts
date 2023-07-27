@@ -19,7 +19,6 @@ export const GlobalStyles = createGlobalStyle`
     --secondary: #3f3d56;
     --secondary-light: #c8e0eb;
 
-    /* accent */
 
     /* neutral */
     --neutral-primary: #fff;
@@ -28,6 +27,9 @@ export const GlobalStyles = createGlobalStyle`
     
     --toastify-color-success: var(--primary);
     --toastify-icon-color-success: var(--primary);
+
+    --toastify-color-info: var(--secondary);
+    --toastify-icon-color-info: var(--secondary);
   }
 
 `;

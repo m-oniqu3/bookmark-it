@@ -11,7 +11,6 @@ import { addSearch } from "../../store/features/search/searchSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
-import { Book } from "../../types/Book";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import Loading from "../helpers/ui/Loading";
@@ -20,6 +19,7 @@ import Options from "./Options";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { selectBookDetails } from "../utils/selectors";
 
 type StyledProps = {
   background: string;
@@ -66,7 +66,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       top: 0;
       right: -1px;
       z-index: 1;
-      filter: brightness(60%);
+      filter: brightness(70%);
     }
 
     figure {
@@ -303,28 +303,7 @@ const BookDetails = () => {
   if (!id) <Navigate to="/" />;
 
   const { bookDetails, isLoading, isFetching, isSuccess, error } = useGetBookDetailsQuery(id, {
-    selectFromResult: (result: any) => {
-      return {
-        bookDetails: {
-          id: result.data?.id,
-          title: result.data?.volumeInfo.title,
-          subtitle: result.data?.volumeInfo.subtitle,
-          authors: result.data?.volumeInfo.authors,
-          publishedDate: result.data?.volumeInfo.publishedDate,
-          categories: result.data?.volumeInfo?.categories,
-          description: result.data?.volumeInfo?.description,
-          imageLinks: result.data?.volumeInfo.imageLinks,
-          searchInfo: result.data?.searchInfo,
-          averageRating: result.data?.volumeInfo?.averageRating,
-          ratingsCount: result.data?.volumeInfo?.ratingsCount,
-        } as Book,
-
-        isLoading: result.isLoading,
-        error: result.error,
-        isSuccess: result.isSuccess,
-        isFetching: result.isFetching,
-      };
-    },
+    selectFromResult: (result: any) => selectBookDetails(result),
   });
 
   //handlers
@@ -360,7 +339,7 @@ const BookDetails = () => {
     const color = `rgba(${newColor}, 0.5)`;
     return (
       <p className="category" key={category} style={{ backgroundColor: `${color}` }}>
-        {category}
+        {category.toLowerCase()}
       </p>
     );
   });

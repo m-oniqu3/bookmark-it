@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useEffect, useState } from "react";
-import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import Container from "../components/helpers/ui/Container";
 import { parseColor } from "../components/utils/parseColor";
@@ -86,11 +86,6 @@ const ExploreLayout = () => {
   const [pick, setPick] = useState<string>("all");
   const [rec, setRec] = useState<string>("romance");
   const genreColours = Object.values(colors).slice(0, categories.length);
-  const [current, setCurrent] = useState<string>("all");
-
-  useEffect(() => {
-    setCurrent(pathname.split("/")[3].replace("%20", " "));
-  }, [pathname, page]);
 
   useEffect(() => {
     if (page === "picks") setCategories(exploreGenres);
@@ -105,18 +100,16 @@ const ExploreLayout = () => {
   const renderedCategories = categories.map((category, i) => {
     const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;
 
-    const active = current === category.toLowerCase() ? "active" : "";
-
     return (
-      <Link
+      <NavLink
         to={`${page}/${category}`}
         key={i}
-        className={`category ${active}`}
+        className={`category `}
         style={{ backgroundColor: background }}
         onClick={() => handleCategory(category)}
       >
         {category}
-      </Link>
+      </NavLink>
     );
   });
 

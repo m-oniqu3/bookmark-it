@@ -125,6 +125,7 @@ const ExploreLayout = () => {
             <li>
               <NavLink to={`picks/${pick}`}>Our Picks</NavLink>
             </li>
+
             <li>
               <NavLink to={`recs/${rec}`}>Other Genres</NavLink>
             </li>

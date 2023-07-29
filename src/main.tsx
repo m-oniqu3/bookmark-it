@@ -7,6 +7,7 @@ import App from "./App.tsx";
 import BookDetails from "./components/books/BookDetails.tsx";
 import Picks from "./components/explore/Picks.tsx";
 import Recs from "./components/explore/Recs.tsx";
+import NoMatch from "./components/helpers/routes/NoMatch.tsx";
 import Home from "./components/pages/Home.tsx";
 import Library from "./components/pages/Library.tsx";
 import SearchResults from "./components/pages/SearchResults.tsx";
@@ -28,14 +29,13 @@ const router = createBrowserRouter([
         children: [
           { path: "picks/:category", element: <Picks /> },
           { path: "recs/:category", element: <Recs /> },
-          { path: "*", element: <div>404</div> },
         ],
       },
       { path: "/library", element: <Library /> },
       { path: "/shelves", element: <Shelf /> },
       { path: "/search/:query", element: <SearchResults /> },
       { path: "/details/:id", element: <BookDetails /> },
-      { path: "*", element: <div>404</div> },
+      { path: "*", element: <NoMatch /> },
     ],
   },
 ]);

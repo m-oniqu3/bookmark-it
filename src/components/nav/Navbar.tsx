@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { VscChromeClose } from "react-icons/vsc";
 import { NavLink, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import Logo from "../../assets/bookmark.png";
@@ -101,6 +102,13 @@ const StyledNavContainer = styled.div`
     &__icon {
       display: grid;
       place-items: center;
+      width: 30px;
+      height: 30px;
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
 
       @media (${devices.large}) {
         display: none;
@@ -156,7 +164,7 @@ const Navbar = () => {
             </div>
 
             <div className="nav__icon" onClick={handleMobileMenu}>
-              <AiOutlineMenu size={28} color="var(--primary)" />
+              {!isMenuOpen ? <AiOutlineMenu color="var(--primary)" /> : <VscChromeClose color="var(--primary)" />}
             </div>
           </nav>
         </Container>

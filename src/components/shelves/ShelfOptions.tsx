@@ -19,6 +19,7 @@ const StyledShelfOptions = styled.div`
     transition: all 0.3s ease-in-out;
     border: none;
     /* min-width: max-content; */
+    color: var(--secondary);
 
     &:hover {
       background-color: var(--secondary);

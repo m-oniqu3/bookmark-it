@@ -15,7 +15,7 @@ const StyledMenu = styled.div`
   width: 100%;
   min-height: 90vh;
   height: 100%;
-  z-index: 2;
+  z-index: 5;
   padding: 1rem 0;
 
   .header {

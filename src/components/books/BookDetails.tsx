@@ -222,6 +222,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
         text-align: center;
         min-width: fit-content;
         font-weight: 500;
+        text-transform: capitalize;
       }
     }
   }
@@ -246,6 +247,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
           font-weight: 500;
           color: #1a1a1a;
           min-width: fit-content;
+          text-transform: capitalize;
         }
       }
     }

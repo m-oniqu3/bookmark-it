@@ -38,6 +38,7 @@ const StyledCreateShelf = styled.div`
         padding: 0.3rem 0.5rem;
         border: 1px solid gainsboro;
         border-radius: 5px;
+        font-size: 1rem;
 
         &:focus {
           outline: none;
@@ -54,6 +55,7 @@ const StyledCreateShelf = styled.div`
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: none;
+    background-color: var(--neutral-light);
 
     &:hover {
       background-color: var(--secondary);

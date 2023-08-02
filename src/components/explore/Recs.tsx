@@ -6,7 +6,7 @@ import { useGetSpecificCategoryQuery } from "../../store/features/api/apiSlice";
 import { StyledGrid } from "../../styles/StyledGrid";
 import Books from "../books/Books";
 import Empty from "../helpers/ui/Empty";
-import Loading from "../helpers/ui/Loading";
+import LoadingBooks from "../helpers/ui/LoadingBooks";
 import { selectSearchResults } from "../utils/selectors";
 
 const Recs = () => {
@@ -17,7 +17,7 @@ const Recs = () => {
   });
 
   const content = (() => {
-    if (isLoading || isFetching) return <Loading />;
+    if (isLoading || isFetching) return <LoadingBooks />;
 
     if (error)
       return (

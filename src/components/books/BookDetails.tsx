@@ -13,12 +13,12 @@ import { StyledTitle } from "../../styles/StyledTitle";
 import { devices } from "../../styles/breakpoints";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
-import Loading from "../helpers/ui/Loading";
 import { parseColor } from "../utils/parseColor";
 import Options from "./Options";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import LoadingDetails from "../helpers/ui/LoadingDetails";
 import { selectBookDetails } from "../utils/selectors";
 
 type StyledProps = {
@@ -350,7 +350,7 @@ const BookDetails = () => {
   const content = (() => {
     const icon = <ImBookmark size={28} color={colors[3]} />;
 
-    if (isLoading || isFetching) return <Loading />;
+    if (isLoading || isFetching) return <LoadingDetails />;
     if (error)
       return (
         <Empty

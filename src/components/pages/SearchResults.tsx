@@ -11,7 +11,7 @@ import web_search from "../../assets/web_search.svg";
 import Sidebar from "../books/Sidebar";
 import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
-import Loading from "../helpers/ui/Loading";
+import LoadingSearch from "../helpers/ui/LoadingSearch";
 import { selectSearchResults } from "../utils/selectors";
 
 const StyledSearchResults = styled.div`
@@ -38,9 +38,9 @@ const SearchResults = () => {
   );
 
   const content = (() => {
-    if (isLoading || isFetching) return <Loading />;
-
-    if (error)
+    if (isLoading || isFetching) {
+      return <LoadingSearch />;
+    } else if (error) {
       return (
         <Empty
           src={server_down}
@@ -50,19 +50,7 @@ const SearchResults = () => {
           route="/explore/picks/all"
         />
       );
-
-    if (!isSuccess || !books)
-      return (
-        <Empty
-          src={web_search}
-          heading="No results found"
-          message="Try searching for another book or visit the Explore page."
-          buttonName="Explore"
-          route="/explore/picks/all"
-        />
-      );
-
-    if (isSuccess && books) {
+    } else if (isSuccess && books) {
       if (books.length === 0) {
         return (
           <Empty

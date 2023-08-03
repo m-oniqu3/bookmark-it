@@ -90,12 +90,12 @@ const SkeletonContainer = styled(Container)`
 
     .title {
       width: 100%;
-      height: 1.2rem;
+      height: 1.5rem;
     }
 
     .subtitle,
     .rating {
-      width: 50%;
+      width: 20%;
       height: 1rem;
       margin: 0 auto;
     }
@@ -123,6 +123,110 @@ const SkeletonContainer = styled(Container)`
       }
     }
   }
+
+  .details {
+    .synopsis {
+      background-color: var(--neutral-light);
+      border-radius: 5px;
+      width: 120px;
+      height: 1rem;
+      margin-top: 1.2rem;
+
+      @media (${devices.medium}) {
+        margin: 1.8rem 0 0.8rem;
+      }
+    }
+
+    .description {
+      padding-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      p {
+        background-color: var(--neutral-light);
+        width: 100%;
+        height: 0.8rem;
+      }
+    }
+
+    .categories {
+      padding-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      overflow-x: scroll;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (${devices.medium}) {
+        overflow-x: hidden;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      @media (${devices.semiLarge}) {
+        justify-content: flex-start;
+      }
+
+      @media (${devices.xlarge}) {
+        display: none;
+      }
+
+      p {
+        background-color: var(--neutral-light);
+        border-radius: 5px;
+        height: 1.8rem;
+        min-width: 100px;
+      }
+    }
+  }
+
+  aside {
+    display: none;
+
+    @media (${devices.xlarge}) {
+      display: block;
+
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        width: 100%;
+
+        p {
+          background-color: var(--neutral-light);
+          border-radius: 5px;
+          height: 1.8rem;
+          min-width: 100px;
+
+          &:nth-child(2n) {
+            min-width: 80px;
+          }
+
+          &:nth-child(3n) {
+            min-width: 130px;
+          }
+        }
+      }
+    }
+
+    .heading {
+      display: none;
+
+      @media (${devices.xlarge}) {
+        display: block;
+        margin-bottom: 1rem;
+        background-color: var(--neutral-light);
+        border-radius: 5px;
+        height: 0.7rem;
+        width: 100px;
+      }
+    }
+  }
 `;
 
 const LoadingDetails = () => {
@@ -135,7 +239,6 @@ const LoadingDetails = () => {
         </div>
       </section>
 
-      {/* Placeholder content */}
       <section className="overview">
         <div className="intro">
           <p className="title" />
@@ -144,26 +247,36 @@ const LoadingDetails = () => {
           <p className="rating" />
         </div>
 
-        <div className="details">
-          <p className="heading" />
-          <p className="description" />
-        </div>
+        <article className="details">
+          <div className="categories">
+            {Array(8)
+              .fill(0)
+              .map((_, i) => (
+                <p key={i} />
+              ))}
+          </div>
+
+          <div>
+            <p className="synopsis" />
+            <div className="description">
+              {Array(15)
+                .fill(0)
+                .map((_, i) => (
+                  <p key={i} />
+                ))}
+            </div>
+          </div>
+        </article>
       </section>
 
-      {/* Placeholder description */}
-      <article className="details">
-        <div className="synopsis" />
-        <div className="description" />
-      </article>
-
       <aside>
-        <div className="heading" />
+        <p className="heading" />
         <div className="content">
-          <p className="genre"></p>
-          <p className="genre"></p>
-          <p className="genre"></p>
-          <p className="genre"></p>
-          <p className="genre"></p>
+          {Array(8)
+            .fill(0)
+            .map((_, i) => (
+              <p key={i} />
+            ))}
         </div>
       </aside>
     </SkeletonContainer>

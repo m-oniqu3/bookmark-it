@@ -1,6 +1,13 @@
+import { signInWithPopup } from "firebase/auth";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { styled } from "styled-components";
 import BookSitting from "../../assets/book_sitting.png";
+import { auth, provider } from "../../firebase/firebase";
+import { setUser } from "../../store/features/auth/authSlice";
+import { useAppDispatch } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
@@ -54,7 +61,36 @@ const StyledLogin = styled(Container)`
   }
 `;
 
-const Login = () => {
+type Props = {
+  closeModal: () => void;
+};
+
+const Login = (props: Props) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const { closeModal } = props;
+
+  const path = window.location.pathname;
+
+  const handleLogin = function () {
+    setLoading(true);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const data = { user: result.user.uid, isSignedIn: true };
+        console.log(data);
+        dispatch(setUser(data));
+        localStorage.setItem("user", JSON.stringify(data));
+        navigate(`${path}`, { replace: true });
+        closeModal();
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+    setLoading(false);
+  };
+
   return (
     <StyledLogin>
       <h1>Start Organizing</h1>
@@ -67,7 +103,7 @@ const Login = () => {
         <img src={BookSitting} alt="Illustration of a girl sitting on a book" />
       </figure>
 
-      <Button buttonType="action" onClick={() => console.log("click")}>
+      <Button buttonType="action" disabled={loading} onClick={handleLogin}>
         <span>
           <FcGoogle size={25} />
         </span>

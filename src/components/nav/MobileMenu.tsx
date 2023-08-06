@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ReactDOM from "react-dom";
 import { VscClose } from "react-icons/vsc";
 import { NavLink } from "react-router-dom";
@@ -5,6 +6,8 @@ import { styled } from "styled-components";
 import logo from "../../assets/bookmark.png";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import Container from "../helpers/ui/Container";
+import Modal from "../helpers/ui/Modal";
+import Login from "../user/Login";
 
 const StyledMenu = styled.div`
   position: fixed;
@@ -23,7 +26,6 @@ const StyledMenu = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    /* height: 2rem; */
   }
 
   ul {
@@ -59,41 +61,52 @@ type Props = {
 
 const MobileMenu = (props: Props) => {
   const { closeMenu } = props;
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleModal = () => setOpenModal((state) => !state);
 
   return ReactDOM.createPortal(
-    <StyledMenu>
-      <Container>
-        <div className="header">
-          <StyledLogo>
-            <img src={logo} alt="Bookmark Logo" />
-          </StyledLogo>
+    <>
+      <StyledMenu>
+        <Container>
+          <div className="header">
+            <StyledLogo>
+              <img src={logo} alt="Bookmark Logo" />
+            </StyledLogo>
 
-          <VscClose size={35} color="var(--primary)" onClick={closeMenu} />
-        </div>
+            <VscClose size={35} color="var(--primary)" onClick={closeMenu} />
+          </div>
 
-        <ul>
-          <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
+          <ul>
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
 
-          <li>
-            <NavLink to="/explore/picks/all">Explore</NavLink>
-          </li>
+            <li>
+              <NavLink to="/explore/picks/all">Explore</NavLink>
+            </li>
 
-          <li>
-            <NavLink to="/library">Library</NavLink>
-          </li>
+            <li>
+              <NavLink to="/library">Library</NavLink>
+            </li>
 
-          <li>
-            <NavLink to="/shelves">Shelves</NavLink>
-          </li>
+            <li>
+              <NavLink to="/shelves">Shelves</NavLink>
+            </li>
 
-          <li>
-            <NavLink to="">Login</NavLink>
-          </li>
-        </ul>
-      </Container>
-    </StyledMenu>,
+            <li onClick={handleModal}>
+              <p>Login</p>
+            </li>
+          </ul>
+        </Container>
+      </StyledMenu>
+
+      {openModal && (
+        <Modal closeModal={() => setOpenModal(false)}>
+          <Login closeModal={() => setOpenModal(false)} />
+        </Modal>
+      )}
+    </>,
     document.querySelector("#menu") as HTMLDivElement
   );
 };

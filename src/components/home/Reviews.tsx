@@ -86,14 +86,9 @@ const Reviews = () => {
       <StyledReviews>
         <Container>
           <article className="intro">
-            <Heading
-              variant="medium"
-              text=" See what <span> others </span>are saying about BookMark."
-            />
+            <Heading variant="medium" text=" See what <span> others </span>are saying about BookMark." />
 
-            <StyledText>
-              Here are some reviews from users who have used BookMark.
-            </StyledText>
+            <StyledText>Here are some reviews from users who have used BookMark.</StyledText>
 
             <Button onClick={handleClick}>Start Organizing</Button>
           </article>
@@ -103,7 +98,7 @@ const Reviews = () => {
 
       {activeModal && (
         <Modal closeModal={() => setActiveModal(null)} variant>
-          <Login />
+          <Login closeModal={() => setActiveModal(null)} />
         </Modal>
       )}
     </Fragment>

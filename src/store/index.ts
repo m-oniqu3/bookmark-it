@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./features/api/apiSlice";
+import authReducer from "./features/auth/authSlice";
 import coloursReducer from "./features/colours/coloursSlice";
 import libraryReducer from "./features/library/librarySlice";
 import searchReducer from "./features/search/searchSlice";
@@ -12,6 +13,7 @@ export const store = configureStore({
     searches: searchReducer,
     bookStore: libraryReducer,
     bookShelf: shelfReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware);

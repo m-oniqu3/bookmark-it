@@ -1,13 +1,6 @@
 import { MouseEvent } from "react";
 import styled from "styled-components";
 
-type Props = {
-  onClick: ((e: MouseEvent<HTMLButtonElement>) => void) | (() => void);
-  type?: "button" | "submit" | "reset" | undefined;
-  children: React.ReactNode;
-  buttonType?: "action";
-};
-
 const ButtonBase = styled.button`
   font-size: 0.9rem;
   padding: 7px 20px;
@@ -43,13 +36,25 @@ const StyledActionButton = styled(ButtonBase)`
   }
 `;
 
+type Props = {
+  onClick: ((e: MouseEvent<HTMLButtonElement>) => void) | (() => void);
+  type?: "button" | "submit" | "reset" | undefined;
+  children: React.ReactNode;
+  buttonType?: "action";
+  disabled?: boolean;
+};
+
 const Button = (props: Props) => {
-  const { onClick, type, children, buttonType } = props;
+  const { onClick, type, children, buttonType, disabled } = props;
 
   const handleButtonClick = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => onClick(e);
 
   if (buttonType === "action") {
-    return <StyledActionButton onClick={handleButtonClick}>{children}</StyledActionButton>;
+    return (
+      <StyledActionButton disabled={disabled} onClick={handleButtonClick}>
+        {children}
+      </StyledActionButton>
+    );
   }
 
   return (

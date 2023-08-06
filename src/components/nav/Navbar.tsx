@@ -173,7 +173,7 @@ const Navbar = () => {
       {isMenuOpen && <MobileMenu closeMenu={() => setIsMenuOpen(false)} />}
       {activeModal && (
         <Modal closeModal={() => setActiveModal(null)} variant>
-          <Login />
+          <Login closeModal={() => setActiveModal(null)} />
         </Modal>
       )}
     </Fragment>

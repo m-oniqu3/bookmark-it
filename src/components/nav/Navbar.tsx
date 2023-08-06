@@ -1,9 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { VscChromeClose } from "react-icons/vsc";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import Logo from "../../assets/bookmark.png";
+import { signUserOut } from "../../firebase/firebase";
+import { setUser } from "../../store/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import { devices } from "../../styles/breakpoints";
 import { ModalEnum, ModalType } from "../../types/ModalType";
@@ -14,7 +17,7 @@ import SearchBar from "../search/SearchBar";
 import Login from "../user/Login";
 import MobileMenu from "./MobileMenu";
 
-const StyledNavContainer = styled.div`
+const StyledNavContainer = styled.div<{ $isSignedIn: boolean }>`
   background: var(--neutral-primary);
   border-bottom: 1px solid rgba(230, 230, 230, 0.688);
   position: fixed;
@@ -31,6 +34,7 @@ const StyledNavContainer = styled.div`
       display: flex;
       align-items: center;
       gap: 1rem;
+      cursor: pointer;
 
       h3 {
         display: none;
@@ -50,11 +54,11 @@ const StyledNavContainer = styled.div`
 
       @media (${devices.large}) {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: ${({ $isSignedIn }) => ($isSignedIn ? "repeat(4, 1fr)" : "repeat(2, 1fr)")};
         place-items: center;
         gap: 1rem;
         list-style: none;
-        width: 300px;
+        width: ${({ $isSignedIn }) => ($isSignedIn ? "300px" : "150px")};
       }
 
       a {
@@ -118,11 +122,26 @@ const StyledNavContainer = styled.div`
 `;
 
 const Navbar = () => {
+  const { isSignedIn } = useAppSelector((state) => state.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const authText = isSignedIn ? "Logout" : "Login";
 
   const handleMobileMenu = () => setIsMenuOpen((state) => !state);
+  const handleClick = () => navigate("/");
+
+  const handleAuth = () => {
+    if (!isSignedIn) {
+      return setActiveModal({ type: ModalEnum.LOGIN_MODAL });
+    }
+
+    signUserOut();
+    dispatch(setUser({ user: null, isSignedIn: false }));
+    navigate("/", { replace: true });
+  };
 
   //close menu when route changes
   useEffect(() => {
@@ -131,10 +150,10 @@ const Navbar = () => {
 
   return (
     <Fragment>
-      <StyledNavContainer>
+      <StyledNavContainer $isSignedIn={isSignedIn}>
         <Container>
           <nav className="nav">
-            <div className="logo">
+            <div className="logo" onClick={handleClick}>
               <StyledLogo>
                 <img src={Logo} alt="logo" />
               </StyledLogo>
@@ -149,18 +168,22 @@ const Navbar = () => {
                 <NavLink to="/explore/picks/all">Explore</NavLink>
               </li>
 
-              <li>
-                <NavLink to="/library">Library</NavLink>
-              </li>
+              {isSignedIn && (
+                <li>
+                  <NavLink to="/library">Library</NavLink>
+                </li>
+              )}
 
-              <li>
-                <NavLink to="/shelves">Shelves</NavLink>
-              </li>
+              {isSignedIn && (
+                <li>
+                  <NavLink to="/shelves">Shelves</NavLink>
+                </li>
+              )}
             </ul>
 
             <div className="nav__group">
               <SearchBar />
-              <Button onClick={() => setActiveModal({ type: ModalEnum.LOGIN_MODAL })}>Login</Button>
+              <Button onClick={handleAuth}>{authText}</Button>
             </div>
 
             <div className="nav__icon" onClick={handleMobileMenu}>

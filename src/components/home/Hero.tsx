@@ -10,11 +10,11 @@ import Modal from "../helpers/ui/Modal";
 import Login from "../user/Login";
 
 type StyledProps = {
-  url: string;
+  $url: string;
 };
 
 const StyledHero = styled.div<StyledProps>`
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$url});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -64,7 +64,7 @@ const Hero = (props: Props) => {
 
   return (
     <>
-      <StyledHero url={background}>
+      <StyledHero $url={background}>
         <Container>
           <article>
             <Heading variant="large" text={heading} />

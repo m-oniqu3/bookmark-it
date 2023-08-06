@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import bookgrid from "../../assets/book-grid.png";
 import background from "../../assets/private_background.png";
@@ -96,11 +97,10 @@ const StyledHero = styled.div<{ url: string }>`
 `;
 
 const AuthHero = () => {
+  const navigate = useNavigate();
   const heading = "Start <span>organizing</span> ";
 
-  const handleClick = () => {
-    console.log("Button clicked");
-  };
+  const handleClick = () => navigate("/explore");
 
   return (
     <StyledHero url={background}>

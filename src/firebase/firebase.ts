@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signOut } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -17,3 +18,10 @@ export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider().setCustomParameters({
   prompt: "select_account",
 });
+
+// sign user out and remove data from local storage
+export const signUserOut = async () => {
+  await signOut(auth)
+    .then(() => localStorage.removeItem("user"))
+    .catch(() => toast.error("Error signing out. Please try again.", { autoClose: 5000 }));
+};

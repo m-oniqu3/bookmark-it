@@ -1,9 +1,12 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import { VscClose } from "react-icons/vsc";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import logo from "../../assets/bookmark.png";
+import { signUserOut } from "../../firebase/firebase";
+import { setUser } from "../../store/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import Container from "../helpers/ui/Container";
 import Modal from "../helpers/ui/Modal";
@@ -60,10 +63,22 @@ type Props = {
 };
 
 const MobileMenu = (props: Props) => {
+  const { isSignedIn } = useAppSelector((state) => state.auth);
   const { closeMenu } = props;
   const [openModal, setOpenModal] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleModal = () => setOpenModal((state) => !state);
+  const handleAuth = () => {
+    if (!isSignedIn) {
+      return setOpenModal((state) => !state);
+    }
+    signUserOut();
+    dispatch(setUser({ user: null, isSignedIn: false }));
+    navigate("/", { replace: true });
+  };
+
+  const authText = isSignedIn ? "Logout" : "Login";
 
   return ReactDOM.createPortal(
     <>
@@ -86,16 +101,19 @@ const MobileMenu = (props: Props) => {
               <NavLink to="/explore/picks/all">Explore</NavLink>
             </li>
 
-            <li>
-              <NavLink to="/library">Library</NavLink>
-            </li>
+            {isSignedIn && (
+              <li>
+                <NavLink to="/library">Library</NavLink>
+              </li>
+            )}
 
-            <li>
-              <NavLink to="/shelves">Shelves</NavLink>
-            </li>
-
-            <li onClick={handleModal}>
-              <p>Login</p>
+            {isSignedIn && (
+              <li>
+                <NavLink to="/shelves">Shelves</NavLink>
+              </li>
+            )}
+            <li onClick={handleAuth}>
+              <p>{authText}</p>
             </li>
           </ul>
         </Container>

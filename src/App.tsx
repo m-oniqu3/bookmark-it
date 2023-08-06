@@ -5,6 +5,7 @@ import BookDetails from "./components/books/BookDetails";
 import Picks from "./components/explore/Picks";
 import Recs from "./components/explore/Recs";
 import NoMatch from "./components/helpers/routes/NoMatch";
+import ProtectedRoute from "./components/helpers/routes/ProtectedRoute";
 import HomePage from "./components/pages/HomePage";
 import Library from "./components/pages/Library";
 import SearchResults from "./components/pages/SearchResults";
@@ -29,8 +30,22 @@ const App = () => {
             { path: "recs/:category", element: <Recs /> },
           ],
         },
-        { path: "/library", element: <Library /> },
-        { path: "/shelves", element: <Shelf /> },
+        {
+          path: "/library",
+          element: (
+            <ProtectedRoute>
+              <Library />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/shelves",
+          element: (
+            <ProtectedRoute>
+              <Shelf />
+            </ProtectedRoute>
+          ),
+        },
         { path: "/search/:query", element: <SearchResults /> },
         { path: "/details/:id", element: <BookDetails /> },
         { path: "*", element: <NoMatch /> },

@@ -14,6 +14,7 @@ import Information from "./Information";
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
 import NewShelf from "../shelves/NewShelf";
+import Login from "../user/Login";
 import AddToShelf from "./AddToShelf";
 
 type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean };
@@ -118,6 +119,9 @@ const Books = (props: Props) => {
       case ModalEnum.NEW_SHELF_MODAL:
         return <NewShelf book={book} setActiveModal={setActiveModal} />;
 
+      case ModalEnum.LOGIN_MODAL:
+        return <Login closeModal={() => setActiveModal(null)} />;
+
       default:
         return null;
     }
@@ -150,7 +154,7 @@ const Books = (props: Props) => {
       </StyledBook>
 
       {activeModal && (
-        <Modal closeModal={() => setActiveModal(null)}>
+        <Modal closeModal={() => setActiveModal(null)} variant={activeModal.type === ModalEnum.LOGIN_MODAL}>
           <Fragment>{modalContent}</Fragment>
         </Modal>
       )}

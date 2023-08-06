@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { styled } from "styled-components";
 import { StyledText } from "../../styles/StyledText";
 import { devices } from "../../styles/breakpoints";
+import { ModalEnum, ModalType } from "../../types/ModalType";
 import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Heading from "../helpers/ui/Heading";
+import Modal from "../helpers/ui/Modal";
+import Login from "../user/Login";
 
 type StyledProps = {
   url: string;
@@ -53,22 +57,29 @@ type Props = {
 };
 
 const Hero = (props: Props) => {
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { heading, text, button, background } = props;
 
-  const handleClick = () => {
-    console.log("Button clicked");
-  };
+  const handleClick = () => setActiveModal({ type: ModalEnum.LOGIN_MODAL });
 
   return (
-    <StyledHero url={background}>
-      <Container>
-        <article>
-          <Heading variant="large" text={heading} />
-          <StyledText>{text}</StyledText>
-          <Button onClick={handleClick}>{button}</Button>
-        </article>
-      </Container>
-    </StyledHero>
+    <>
+      <StyledHero url={background}>
+        <Container>
+          <article>
+            <Heading variant="large" text={heading} />
+            <StyledText>{text}</StyledText>
+            <Button onClick={handleClick}>{button}</Button>
+          </article>
+        </Container>
+      </StyledHero>
+
+      {activeModal && (
+        <Modal closeModal={() => setActiveModal(null)} variant>
+          <Login closeModal={() => setActiveModal(null)} />
+        </Modal>
+      )}
+    </>
   );
 };
 

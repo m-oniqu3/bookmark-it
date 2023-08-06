@@ -47,7 +47,7 @@ const StyledLogin = styled(Container)`
     padding: 7px 20px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #f1f1f1;
     background-color: var(--neutral-light);
 
     span {

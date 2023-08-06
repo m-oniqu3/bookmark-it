@@ -38,6 +38,7 @@ type Props = {
 };
 
 const Information = (props: Props) => {
+  const { isSignedIn } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const { book, modalType, setActiveModal, showBookmarkIcon } = props;
   const { shelves } = useAppSelector((state) => state.bookShelf);
@@ -49,7 +50,11 @@ const Information = (props: Props) => {
   const handleAdd = () => {
     switch (modalType) {
       case "library":
-        setActiveModal({ type: ModalEnum.ADD_TO_LIBRARY_MODAL, book });
+        if (isSignedIn) {
+          setActiveModal({ type: ModalEnum.ADD_TO_LIBRARY_MODAL, book });
+        } else {
+          setActiveModal({ type: ModalEnum.LOGIN_MODAL });
+        }
         break;
 
       case "shelf":

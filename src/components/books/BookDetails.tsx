@@ -18,7 +18,10 @@ import Options from "./Options";
 
 // @ts-expect-error - no types available
 import { ColorExtractor } from "react-color-extractor";
+import { ModalEnum, ModalType } from "../../types/ModalType";
 import LoadingDetails from "../helpers/ui/LoadingDetails";
+import Modal from "../helpers/ui/Modal";
+import Login from "../user/Login";
 import { selectBookDetails } from "../utils/selectors";
 
 type StyledProps = {
@@ -297,6 +300,8 @@ const BookDetails = () => {
   const { library } = useAppSelector((state) => state.bookStore);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
   const [options, setOptions] = useState(false);
+  const { isSignedIn } = useAppSelector((state) => state.auth);
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -321,7 +326,15 @@ const BookDetails = () => {
     }
   };
 
-  const handleOptions = () => setOptions((state) => !state);
+  const handleOptions = () => {
+    if (!isSignedIn) {
+      return setActiveModal({ type: ModalEnum.LOGIN_MODAL });
+    }
+
+    setOptions((state) => !state);
+  };
+
+  const closeModal = () => setActiveModal(null);
 
   useEffect(() => {
     if (bookDetails.description && descriptionRef.current) {
@@ -440,7 +453,16 @@ const BookDetails = () => {
     }
   })();
 
-  return <Fragment>{content}</Fragment>;
+  return (
+    <>
+      <Fragment>{content}</Fragment>
+      {activeModal && (
+        <Modal closeModal={closeModal} variant>
+          <Login closeModal={closeModal} />
+        </Modal>
+      )}
+    </>
+  );
 };
 
 export default BookDetails;

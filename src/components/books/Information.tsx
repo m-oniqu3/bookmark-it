@@ -58,7 +58,7 @@ const Information = (props: Props) => {
         break;
 
       case "shelf":
-        if (isShelvesEmpty) {
+        if (isShelvesEmpty && isSignedIn) {
           setActiveModal({ type: ModalEnum.NEW_SHELF_MODAL, book });
         } else {
           setActiveModal({ type: ModalEnum.ADD_TO_SHELF_MODAL, book });

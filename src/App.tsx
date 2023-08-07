@@ -17,6 +17,7 @@ import { database } from "./firebase/firebase";
 import ExploreLayout from "./layout/ExploreLayout";
 import RootLayout from "./layout/RootLayout";
 import { populateLibrary } from "./store/features/library/librarySlice";
+import { populateShelf } from "./store/features/shelf/shelfSlice";
 import { useAppDispatch, useAppSelector } from "./store/hooks/hooks";
 import { GlobalStyles } from "./styles/Global.styled";
 
@@ -28,12 +29,21 @@ const App = () => {
   useEffect(() => {
     async function getData(user: string) {
       setLoading(true);
-      const ref = doc(database, "library", user);
-      const docSnap = await getDoc(ref);
+      const libraryRef = doc(database, "library", user);
+      const shelfRef = doc(database, "shelves", user);
 
-      if (docSnap.exists() && docSnap.data().library) {
-        dispatch(populateLibrary(docSnap.data().library));
-        console.log("Document data:", docSnap.data());
+      const librarySnap = await getDoc(libraryRef);
+      const shelfSnap = await getDoc(shelfRef);
+
+      if (librarySnap.exists() && librarySnap.data().library) {
+        dispatch(populateLibrary(librarySnap.data().library));
+        console.log("Document data:", librarySnap.data());
+      }
+
+      if (shelfSnap.exists() && shelfSnap.data()) {
+        console.log("Document data:", shelfSnap.data());
+
+        dispatch(populateShelf({ books: shelfSnap.data().books, shelves: shelfSnap.data().shelves }));
       }
 
       setLoading(false);
@@ -84,10 +94,10 @@ const App = () => {
 
   return (
     <>
+      {loading && <Loading />}
       <RouterProvider router={router} />
       <GlobalStyles />
       <ToastContainer position="top-left" autoClose={2000} limit={4} />
-      {loading && <Loading />}
     </>
   );
 };

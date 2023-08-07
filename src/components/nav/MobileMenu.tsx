@@ -43,7 +43,8 @@ const StyledMenu = styled.div`
       margin: 1rem 0;
       cursor: pointer;
 
-      a {
+      a,
+      p {
         text-decoration: none;
         color: inherit;
         font-size: clamp(1rem, 2vw, 1.1rem);

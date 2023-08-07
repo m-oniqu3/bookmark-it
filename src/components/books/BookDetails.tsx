@@ -180,6 +180,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
 
     .description {
       padding-top: 0.5rem;
+      word-break: break-word;
     }
 
     .description,
@@ -187,6 +188,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
       font-style: normal !important;
       font-weight: 300;
       line-height: 150%;
+      word-break: break-word;
     }
 
     .categories {
@@ -339,7 +341,9 @@ const BookDetails = () => {
   useEffect(() => {
     if (bookDetails.description && descriptionRef.current) {
       descriptionRef.current.innerHTML = bookDetails.description.trim();
-    } else if (!bookDetails.description && descriptionRef.current) {
+    } else if (bookDetails.description === "" && descriptionRef.current) {
+      descriptionRef.current.innerHTML = "No description available";
+    } else if (descriptionRef.current) {
       descriptionRef.current.innerHTML = "No description available";
     }
   }, [bookDetails.description]);

@@ -42,6 +42,6 @@ export const addShelvesToFirebase = async (user: string, books: BooksOnShelf, sh
 // sign user out and remove data from local storage
 export const signUserOut = async () => {
   await signOut(auth)
-    .then(() => localStorage.removeItem("user"))
+    .then(() => localStorage.removeItem("bkmk_user"))
     .catch(() => toast.error("Error signing out. Please try again.", { autoClose: 5000 }));
 };

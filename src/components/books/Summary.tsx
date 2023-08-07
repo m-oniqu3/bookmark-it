@@ -15,6 +15,7 @@ const StyledSummary = styled.section<StyledProps>`
   .summary {
     display: grid;
     grid-template-columns: 100px auto;
+
     gap: 1rem;
 
     .background {
@@ -50,6 +51,7 @@ const StyledSummary = styled.section<StyledProps>`
 
     article {
       position: relative;
+      overflow: hidden;
 
       .title {
         font-size: 1.2rem;
@@ -108,18 +110,26 @@ const StyledSummary = styled.section<StyledProps>`
 
       .snippet {
         font-size: 0.92rem;
-        font-weight: 400;
+        font-weight: 400 !important;
         line-height: 125%;
         padding-top: 0.5rem;
-        width: calc(100% - 1rem);
+        width: 100%;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         color: var(--secondary);
-        font-style: normal;
+        font-style: normal !important;
         position: relative;
         bottom: 0px;
+        word-break: break-word;
+
+        & > p > * {
+          font-size: 0.92rem;
+          font-weight: 400 !important;
+          font-style: normal !important;
+          word-break: break-word;
+        }
       }
     }
   }

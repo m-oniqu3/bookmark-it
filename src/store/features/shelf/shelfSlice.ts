@@ -127,7 +127,6 @@ const shelfSlice = createSlice({
       }
 
       shelves[newShelf] = Object.assign({}, shelves[currentShelf]);
-      console.log(shelves[newShelf]);
       delete shelves[currentShelf];
 
       // update books
@@ -146,8 +145,14 @@ const shelfSlice = createSlice({
       state.toast = { message: "Shelf Renamed", type: "success" };
       addShelvesToFirebase(user, books, shelves);
     },
+    populateShelf: (state, { payload }: PayloadAction<{ books: BooksOnShelf; shelves: Shelf }>) => {
+      const { books, shelves } = payload;
+      state.books = books;
+      state.shelves = shelves;
+    },
   },
 });
 
-export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf, renameShelf } = shelfSlice.actions;
+export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf, renameShelf, populateShelf } =
+  shelfSlice.actions;
 export default shelfSlice.reducer;

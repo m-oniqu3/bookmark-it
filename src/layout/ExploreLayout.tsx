@@ -44,7 +44,7 @@ const StyledExplore = styled(Container)`
       a {
         display: flex;
         justify-content: center;
-        padding: 7px 12px;
+        padding: 7px 8px;
         border-radius: 5px;
         text-transform: capitalize;
         font-size: 0.9rem;

@@ -6,8 +6,8 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem("user") as string)?.user || null,
-  isSignedIn: JSON.parse(localStorage.getItem("user") as string)?.isSignedIn || false,
+  user: JSON.parse(localStorage.getItem("bkmk_user") as string)?.user || null,
+  isSignedIn: JSON.parse(localStorage.getItem("bkmk_user") as string)?.isSignedIn || false,
 };
 
 const authSlice = createSlice({

@@ -16,10 +16,11 @@ const StyledLayout = styled.div`
 const RootLayout = () => {
   const feedback = useAppSelector((state) => state.bookStore.toast);
   const shelfFeedback = useAppSelector((state) => state.bookShelf.toast);
+  const { isSignedIn } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (feedback.message) {
+    if (feedback.message && isSignedIn) {
       const { message, type } = feedback;
       const goToLibrary = () => navigate("/library");
       if (type === "success") {
@@ -27,10 +28,10 @@ const RootLayout = () => {
       } else if (type === "info") toast.info(message, { onClick: goToLibrary });
       else if (type === "warning") toast.warning(message, { onClick: goToLibrary });
     }
-  }, [feedback, navigate]);
+  }, [feedback, navigate, isSignedIn]);
 
   useEffect(() => {
-    if (shelfFeedback.message) {
+    if (shelfFeedback.message && isSignedIn) {
       const { message, type } = shelfFeedback;
       const goToShelf = () => navigate("/shelves");
       if (type === "success") {
@@ -39,7 +40,7 @@ const RootLayout = () => {
       else if (type === "warning") toast.warning(message, { onClick: goToShelf });
       else if (type === "error") toast.error(message, { onClick: goToShelf });
     }
-  }, [shelfFeedback, navigate]);
+  }, [shelfFeedback, navigate, isSignedIn]);
 
   return (
     <ScrollToTop>

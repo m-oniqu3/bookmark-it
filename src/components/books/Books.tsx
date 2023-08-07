@@ -84,6 +84,7 @@ const Books = (props: Props) => {
   const { book, modalType, showBookmarkIcon, showShelfIcon } = props;
   const dispatch = useAppDispatch();
   const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
+  const { isSignedIn } = useAppSelector((state) => state.auth);
   const { library } = useAppSelector((state) => state.bookStore);
   const { books } = useAppSelector((state) => state.bookShelf);
 
@@ -136,8 +137,8 @@ const Books = (props: Props) => {
   const icon = <ImBookmark size={25} color={color} />;
   const shelfIcon = <ImBookmark size={25} color={color} />;
 
-  const isBookInLibrary = !!library[book.id] && showBookmarkIcon;
-  const isBookInShelf = !!books[book.id] && showShelfIcon;
+  const isBookInLibrary = !!library[book.id] && showBookmarkIcon && isSignedIn;
+  const isBookInShelf = !!books[book.id] && showShelfIcon && isSignedIn;
 
   return (
     <Fragment>

@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from "react";
 import { styled } from "styled-components";
 import { removeShelf } from "../../store/features/shelf/shelfSlice";
-import { useAppDispatch } from "../../store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { SmallModalEnum, SmallModalTypes } from "../../types/SmallModalTypes";
 import { SmallModal } from "../helpers/ui/SmallModal";
 import RenameShelf from "./RenameShelf";
@@ -36,13 +36,16 @@ type Props = {
 };
 
 const ShelfOptions = (props: Props) => {
+  const { user } = useAppSelector((state) => state.auth);
   const { shelf, activeFilter, setActiveFilter, closePopover } = props;
   const dispatch = useAppDispatch();
   const [activeShelfModal, setActiveShelfModal] = useState<SmallModalTypes | null>(null);
 
   const handleDelete = () => {
     if (activeFilter === shelf) setActiveFilter("All");
-    dispatch(removeShelf(shelf));
+    if (user) {
+      dispatch(removeShelf({ selectedShelf: shelf, user }));
+    }
 
     closePopover();
   };

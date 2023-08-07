@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { addShelvesToFirebase } from "../../../firebase/firebase";
 
 type Books = { [key: string]: { bookId: string; timeAdded: number } };
 
-type Shelf = {
+export type Shelf = {
   [key: string]: { createdAt: number; books: Books };
 };
 
-type BooksOnShelf = {
+export type BooksOnShelf = {
   [key: string]: string[];
 };
 
@@ -28,8 +29,9 @@ const shelfSlice = createSlice({
   name: "shelf",
   initialState,
   reducers: {
-    createShelf: (state, { payload }: PayloadAction<string>) => {
-      if (payload.toLowerCase() === "all") {
+    createShelf: (state, { payload }: PayloadAction<{ shelfName: string; user: string }>) => {
+      const { shelfName, user } = payload;
+      if (shelfName.toLowerCase() === "all") {
         state.toast = {
           message: "This shelf name is reserved",
           type: "error",
@@ -37,7 +39,7 @@ const shelfSlice = createSlice({
         return;
       }
 
-      const isDuplicateShelf = !!Object.getOwnPropertyDescriptor(state.shelves, payload);
+      const isDuplicateShelf = !!Object.getOwnPropertyDescriptor(state.shelves, shelfName);
 
       //check if shelf exist
       if (isDuplicateShelf) {
@@ -46,13 +48,15 @@ const shelfSlice = createSlice({
           type: "error",
         };
       } else {
-        state.shelves[payload] = { createdAt: Date.now(), books: {} };
+        state.shelves[shelfName] = { createdAt: Date.now(), books: {} };
         state.toast = { message: "Shelf created", type: "success" };
       }
+
+      addShelvesToFirebase(user, state.books, state.shelves);
     },
 
-    addShelfToBook: (state, { payload }: PayloadAction<{ bookId: string; selectedShelf: string }>) => {
-      const { bookId, selectedShelf } = payload;
+    addShelfToBook: (state, { payload }: PayloadAction<{ bookId: string; selectedShelf: string; user: string }>) => {
+      const { bookId, selectedShelf, user } = payload;
 
       //check if book is already exist
       const isBookExist = !!Object.getOwnPropertyDescriptor(state.books, bookId);
@@ -73,10 +77,11 @@ const shelfSlice = createSlice({
       }
 
       state.toast = { message: "Shelf Updated", type: "success" };
+      addShelvesToFirebase(user, state.books, state.shelves);
     },
 
-    addBooksToShelf: (state, { payload }: PayloadAction<{ bookId: string; shelfName: string }>) => {
-      const { bookId, shelfName } = payload;
+    addBooksToShelf: (state, { payload }: PayloadAction<{ bookId: string; shelfName: string; user: string }>) => {
+      const { bookId, shelfName, user } = payload;
 
       const currentShelf = state.shelves[shelfName].books;
 
@@ -90,9 +95,11 @@ const shelfSlice = createSlice({
         //add book to shelf
         currentShelf[bookId] = { bookId, timeAdded: Date.now() };
       }
+
+      addShelvesToFirebase(user, state.books, state.shelves);
     },
-    removeShelf: (state, { payload }: PayloadAction<string>) => {
-      const selectedShelf = payload;
+    removeShelf: (state, { payload }: PayloadAction<{ selectedShelf: string; user: string }>) => {
+      const { selectedShelf, user } = payload;
 
       // delete it from shelves
       delete state.shelves[selectedShelf];
@@ -105,10 +112,11 @@ const shelfSlice = createSlice({
       });
 
       state.toast = { message: "Shelf Removed", type: "success" };
+      addShelvesToFirebase(user, state.books, state.shelves);
     },
 
-    renameShelf: (state, { payload }: PayloadAction<{ currentShelf: string; newShelf: string }>) => {
-      const { currentShelf, newShelf } = payload;
+    renameShelf: (state, { payload }: PayloadAction<{ currentShelf: string; newShelf: string; user: string }>) => {
+      const { currentShelf, newShelf, user } = payload;
       const { shelves, books } = state;
 
       // check if shelf exist
@@ -136,6 +144,7 @@ const shelfSlice = createSlice({
       });
 
       state.toast = { message: "Shelf Renamed", type: "success" };
+      addShelvesToFirebase(user, state.books, state.shelves);
     },
   },
 });

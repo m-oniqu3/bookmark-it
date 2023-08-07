@@ -99,6 +99,7 @@ const AddToShelf = (props: Props) => {
   const { book, setActiveModal, modalType } = props;
   const navigate = useNavigate();
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
+  const { user } = useAppSelector((state) => state.auth);
   const { shelves, books } = useAppSelector((state) => state.bookShelf);
   const [currentBookShelves, setCurrentBookShelves] = useState<string[]>([]);
   const dispatch = useAppDispatch();
@@ -123,8 +124,10 @@ const AddToShelf = (props: Props) => {
 
   const handleUpdates = (e: React.ChangeEvent<HTMLInputElement>) => {
     const shelf = e.target.value;
-    dispatch(addBooksToShelf({ bookId: book.id, shelfName: shelf }));
-    dispatch(addShelfToBook({ bookId: book.id, selectedShelf: shelf }));
+    if (user) {
+      dispatch(addBooksToShelf({ bookId: book.id, shelfName: shelf, user }));
+      dispatch(addShelfToBook({ bookId: book.id, selectedShelf: shelf, user }));
+    }
   };
 
   const availableShelves = sortedShelves.map((shelf) => {

@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { styled } from "styled-components";
 import { createShelf } from "../../store/features/shelf/shelfSlice";
-import { useAppDispatch } from "../../store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
 const StyledCreateShelf = styled.div`
@@ -69,6 +69,7 @@ type Props = {
 };
 
 const CreateShelf = (props: Props) => {
+  const { user } = useAppSelector((state) => state.auth);
   const [name, setName] = useState("");
   const dispatch = useAppDispatch();
   const { closeModal } = props;
@@ -79,7 +80,9 @@ const CreateShelf = (props: Props) => {
 
   const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-    dispatch(createShelf(name.trim()));
+    if (user) {
+      dispatch(createShelf({ shelfName: name.trim(), user }));
+    }
 
     closeModal();
   };

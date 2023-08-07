@@ -123,6 +123,7 @@ type Props = {
 const NewShelf = (props: Props) => {
   const { book, setActiveModal } = props;
   const [name, setName] = useState<string>("");
+  const { user } = useAppSelector((state) => state.auth);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
   const dispatch = useAppDispatch();
 
@@ -137,15 +138,16 @@ const NewShelf = (props: Props) => {
   };
 
   const handleCreate = () => {
-    dispatch(createShelf(name.trim()));
+    if (user) {
+      dispatch(createShelf({ shelfName: name.trim(), user }));
+    }
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: "shelf" });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(createShelf(name.trim()));
-    setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: "shelf" });
+    handleCreate();
   };
 
   const renderOptions = ["romance", "mystery", "fantasy", "booktok", "sad recs"].map((option) => {

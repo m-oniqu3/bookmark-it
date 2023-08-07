@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { styled } from "styled-components";
 import { renameShelf } from "../../store/features/shelf/shelfSlice";
-import { useAppDispatch } from "../../store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledText } from "../../styles/StyledText";
 
 const StyledRenameShelf = styled.div`
@@ -73,6 +73,7 @@ type Props = {
 };
 
 const RenameShelf = (props: Props) => {
+  const { user } = useAppSelector((state) => state.auth);
   const { closeModal, closePopover, currentShelf, activeFilter, setActiveFilter } = props;
   const [name, setName] = useState(currentShelf);
   const dispatch = useAppDispatch();
@@ -84,9 +85,11 @@ const RenameShelf = (props: Props) => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!user) return;
+
     if (name.trim() === currentShelf) return;
 
-    dispatch(renameShelf({ currentShelf, newShelf: name.trim() }));
+    dispatch(renameShelf({ currentShelf, newShelf: name.trim(), user }));
     if (activeFilter === currentShelf) setActiveFilter(name.trim());
     closePopover();
     closeModal();

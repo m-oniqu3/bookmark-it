@@ -3,6 +3,7 @@ import { GoogleAuthProvider, getAuth, signOut } from "firebase/auth";
 import { doc, getFirestore, initializeFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { BookRecord } from "../store/features/library/librarySlice";
+import { BooksOnShelf, Shelf } from "../store/features/shelf/shelfSlice";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,9 +28,13 @@ export const provider = new GoogleAuthProvider().setCustomParameters({
 });
 
 export const addLibraryToFirebase = async (user_id: string, library: BookRecord) => {
-  console.log("called addLibraryToFirebase");
   const currentDoc = doc(database, "library", `${user_id}`);
   await setDoc(currentDoc, { library }, { merge: true });
+};
+
+export const addShelvesToFirebase = async (user: string, books: BooksOnShelf, shelves: Shelf) => {
+  const currentDoc = doc(database, "shelves", `${user}`);
+  await setDoc(currentDoc, { books, shelves }, { merge: true });
 };
 
 // sign user out and remove data from local storage

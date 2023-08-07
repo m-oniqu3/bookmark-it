@@ -201,7 +201,12 @@ const Shelf = () => {
     );
   });
 
-  const handleAuthor = (author: string) => setActiveAuthor(author);
+  const handleAuthor = (author: string) => {
+    setActiveAuthor(author);
+
+    //smooth scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const authorColours = Object.values(colors).slice(0, authors.length + 1);
 

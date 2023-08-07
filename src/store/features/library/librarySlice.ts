@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { addDataToFirebase } from "../../../firebase/firebase";
 import { Book, BookCategory } from "../../../types/Book";
 
-type Record = { bookInfo: Book; category: BookCategory; timeAdded: number };
+interface Record {
+  bookInfo: Book;
+  category: BookCategory;
+  timeAdded: number;
+}
 
-type BookRecord = {
+export type BookRecord = {
   [key: string]: Record;
 };
 
@@ -12,6 +17,10 @@ type LibraryState = {
   duplicateBookCategory: BookCategory | null;
   toast: { message: string; type: "success" | "warning" | "error" | "info" | null };
 };
+
+interface ExtendedRecord extends Record {
+  user: string;
+}
 
 const initialState: LibraryState = {
   library: {},
@@ -23,12 +32,12 @@ const librarySlice = createSlice({
   name: "books",
   initialState,
   reducers: {
-    addToLibrary: (state, { payload }: PayloadAction<Record>) => {
+    addToLibrary: (state, { payload }: PayloadAction<ExtendedRecord>) => {
       if (!payload) {
         state.toast = { message: "No data received", type: "error" };
       }
 
-      const { bookInfo, category, timeAdded } = payload;
+      const { bookInfo, category, timeAdded, user } = payload;
       const { id } = bookInfo;
 
       //check if book exists
@@ -50,6 +59,8 @@ const librarySlice = createSlice({
         state.library[id] = { bookInfo, category, timeAdded };
         state.toast = { message: "Book added to library", type: "success" };
       }
+
+      addDataToFirebase(user, state.library);
     },
     getActiveBookCategory: (state, { payload }: PayloadAction<string>) => {
       const id = payload;

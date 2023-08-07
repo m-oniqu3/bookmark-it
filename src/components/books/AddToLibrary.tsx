@@ -150,6 +150,7 @@ const categories: BookCategory[] = ["Reading", "TBR", "DNF", "Finished"];
 
 const AddToLibrary = (props: Props) => {
   const { book, setActiveModal, modalType, showBookmarkIcon } = props;
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const duplicateBookCategory = useAppSelector((state) => state.bookStore.duplicateBookCategory);
   const color = useAppSelector((state) => state.colours.bookColours[book.id]);
@@ -175,8 +176,9 @@ const AddToLibrary = (props: Props) => {
 
   const handleCategory = (category: BookCategory) => {
     const now = Date.now();
-
-    dispatch(addToLibrary({ bookInfo: book, category, timeAdded: now }));
+    if (user) {
+      dispatch(addToLibrary({ bookInfo: book, category, timeAdded: now, user }));
+    }
     setActiveModal(null);
   };
 

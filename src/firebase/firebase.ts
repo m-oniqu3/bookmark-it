@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signOut } from "firebase/auth";
+import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { BookRecord } from "../store/features/library/librarySlice";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,10 +16,19 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const database = getFirestore(app);
 
 export const provider = new GoogleAuthProvider().setCustomParameters({
   prompt: "select_account",
 });
+
+export const booksCollection = collection(database, "library");
+
+export const addDataToFirebase = async (user_id: string, library: BookRecord) => {
+  const currentDoc = doc(database, "library", `${user_id}`);
+
+  await setDoc(currentDoc, { library }, { merge: true });
+};
 
 // sign user out and remove data from local storage
 export const signUserOut = async () => {

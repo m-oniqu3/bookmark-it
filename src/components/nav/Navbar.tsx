@@ -6,6 +6,8 @@ import { styled } from "styled-components";
 import Logo from "../../assets/bookmark.png";
 import { signUserOut } from "../../firebase/firebase";
 import { setUser } from "../../store/features/auth/authSlice";
+import { clearLibrary } from "../../store/features/library/librarySlice";
+import { clearShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import { devices } from "../../styles/breakpoints";
@@ -140,6 +142,8 @@ const Navbar = () => {
 
     signUserOut();
     dispatch(setUser({ user: null, isSignedIn: false }));
+    dispatch(clearLibrary());
+    dispatch(clearShelf());
     navigate("/", { replace: true });
   };
 

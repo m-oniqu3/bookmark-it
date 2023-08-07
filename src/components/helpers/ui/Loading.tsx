@@ -6,7 +6,7 @@ const StyledLoader = styled.div`
   top: 0;
   left: 0;
   display: grid;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.179);
   place-items: center;
   place-content: center;
   height: 100vh;

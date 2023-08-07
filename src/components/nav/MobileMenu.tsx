@@ -6,6 +6,8 @@ import { styled } from "styled-components";
 import logo from "../../assets/bookmark.png";
 import { signUserOut } from "../../firebase/firebase";
 import { setUser } from "../../store/features/auth/authSlice";
+import { clearLibrary } from "../../store/features/library/librarySlice";
+import { clearShelf } from "../../store/features/shelf/shelfSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledLogo } from "../../styles/StyledLogo.styled";
 import Container from "../helpers/ui/Container";
@@ -76,6 +78,8 @@ const MobileMenu = (props: Props) => {
     }
     signUserOut();
     dispatch(setUser({ user: null, isSignedIn: false }));
+    dispatch(clearLibrary());
+    dispatch(clearShelf());
     navigate("/", { replace: true });
   };
 

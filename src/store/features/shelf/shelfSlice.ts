@@ -150,9 +150,15 @@ const shelfSlice = createSlice({
       state.books = books;
       state.shelves = shelves;
     },
+    clearShelf: (state) => {
+      state.books = {};
+      state.shelves = {};
+      state.isShelfEmpty = true;
+      state.toast = { message: "", type: null };
+    },
   },
 });
 
-export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf, renameShelf, populateShelf } =
+export const { createShelf, addBooksToShelf, addShelfToBook, removeShelf, renameShelf, populateShelf, clearShelf } =
   shelfSlice.actions;
 export default shelfSlice.reducer;

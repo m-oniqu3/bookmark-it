@@ -71,9 +71,14 @@ const librarySlice = createSlice({
     populateLibrary: (state, { payload }: PayloadAction<BookRecord>) => {
       state.library = payload;
     },
+    clearLibrary: (state) => {
+      state.library = {};
+      state.duplicateBookCategory = null;
+      state.toast = { message: "", type: null };
+    },
   },
 });
 
-export const { addToLibrary, getActiveBookCategory, populateLibrary } = librarySlice.actions;
+export const { addToLibrary, getActiveBookCategory, populateLibrary, clearLibrary } = librarySlice.actions;
 
 export default librarySlice.reducer;

@@ -26,12 +26,11 @@ const useFilterLibrary = (filter: Filter, author: string) => {
   })();
 
   const allAuthors = Object.values(library).map((book) => {
-    const author = book.bookInfo.authors ? book.bookInfo.authors[0] : "";
+    const author = book.bookInfo.authors !== undefined ? book.bookInfo.authors[0] : "";
     return author;
   });
 
   const authors = [...new Set(allAuthors)].sort();
-  //   console.log(authors);
 
   const books = authorResults.map((record) => {
     return (

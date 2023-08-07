@@ -8,8 +8,8 @@ import Button from "../helpers/ui/Button";
 import Container from "../helpers/ui/Container";
 import Heading from "../helpers/ui/Heading";
 
-const StyledHero = styled.div<{ url: string }>`
-  background-image: url(${(props) => props.url});
+const StyledHero = styled.div<{ $url: string }>`
+  background-image: url(${(props) => props.$url});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -103,7 +103,7 @@ const AuthHero = () => {
   const handleClick = () => navigate("/explore");
 
   return (
-    <StyledHero url={background}>
+    <StyledHero $url={background}>
       <Container className="container">
         <article>
           <Heading variant="large" text={heading} />

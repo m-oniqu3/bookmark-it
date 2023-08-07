@@ -16,15 +16,14 @@ import Shelf from "./components/pages/Shelf";
 import { database } from "./firebase/firebase";
 import ExploreLayout from "./layout/ExploreLayout";
 import RootLayout from "./layout/RootLayout";
-import { useAppSelector } from "./store/hooks/hooks";
+import { populateLibrary } from "./store/features/library/librarySlice";
+import { useAppDispatch, useAppSelector } from "./store/hooks/hooks";
 import { GlobalStyles } from "./styles/Global.styled";
 
 const App = () => {
   const { user } = useAppSelector((state) => state.auth);
-  //const [dataForUser, setDataForUser] = useState<{ id: string }[]>([]);
   const [loading, setLoading] = useState(false);
-
-  console.log(loading);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function getData(user: string) {
@@ -32,19 +31,18 @@ const App = () => {
       const ref = doc(database, "library", user);
       const docSnap = await getDoc(ref);
 
-      if (docSnap.exists()) {
+      if (docSnap.exists() && docSnap.data().library) {
+        dispatch(populateLibrary(docSnap.data().library));
         console.log("Document data:", docSnap.data());
-      } else {
-        // docSnap.data() will be undefined in this case
-        console.log("No such document!");
       }
+
       setLoading(false);
     }
+
     if (user) {
       getData(user);
     }
-  }, [user]);
-  //console.log(dataForUser);
+  }, [user, dispatch]);
 
   const router = createBrowserRouter([
     {

@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { Book } from "../../types/Book";
 import { parseColor } from "../utils/parseColor";
 
-type StyledProps = { background: string; $showicon: boolean };
+type StyledProps = { $background: string; $showicon: boolean };
 
 const StyledSummary = styled.section<StyledProps>`
   .summary {
@@ -18,7 +18,7 @@ const StyledSummary = styled.section<StyledProps>`
     gap: 1rem;
 
     .background {
-      background-color: ${({ background }) => `rgba(${parseColor(background)},
+      background-color: ${({ $background }) => `rgba(${parseColor($background)},
        0.5)`};
       padding: 12px;
       border-radius: 5px;
@@ -72,8 +72,8 @@ const StyledSummary = styled.section<StyledProps>`
         cursor: pointer;
 
         &:hover {
-          background: ${({ background }) =>
-            `linear-gradient(to left, #000000c5, rgba(${parseColor(background)}) 100%)`};
+          background: ${({ $background }) =>
+            `linear-gradient(to left, #000000c5, rgba(${parseColor($background)}) 100%)`};
           background-position: 0 100%;
           background-size: 100% 2px;
           background-repeat: no-repeat;
@@ -164,7 +164,7 @@ const Summary = (props: Props) => {
   const icon = <ImBookmark size={25} color={color} />;
 
   return (
-    <StyledSummary background={color} $showicon={isBookInLibrary}>
+    <StyledSummary $background={color} $showicon={isBookInLibrary}>
       <div className="summary">
         <div className="background">
           <div className="icon">{icon}</div>

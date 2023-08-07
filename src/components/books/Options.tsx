@@ -58,11 +58,13 @@ const Options = (props: Props) => {
   const dispatch = useAppDispatch();
   const duplicateBookCategory = useAppSelector((state) => state.bookStore.duplicateBookCategory);
   const { book, closeOptions } = props;
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleCategoryClick = (category: BookCategory) => {
     const now = Date.now();
-
-    dispatch(addToLibrary({ bookInfo: book, category, timeAdded: now }));
+    if (user) {
+      dispatch(addToLibrary({ bookInfo: book, category, timeAdded: now, user }));
+    }
     closeOptions();
   };
 

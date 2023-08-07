@@ -12,20 +12,9 @@ import SearchResults from "./components/pages/SearchResults";
 import Shelf from "./components/pages/Shelf";
 import ExploreLayout from "./layout/ExploreLayout";
 import RootLayout from "./layout/RootLayout";
-import { useAppDispatch, useAppSelector } from "./store/hooks/hooks";
 import { GlobalStyles } from "./styles/Global.styled";
 
 const App = () => {
-  const { user } = useAppSelector((state) => state.auth);
-  const { library } = useAppSelector((state) => state.bookStore);
-  const dispatch = useAppDispatch();
-
-  // useEffect(() => {
-  //   if (user && Object.keys(library).length > 0) {
-  //     addDataToFirebase(user, library);
-  //   }
-  // }, [library, user, dispatch]);
-
   const router = createBrowserRouter([
     {
       path: "/",

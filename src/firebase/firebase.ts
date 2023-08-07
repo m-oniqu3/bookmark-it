@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signOut } from "firebase/auth";
-import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getFirestore, initializeFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { BookRecord } from "../store/features/library/librarySlice";
 
@@ -15,6 +15,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+initializeFirestore(app, {
+  ignoreUndefinedProperties: true,
+});
+
 export const auth = getAuth(app);
 export const database = getFirestore(app);
 
@@ -25,8 +29,8 @@ export const provider = new GoogleAuthProvider().setCustomParameters({
 export const booksCollection = collection(database, "library");
 
 export const addDataToFirebase = async (user_id: string, library: BookRecord) => {
+  console.log("called addDataToFirebase");
   const currentDoc = doc(database, "library", `${user_id}`);
-
   await setDoc(currentDoc, { library }, { merge: true });
 };
 

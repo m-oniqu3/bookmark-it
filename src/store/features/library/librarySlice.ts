@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDataToFirebase } from "../../../firebase/firebase";
+import { addLibraryToFirebase } from "../../../firebase/firebase";
 import { Book, BookCategory } from "../../../types/Book";
 
 interface Record {
@@ -60,7 +60,7 @@ const librarySlice = createSlice({
         state.toast = { message: "Book added to library", type: "success" };
       }
 
-      addDataToFirebase(user, state.library);
+      addLibraryToFirebase(user, state.library);
     },
     getActiveBookCategory: (state, { payload }: PayloadAction<string>) => {
       const id = payload;

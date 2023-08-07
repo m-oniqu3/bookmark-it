@@ -143,7 +143,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
         background-repeat: no-repeat;
       }
 
-      @media (${devices.medium}) {
+      @media (${devices.semiLarge}) {
         margin: 0;
         margin-right: auto;
       }

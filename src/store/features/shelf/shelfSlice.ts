@@ -144,7 +144,7 @@ const shelfSlice = createSlice({
       });
 
       state.toast = { message: "Shelf Renamed", type: "success" };
-      addShelvesToFirebase(user, state.books, state.shelves);
+      addShelvesToFirebase(user, books, shelves);
     },
   },
 });

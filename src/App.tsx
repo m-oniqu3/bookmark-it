@@ -1,7 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BookDetails from "./components/books/BookDetails";
 import Picks from "./components/explore/Picks";
@@ -26,27 +26,41 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function isObjectEmpty(obj: any) {
+    return Object.keys(obj).length === 0;
+  }
+
   useEffect(() => {
     async function getData(user: string) {
       setLoading(true);
-      const libraryRef = doc(database, "library", user);
-      const shelfRef = doc(database, "shelves", user);
+      try {
+        const libraryRef = doc(database, "library", user);
+        const shelfRef = doc(database, "shelves", user);
 
-      const librarySnap = await getDoc(libraryRef);
-      const shelfSnap = await getDoc(shelfRef);
+        const librarySnap = await getDoc(libraryRef);
+        const shelfSnap = await getDoc(shelfRef);
 
-      if (librarySnap.exists() && librarySnap.data().library) {
-        dispatch(populateLibrary(librarySnap.data().library));
-        console.log("Document data:", librarySnap.data());
+        if (librarySnap.exists() && librarySnap.data().library) {
+          if (isObjectEmpty(librarySnap.data().library)) return;
+          else {
+            dispatch(populateLibrary(librarySnap.data().library));
+            console.log("Document data:", librarySnap.data());
+          }
+        }
+
+        if (shelfSnap.exists() && shelfSnap.data()) {
+          if (isObjectEmpty(shelfSnap.data())) return;
+          else {
+            console.log("Document data:", shelfSnap.data());
+            dispatch(populateShelf({ books: shelfSnap.data().books, shelves: shelfSnap.data().shelves }));
+          }
+        }
+      } catch (error) {
+        toast.error("Something went wrong. We couldn't get your books. Please try again.");
+      } finally {
+        setLoading(false);
       }
-
-      if (shelfSnap.exists() && shelfSnap.data()) {
-        console.log("Document data:", shelfSnap.data());
-
-        dispatch(populateShelf({ books: shelfSnap.data().books, shelves: shelfSnap.data().shelves }));
-      }
-
-      setLoading(false);
     }
 
     if (user) {
@@ -91,15 +105,17 @@ const App = () => {
       ],
     },
   ]);
-
-  return (
-    <>
-      {loading && <Loading />}
-      <RouterProvider router={router} />
-      <GlobalStyles />
-      <ToastContainer position="top-left" autoClose={2000} limit={4} />
-    </>
-  );
+  if (loading) {
+    return <Loading />;
+  } else
+    return (
+      <>
+        {/* {loading && <Loading />} */}
+        <RouterProvider router={router} />
+        <GlobalStyles />
+        <ToastContainer position="top-left" autoClose={2000} limit={4} />
+      </>
+    );
 };
 
 export default App;

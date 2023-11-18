@@ -137,8 +137,8 @@ const Books = (props: Props) => {
   const icon = <ImBookmark size={25} color={color} />;
   const shelfIcon = <ImBookmark size={25} color={color} />;
 
-  const isBookInLibrary = !!library[book.id] && showBookmarkIcon && isSignedIn;
-  const isBookInShelf = !!books[book.id] && showShelfIcon && isSignedIn;
+  const isBookInLibrary = library[book.id] && showBookmarkIcon && isSignedIn;
+  const isBookInShelf = isBookInLibrary && books[book.id] && showShelfIcon && isSignedIn;
 
   return (
     <Fragment>

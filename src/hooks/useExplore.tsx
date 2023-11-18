@@ -13,15 +13,7 @@ const useExplore = (subject: string) => {
   })();
 
   const allBooks = results.map((book) => {
-    return (
-      <Books
-        key={book.id}
-        book={book}
-        modalType="library"
-        showBookmarkIcon={true}
-        showShelfIcon={{ display: true, size: "medium" }}
-      />
-    );
+    return <Books key={book.id} book={book} modalType="library" showBookmarkIcon={true} showShelfIcon={false} />;
   });
 
   return allBooks;

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { ImBookmark } from "react-icons/im";
 import { styled } from "styled-components";
 import { useAppSelector } from "../../store/hooks/hooks";
@@ -6,14 +6,18 @@ import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import Modal from "../helpers/ui/Modal";
-import { parseColor } from "../utils/parseColor";
+
 import AddToLibrary from "./AddToLibrary";
 import Information from "./Information";
 
-import { usePalette } from "react-palette";
+// import { usePalette } from "react-palette";
 import NewShelf from "../shelves/NewShelf";
 import Login from "../user/Login";
 import AddToShelf from "./AddToShelf";
+
+import useBackground from "../../hooks/useBackground";
+import { parseColor } from "../utils/parseColor";
+
 type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean };
 
 const StyledBook = styled.div<StyledProps>`
@@ -38,8 +42,8 @@ const StyledBook = styled.div<StyledProps>`
   }
 
   .bg-container {
-    background-color: ${({ color }) => `rgba(${parseColor(color)},
-       0.5)`};
+    background-color: ${({ color }) => `rgb(${parseColor(color)}, 0.5)`};
+
     padding: 12px;
     border-radius: 5px;
   }
@@ -85,12 +89,10 @@ const Books = (props: Props) => {
   const { library } = useAppSelector((state) => state.bookStore);
   const { books } = useAppSelector((state) => state.bookShelf);
 
-  const { data, loading, error } = usePalette(
-    `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
-  );
-  // console.log(data, src);
-  // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
+  const imgRef = useRef<HTMLImageElement>(null);
+  const color = useBackground(book.id, book.imageLinks?.smallThumbnail as string);
 
+  // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
   };
@@ -131,17 +133,6 @@ const Books = (props: Props) => {
     }
   })();
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
-
-  const color = data.vibrant as string;
-
-  // const handleColors = (colors: string[]) => {
-  //   dispatch(addBookColors({ bookId: book.id, colors: colors[0] }));
-  // };
-
-  // const src = book.imageLinks?.smallThumbnail;
-  // console.log(src);
   // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api` ??
 
   const icon = <ImBookmark size={25} color={color} />;
@@ -156,8 +147,8 @@ const Books = (props: Props) => {
         <div className="icon">{icon}</div>
         <div className="shelf-icon">{shelfIcon}</div>
         <div className="bg-container">
-          <figure className="cover" onClick={handleModal} style={{ background: data.vibrant }}>
-            <img src={book.imageLinks?.smallThumbnail} alt={book.title} />
+          <figure className="cover" onClick={handleModal}>
+            <img src={book.imageLinks?.smallThumbnail.replace("api", "").trim()} alt={book.title} ref={imgRef} />
           </figure>
         </div>
       </StyledBook>

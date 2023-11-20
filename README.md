@@ -30,7 +30,7 @@ Bookmark was built using
 - Firebase
 - Google Books API
 - React Toastify
-- React Color Extractor
+- Color Thief
 - Styled Components
 
 ## Design File

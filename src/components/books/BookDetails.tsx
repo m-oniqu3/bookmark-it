@@ -16,8 +16,7 @@ import Empty from "../helpers/ui/Empty";
 import { parseColor } from "../utils/parseColor";
 import Options from "./Options";
 
-// @ts-expect-error - no types available
-import { ColorExtractor } from "react-color-extractor";
+import useBackground from "../../hooks/useBackground";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import LoadingDetails from "../helpers/ui/LoadingDetails";
 import Modal from "../helpers/ui/Modal";
@@ -298,7 +297,7 @@ const StyledDetailsContainer = styled(Container)<StyledProps>`
 
 const BookDetails = () => {
   const { id } = useParams() as { id: string };
-  const [colors, setColors] = useState<string[]>([]);
+
   const { library } = useAppSelector((state) => state.bookStore);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
   const [options, setOptions] = useState(false);
@@ -307,7 +306,6 @@ const BookDetails = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const background = colors[0];
 
   if (!id) <Navigate to="/" />;
 
@@ -315,10 +313,7 @@ const BookDetails = () => {
     selectFromResult: (result: any) => selectBookDetails(result),
   });
 
-  //handlers
-  const handleColors = (colors: string[]) => {
-    setColors(colors);
-  };
+  const bookColor = useBackground(id, bookDetails?.imageLinks?.smallThumbnail as string);
 
   const handleAuthor = () => {
     const author = bookDetails.authors ? bookDetails.authors[0] : "";
@@ -353,9 +348,9 @@ const BookDetails = () => {
   //remove duplicate categories, split categories with "/" and flatten array
   const categorySet = new Set(bookDetails.categories?.map((cat) => cat.split("/"))?.flat());
   const allCategories = [...categorySet]?.map((category, index) => {
-    const newColor = parseColor(colors[index % colors.length]);
+    const newColor = parseColor(bookColor);
 
-    const color = `rgba(${newColor}, 0.5)`;
+    const color = `rgba(${newColor}, ${0.2 + index * 0.1})`;
     return (
       <p className="category" key={category} style={{ backgroundColor: `${color}` }}>
         {category.toLowerCase()}
@@ -365,7 +360,7 @@ const BookDetails = () => {
 
   // iife to determine content
   const content = (() => {
-    const icon = <ImBookmark size={28} color={colors[3]} />;
+    const icon = <ImBookmark size={28} color={bookColor} />;
 
     if (isLoading || isFetching) return <LoadingDetails />;
     if (error)
@@ -394,14 +389,12 @@ const BookDetails = () => {
       const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
 
       return (
-        <StyledDetailsContainer background={background} categories={!!bookDetails.categories}>
+        <StyledDetailsContainer background={bookColor} categories={!!bookDetails.categories}>
           <div>
             <div className="background">
               {isBookInLibrary && <div className="icon">{icon}</div>}
               <figure>
-                <ColorExtractor getColors={handleColors}>
-                  <img src={src} alt={bookDetails.title} />
-                </ColorExtractor>
+                <img src={src} alt={bookDetails.title} />
               </figure>
             </div>
 
@@ -426,8 +419,8 @@ const BookDetails = () => {
                   value={bookDetails.averageRating || 1}
                   count={5}
                   size={16}
-                  activeColor={background}
-                  inactiveColor={`rgba(${parseColor(background)}, 0.8)`}
+                  activeColor={bookColor}
+                  inactiveColor={`rgba(${parseColor(bookColor)}, 0.8)`}
                 />
                 <p className="count">
                   {bookDetails.ratingsCount || 1}

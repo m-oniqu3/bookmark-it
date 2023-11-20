@@ -15,10 +15,10 @@ import NewShelf from "../shelves/NewShelf";
 import Login from "../user/Login";
 import AddToShelf from "./AddToShelf";
 
-// @ts-expect-error - no types available
-import ColorThief from "../../../node_modules/colorthief/dist/color-thief.mjs";
+import useBackground from "../../hooks/useBackground";
+import { parseColor } from "../utils/parseColor";
 
-type StyledProps = { color: number[]; $showicon: boolean; $showShelfIcon: boolean };
+type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean };
 
 const StyledBook = styled.div<StyledProps>`
   position: relative;
@@ -42,7 +42,7 @@ const StyledBook = styled.div<StyledProps>`
   }
 
   .bg-container {
-    background-color: ${({ color }) => `rgb(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`};
+    background-color: ${({ color }) => `rgb(${parseColor(color)}, 0.5)`};
 
     padding: 12px;
     border-radius: 5px;
@@ -90,21 +90,7 @@ const Books = (props: Props) => {
   const { books } = useAppSelector((state) => state.bookShelf);
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const [color, setColor] = useState([242, 242, 242]);
-
-  const colorThief = new ColorThief();
-  const img = new Image();
-
-  img.addEventListener("load", function () {
-    setColor(colorThief.getColor(img));
-  });
-
-  const imageURL = book.imageLinks?.smallThumbnail?.replace("http://", "https://") as string;
-  const googleProxyURL =
-    "https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=";
-
-  img.crossOrigin = "Anonymous";
-  img.src = googleProxyURL + encodeURIComponent(imageURL);
+  const color = useBackground(book.id, book.imageLinks?.smallThumbnail as string);
 
   // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
   const handleModal = () => {

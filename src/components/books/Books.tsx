@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { ImBookmark } from "react-icons/im";
 import { styled } from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
+import { useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
 import { ModalEnum, ModalType } from "../../types/ModalType";
@@ -79,7 +79,7 @@ type Props = {
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType, showBookmarkIcon, showShelfIcon } = props;
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   // const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const { isSignedIn } = useAppSelector((state) => state.auth);
   const { library } = useAppSelector((state) => state.bookStore);

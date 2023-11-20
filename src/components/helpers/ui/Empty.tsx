@@ -67,7 +67,7 @@ const Empty = (props: Props) => {
       </figure>
 
       <article>
-        <Heading variant="small" text={heading} />
+        <Heading variant="small">{heading}</Heading>
         <StyledText>{message}</StyledText>
         <Button onClick={handleClick}>{buttonName}</Button>
       </article>

@@ -76,16 +76,12 @@ const Booktok = () => {
 
       <Container>
         <article>
-          <Heading
-            variant="medium"
-            text=" What side of <span>tiktok</span> are you on?"
-          />
+          <Heading variant="medium">{`What side of <span>tiktok</span> are you on?`}</Heading>
 
           <StyledText>
-            TikTok made me read it! We are staying up to date with{" "}
-            <span>#BookTok</span> and we've made it easier for you to see what's
-            going viral. Add these popular books to your collection and stay
-            up-to-date on the latest must-reads.
+            TikTok made me read it! We are staying up to date with <span>#BookTok</span> and we've made it easier for
+            you to see what's going viral. Add these popular books to your collection and stay up-to-date on the latest
+            must-reads.
           </StyledText>
 
           <Button onClick={handleNavigation}>Explore</Button>

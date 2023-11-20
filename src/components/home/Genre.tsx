@@ -103,7 +103,7 @@ const Genre = (props: Props) => {
     <StyledGenre>
       <Container className="container">
         <article>
-          <Heading variant="medium" text={heading} />
+          <Heading variant="medium">{heading}</Heading>
           <StyledText>{paragraph}</StyledText>
           <div className="genres">{genreList}</div>
         </article>

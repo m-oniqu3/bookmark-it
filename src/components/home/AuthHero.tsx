@@ -32,9 +32,6 @@ const StyledHero = styled.div<{ $url: string }>`
     }
 
     article {
-      /* position: absolute;
-    top: 55%;
-    transform: translateY(-50%); */
       width: min(100%, 500px);
       display: flex;
       flex-direction: column;
@@ -98,7 +95,6 @@ const StyledHero = styled.div<{ $url: string }>`
 
 const AuthHero = () => {
   const navigate = useNavigate();
-  const heading = "Start <span>organizing</span> ";
 
   const handleClick = () => navigate("/explore");
 
@@ -106,7 +102,8 @@ const AuthHero = () => {
     <StyledHero $url={background}>
       <Container className="container">
         <article>
-          <Heading variant="large" text={heading} />
+          <Heading variant="large">{` Start <span>organizing</span>`}</Heading>
+
           <StyledText>
             Keep track of the books you've read, the books you're currently reading, the books you want to read and
             those hard to finish books.

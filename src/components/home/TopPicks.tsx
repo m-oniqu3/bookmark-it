@@ -70,7 +70,7 @@ const TopPicks = (props: Props) => {
     <StyledPicks>
       <Container>
         <article>
-          <Heading variant="medium" text={heading} />
+          <Heading variant="medium">{heading}</Heading>
           <StyledText>{paragraph}</StyledText>
         </article>
 

@@ -25,19 +25,19 @@ const LargeHeading = styled(HeadingBase)`
 `;
 
 type Props = {
-  text: string;
+  children: string;
   variant: "small" | "medium" | "large";
 };
 
 const Heading = (props: Props) => {
-  const { text, variant } = props;
+  const { children, variant } = props;
   const ref = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.innerHTML = text;
+      ref.current.innerHTML = children;
     }
-  }, [text]);
+  }, [children]);
 
   const StyledHeading = (() => {
     switch (variant) {
@@ -52,7 +52,7 @@ const Heading = (props: Props) => {
     }
   })();
 
-  return <StyledHeading ref={ref}>{text}</StyledHeading>;
+  return <StyledHeading ref={ref} />;
 };
 
 export default Heading;

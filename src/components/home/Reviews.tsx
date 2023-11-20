@@ -86,7 +86,7 @@ const Reviews = () => {
       <StyledReviews>
         <Container>
           <article className="intro">
-            <Heading variant="medium" text=" See what <span> others </span>are saying about BookMark." />
+            <Heading variant="medium">{`See what <span> others </span>are saying about BookMark.`}</Heading>
 
             <StyledText>Here are some reviews from users who have used BookMark.</StyledText>
 

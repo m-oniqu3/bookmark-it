@@ -46,7 +46,6 @@ const Information = (props: Props) => {
   const text = modalType === "library" ? "Library" : "Shelf";
 
   const isShelvesEmpty = Object.keys(shelves).length === 0;
-  console.log(isShelvesEmpty);
 
   const handleAdd = () => {
     switch (modalType) {

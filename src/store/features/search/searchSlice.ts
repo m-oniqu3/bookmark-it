@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const searchSlice = createSlice({
   name: "search",
   initialState: {
-    recentSearches: JSON.parse(localStorage.getItem("recentSearches") || "[]"),
+    recentSearches: JSON.parse(localStorage.getItem("recentSearches") || "[]") as string[],
   },
   reducers: {
     addSearch: (state, action: PayloadAction<string>) => {

@@ -78,7 +78,7 @@ const Login = (props: Props) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const data = { user: result.user.uid, isSignedIn: true };
-        console.log(data);
+
         dispatch(setUser(data));
         localStorage.setItem("bkmk_user", JSON.stringify(data));
         navigate(`${path}`, { replace: true });

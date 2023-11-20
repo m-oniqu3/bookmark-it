@@ -45,14 +45,12 @@ const App = () => {
           if (isObjectEmpty(librarySnap.data().library)) return;
           else {
             dispatch(populateLibrary(librarySnap.data().library));
-            console.log("Document data:", librarySnap.data());
           }
         }
 
         if (shelfSnap.exists() && shelfSnap.data()) {
           if (isObjectEmpty(shelfSnap.data())) return;
           else {
-            console.log("Document data:", shelfSnap.data());
             dispatch(populateShelf({ books: shelfSnap.data().books, shelves: shelfSnap.data().shelves }));
           }
         }
@@ -110,7 +108,6 @@ const App = () => {
   } else
     return (
       <>
-        {/* {loading && <Loading />} */}
         <RouterProvider router={router} />
         <GlobalStyles />
         <ToastContainer position="top-left" autoClose={2000} limit={4} />

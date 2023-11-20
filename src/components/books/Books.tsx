@@ -1,7 +1,6 @@
 import { Fragment, useState } from "react";
 import { ImBookmark } from "react-icons/im";
 import { styled } from "styled-components";
-import { addBookColors } from "../../store/features/colours/coloursSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { devices } from "../../styles/breakpoints";
 import type { Book } from "../../types/Book";
@@ -11,12 +10,10 @@ import { parseColor } from "../utils/parseColor";
 import AddToLibrary from "./AddToLibrary";
 import Information from "./Information";
 
-// @ts-expect-error - no types available
-import { ColorExtractor } from "react-color-extractor";
+import { usePalette } from "react-palette";
 import NewShelf from "../shelves/NewShelf";
 import Login from "../user/Login";
 import AddToShelf from "./AddToShelf";
-
 type StyledProps = { color: string; $showicon: boolean; $showShelfIcon: boolean };
 
 const StyledBook = styled.div<StyledProps>`
@@ -83,10 +80,16 @@ const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType, showBookmarkIcon, showShelfIcon } = props;
   const dispatch = useAppDispatch();
-  const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
+  // const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
   const { isSignedIn } = useAppSelector((state) => state.auth);
   const { library } = useAppSelector((state) => state.bookStore);
   const { books } = useAppSelector((state) => state.bookShelf);
+
+  const { data, loading, error } = usePalette(
+    `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
+  );
+  // console.log(data, src);
+  // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
 
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
@@ -128,11 +131,17 @@ const Books = (props: Props) => {
     }
   })();
 
-  const handleColors = (colors: string[]) => {
-    dispatch(addBookColors({ bookId: book.id, colors: colors[0] }));
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error</div>;
 
-  const src = book.imageLinks?.smallThumbnail;
+  const color = data.vibrant as string;
+
+  // const handleColors = (colors: string[]) => {
+  //   dispatch(addBookColors({ bookId: book.id, colors: colors[0] }));
+  // };
+
+  // const src = book.imageLinks?.smallThumbnail;
+  // console.log(src);
   // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api` ??
 
   const icon = <ImBookmark size={25} color={color} />;
@@ -147,10 +156,8 @@ const Books = (props: Props) => {
         <div className="icon">{icon}</div>
         <div className="shelf-icon">{shelfIcon}</div>
         <div className="bg-container">
-          <figure className="cover" onClick={handleModal}>
-            <ColorExtractor getColors={handleColors}>
-              <img src={src} alt={book.title} />
-            </ColorExtractor>
+          <figure className="cover" onClick={handleModal} style={{ background: data.vibrant }}>
+            <img src={book.imageLinks?.smallThumbnail} alt={book.title} />
           </figure>
         </div>
       </StyledBook>

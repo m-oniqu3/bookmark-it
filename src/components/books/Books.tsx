@@ -132,7 +132,8 @@ const Books = (props: Props) => {
     dispatch(addBookColors({ bookId: book.id, colors: colors[0] }));
   };
 
-  const src = `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+  const src = book.imageLinks?.smallThumbnail;
+  // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api` ??
 
   const icon = <ImBookmark size={25} color={color} />;
   const shelfIcon = <ImBookmark size={25} color={color} />;

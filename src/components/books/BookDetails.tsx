@@ -3,297 +3,23 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { ImBookmark } from "react-icons/im";
 import ReactStars from "react-rating-star-with-type";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { styled } from "styled-components";
 import server_down from "../../assets/server_down.svg";
 import web_search from "../../assets/web_search.svg";
 import { useGetBookDetailsQuery } from "../../store/features/api/apiSlice";
 import { addSearch } from "../../store/features/search/searchSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
 import { StyledTitle } from "../../styles/StyledTitle";
-import { devices } from "../../styles/breakpoints";
-import Container from "../helpers/ui/Container";
 import Empty from "../helpers/ui/Empty";
 import { parseColor } from "../utils/parseColor";
 import Options from "./Options";
 
 import useBackground from "../../hooks/useBackground";
+import { StyledDetailsContainer } from "../../styles/StyledDetailsContainer";
 import { ModalEnum, ModalType } from "../../types/ModalType";
 import LoadingDetails from "../helpers/ui/LoadingDetails";
 import Modal from "../helpers/ui/Modal";
 import Login from "../user/Login";
 import { selectBookDetails } from "../utils/selectors";
-
-type StyledProps = {
-  background: string;
-  categories: boolean;
-};
-
-const StyledDetailsContainer = styled(Container)<StyledProps>`
-  padding: 2rem 0;
-
-  @media (${devices.semiLarge}) {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 2rem;
-  }
-
-  @media (${devices.xlarge}) {
-    grid-template-columns: ${({ categories }) => (categories ? "250px 1fr 15.5rem;" : "200px 1fr")};
-    width: ${({ categories }) => (categories ? "" : "70%")};
-    gap: 1rem;
-  }
-
-  .background {
-    background-color: ${({ background }) => `rgba(${parseColor(background)},
-       0.5)`};
-    padding: 13px;
-    border-radius: 5px;
-    margin: 0 auto 1rem;
-    width: fit-content;
-    position: relative;
-
-    @media (${devices.semiLarge}) {
-      width: fit-content;
-      height: fit-content;
-      place-items: start;
-    }
-
-    @media (${devices.large}) {
-      margin: 0;
-      margin-left: auto;
-    }
-
-    .icon {
-      position: absolute;
-      top: 0;
-      right: -1px;
-      z-index: 1;
-      filter: brightness(70%);
-    }
-
-    figure {
-      position: relative;
-      height: 11rem;
-      width: 7.125rem;
-      border-radius: 10px;
-
-      @media (${devices.semiLarge}) {
-        height: 14rem;
-        width: 9rem;
-      }
-
-      img {
-        border-radius: 5px;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-  }
-
-  .overview {
-    @media (${devices.xlarge}) {
-      width: ${({ categories }) => (categories ? "80%" : "85%")};
-      margin: 0 auto;
-    }
-  }
-
-  .intro {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    gap: 0.3rem;
-    text-align: center;
-
-    @media (${devices.semiLarge}) {
-      text-align: left;
-    }
-
-    .title {
-      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
-      color: var(--secondary);
-      font-family: "Rubik", sans-serif;
-      font-weight: bold;
-    }
-
-    .subtitle {
-      color: var(--neutral-medium);
-      font-size: 0.95rem;
-      overflow: hidden !important;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-
-    .author {
-      margin: 0 auto;
-      color: var(--secondary);
-      font-size: 1rem;
-      font-weight: 600;
-      padding-bottom: 3px;
-      width: fit-content;
-      cursor: pointer;
-
-      &:hover {
-        background: ${({ background }) => `linear-gradient(to left, #000000c5, rgba(${parseColor(background)}) 100%)`};
-        background-position: 0 100%;
-        background-size: 100% 2px;
-        background-repeat: no-repeat;
-      }
-
-      @media (${devices.semiLarge}) {
-        margin: 0;
-        margin-right: auto;
-      }
-    }
-
-    .rating {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-
-      @media (${devices.semiLarge}) {
-        padding-top: 0.2rem;
-        justify-content: flex-start;
-      }
-
-      svg {
-        color: ${({ background }) => background};
-      }
-    }
-  }
-
-  .details {
-    .synopsis {
-      font-size: clamp(1.2rem, 1.5vw, 1.6rem);
-      font-weight: 700;
-      color: var(--secondary);
-      margin-top: 1.2rem;
-
-      @media (${devices.medium}) {
-        margin-top: 1.8rem;
-      }
-    }
-
-    .description {
-      padding-top: 0.5rem;
-      word-break: break-word;
-    }
-
-    .description,
-    .description * {
-      font-style: normal !important;
-      font-weight: 300;
-      line-height: 150%;
-      word-break: break-word;
-    }
-
-    .categories {
-      padding-top: 1rem;
-      display: flex;
-      align-items: center;
-      overflow-x: scroll;
-      scrollbar-width: none;
-      gap: 1rem;
-      width: 100%;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
-      @media (${devices.medium}) {
-        overflow-x: hidden;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      @media (${devices.semiLarge}) {
-        justify-content: flex-start;
-      }
-
-      @media (${devices.xlarge}) {
-        display: none;
-      }
-
-      .category {
-        font-size: 0.9rem;
-        font-weight: 400;
-        padding: 7px 10px;
-        border-radius: 5px;
-        color: black;
-        text-align: center;
-        min-width: fit-content;
-        font-weight: 500;
-        text-transform: capitalize;
-      }
-    }
-  }
-
-  aside {
-    display: none;
-
-    @media (${devices.xlarge}) {
-      display: block;
-
-      .genres {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        width: 100%;
-
-        .category {
-          padding: 7px 12px;
-          border-radius: 5px;
-          text-transform: capitalize;
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: #1a1a1a;
-          min-width: fit-content;
-          text-transform: capitalize;
-        }
-      }
-    }
-  }
-
-  .options {
-    display: grid;
-    /* justify-content: center; */
-    place-items: center;
-
-    padding: 0.5rem 0;
-
-    @media (${devices.large}) {
-      place-items: end;
-      padding: 1rem 0;
-    }
-
-    button {
-      width: 139.594px;
-      font-size: 0.9rem;
-      padding: 8px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      border: none;
-      color: #1a1a1a;
-      font-weight: 500;
-      background-color: ${({ background }) => `rgba(${parseColor(background)},
-       0.5)`};
-
-      &:hover {
-        background-color: ${({ background }) => `rgba(${parseColor(background)},
-      0.8)`};
-        color: var(--neutral-primary);
-      }
-
-      @media (${devices.medium}) {
-        width: 169.594px;
-      }
-    }
-  }
-`;
 
 const BookDetails = () => {
   const { id } = useParams() as { id: string };
@@ -313,7 +39,7 @@ const BookDetails = () => {
     selectFromResult: (result: any) => selectBookDetails(result),
   });
 
-  const bookColor = useBackground(id, bookDetails?.imageLinks?.smallThumbnail as string);
+  const { color: bookColor, palette } = useBackground(id, bookDetails?.imageLinks?.smallThumbnail as string);
 
   const handleAuthor = () => {
     const author = bookDetails.authors ? bookDetails.authors[0] : "";
@@ -338,7 +64,7 @@ const BookDetails = () => {
       descriptionRef.current.innerHTML = bookDetails.description.trim();
     } else if (bookDetails.description === "" && descriptionRef.current) {
       descriptionRef.current.innerHTML = "No description available";
-    } else if (descriptionRef.current) {
+    } else if (descriptionRef.current && !bookDetails.description) {
       descriptionRef.current.innerHTML = "No description available";
     }
   }, [bookDetails.description]);
@@ -348,9 +74,9 @@ const BookDetails = () => {
   //remove duplicate categories, split categories with "/" and flatten array
   const categorySet = new Set(bookDetails.categories?.map((cat) => cat.split("/"))?.flat());
   const allCategories = [...categorySet]?.map((category, index) => {
-    const newColor = parseColor(bookColor);
+    const newColor = parseColor(palette[index % palette.length]);
 
-    const color = `rgba(${newColor}, ${0.2 + index * 0.1})`;
+    const color = `rgba(${newColor}, 0.5)`;
     return (
       <p className="category" key={category} style={{ backgroundColor: `${color}` }}>
         {category.toLowerCase()}
@@ -386,7 +112,7 @@ const BookDetails = () => {
       );
 
     if (isSuccess && bookDetails) {
-      const src = `/api/content?id=${id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`;
+      const src = bookDetails.imageLinks?.smallThumbnail;
 
       return (
         <StyledDetailsContainer background={bookColor} categories={!!bookDetails.categories}>

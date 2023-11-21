@@ -89,7 +89,7 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const { books } = props;
-  const colors = useAppSelector((state) => state.colours.bookColours);
+  const record = useAppSelector((state) => state.colours.bookPalette);
   const recentSearches = useAppSelector((state) => state.searches.recentSearches);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ const Sidebar = (props: Props) => {
     )
   );
 
-  const genreColours = Object.values(colors).slice(0, uniqueCategories.length);
+  const genreColours = Object.values(record).slice(0, uniqueCategories.length).flat();
 
   const content = uniqueCategories.map((genre, i) => {
     const background = `rgba(${parseColor(genreColours[i])}, 0.5)`;

@@ -115,7 +115,7 @@ const StyledLibrary = styled(Container)`
 const filters: Filter[] = ["All", "TBR", "Reading", "Finished", "DNF"];
 
 const Library = () => {
-  const colors = useAppSelector((state) => state.colours.bookColours);
+  const record = useAppSelector((state) => state.colours.bookPalette);
   const { library } = useAppSelector((state) => state.bookStore);
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const [activeAuthor, setActiveAuthor] = useState<string>("All");
@@ -123,7 +123,9 @@ const Library = () => {
 
   const { authors, books } = useFilterLibrary(activeFilter, activeAuthor);
 
-  const authorColours = Object.values(colors).slice(0, authors.length + 1);
+  const authorColours = Object.values(record)
+    .slice(0, authors.length + 1)
+    .flat() as string[];
 
   const handleFilter = (filter: Filter) => setActiveFilter(filter);
   const handleAuthor = (author: string) => setActiveAuthor(author);
@@ -146,7 +148,7 @@ const Library = () => {
 
   const authorList = ["All"].concat(authors).map((author, i) => {
     const active = activeAuthor === author ? "active" : "";
-    const background = `rgba(${parseColor(authorColours[i])}, 0.5)`;
+    const background = `rgba(${parseColor(authorColours[i % authorColours.length])}, 0.5)`;
 
     return (
       <div

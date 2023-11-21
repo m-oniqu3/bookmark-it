@@ -157,7 +157,7 @@ const StyledShelf = styled(Container)`
 const Shelf = () => {
   const { shelves } = useAppSelector((state) => state.bookShelf);
   const { library } = useAppSelector((state) => state.bookStore);
-  const colors = useAppSelector((state) => state.colours.bookColours);
+  const record = useAppSelector((state) => state.colours.bookPalette);
   const isLibraryEmpty = Object.keys(library).length === 0;
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
@@ -208,7 +208,9 @@ const Shelf = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const authorColours = Object.values(colors).slice(0, authors.length + 1);
+  const authorColours = Object.values(record)
+    .slice(0, authors.length + 1)
+    .flat() as string[];
 
   useEffect(() => {
     if (!authors.includes(activeAuthor)) {

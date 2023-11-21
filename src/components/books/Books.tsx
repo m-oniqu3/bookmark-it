@@ -83,16 +83,14 @@ type Props = {
 const Books = (props: Props) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const { book, modalType, showBookmarkIcon, showShelfIcon } = props;
-  // const dispatch = useAppDispatch();
-  // const color = useAppSelector((state) => state.colours.bookColours[book.id]) as string;
+
   const { isSignedIn } = useAppSelector((state) => state.auth);
   const { library } = useAppSelector((state) => state.bookStore);
   const { books } = useAppSelector((state) => state.bookShelf);
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const color = useBackground(book.id, book.imageLinks?.smallThumbnail as string);
+  const { color } = useBackground(book.id, book.imageLinks?.smallThumbnail as string);
 
-  // `/api/content?id=${book.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
   const handleModal = () => {
     setActiveModal({ type: ModalEnum.INFO_MODAL, book, modal: modalType });
   };

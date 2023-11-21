@@ -81,11 +81,11 @@ const exploreGenres = ["all", "romance", "easy reads", "tiktok", "fiction", "spi
 const ExploreLayout = () => {
   const { pathname } = useLocation();
   const page = pathname.split("/")[2];
-  const colors = useAppSelector((state) => state.colours.bookColours);
+  const record = useAppSelector((state) => state.colours.bookPalette);
   const [categories, setCategories] = useState<string[]>(page === "picks" ? exploreGenres : subjects);
   const [pick, setPick] = useState<string>("all");
   const [rec, setRec] = useState<string>("romance");
-  const genreColours = Object.values(colors).slice(0, categories.length);
+  const genreColours = Object.values(record).slice(0, categories.length).flat();
 
   useEffect(() => {
     if (page === "picks") setCategories(exploreGenres);
